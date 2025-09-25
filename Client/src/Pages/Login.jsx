@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -29,7 +29,7 @@ const Login = () => {
 
     try {
       if (currentState === "Sign Up") {
-        await axios.post("https://api.photoparkk.com/api/users/register", {
+        await axiosInstance.post("/users/register", {
           name,
           email,
           password,
@@ -37,7 +37,7 @@ const Login = () => {
         setSuccess("Registered successfully! Please log in.");
         setCurrentState("Login");
       } else {
-        const res = await axios.post("https://api.photoparkk.com/api/users/login", {
+        const res = await axiosInstance.post("/users/login", {
           email,
           password,
         });

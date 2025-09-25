@@ -99,7 +99,7 @@ const Navbar = () => {
               PHOTO PARKK
             </span>
             <span className="text-[14px] font-medium text-center text-gray-500 tracking-wider uppercase">
-              (since 1986)
+              (since 1996)
             </span>
           </div>
         </NavLink>
@@ -111,44 +111,47 @@ const Navbar = () => {
           </li>
 
           <li className="group relative">
-            <div
-              className="flex items-center gap-1 cursor-pointer text-gray-700 hover:text-gray-900"
-              onClick={() => setDropdownVisible((prev) => !prev)}
-            >
-              <span>SHOP</span>
-              <ChevronDown
-                size={14}
-                className={`transition-transform ${
-                  dropdownVisible ? "rotate-180" : ""
-                }`}
-              />
-            </div>
-            {dropdownVisible && (
-              <div className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 w-48 bg-white shadow-md rounded-md z-50 py-1 border">
-                <NavLink
-                  to="/shop/acrylic"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setDropdownVisible(false)}
-                >
-                  Acrylic
-                </NavLink>
-                <NavLink
-                  to="/shop/canvas"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setDropdownVisible(false)}
-                >
-                  Canvas
-                </NavLink>
-                <NavLink
-                  to="/shop/backlight-frames"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                  onClick={() => setDropdownVisible(false)}
-                >
-                  Backlight Photo Frames
-                </NavLink>
-              </div>
-            )}
-          </li>
+  {/* Trigger */}
+  <div
+    className="flex items-center gap-1 cursor-pointer text-gray-700  transition"
+    onClick={() => setDropdownVisible((prev) => !prev)}
+  >
+    <span className="font-medium">SHOP</span>
+    <ChevronDown
+      size={14}
+      className={`transition-transform ${dropdownVisible ? "rotate-180" : ""}`}
+    />
+  </div>
+
+  {/* Dropdown */}
+  {dropdownVisible && (
+    <div className="absolute top-full mt-2 left-0 w-56 bg-white shadow-lg rounded-lg z-50 border border-gray-200 overflow-hidden">
+      <div className="flex flex-col">
+        <NavLink
+          to="/shop/acrylic"
+          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
+          onClick={() => setDropdownVisible(false)}
+        >
+          Acrylic
+        </NavLink>
+        <NavLink
+          to="/shop/canvas"
+          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
+          onClick={() => setDropdownVisible(false)}
+        >
+          Canvas
+        </NavLink>
+        <NavLink
+          to="/shop/backlight-frames"
+          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
+          onClick={() => setDropdownVisible(false)}
+        >
+          Backlight Photo Frames
+        </NavLink>
+      </div>
+    </div>
+  )}
+</li>
 
           <li className="group">
             <StyledNavLink to="/frames">FRAMES</StyledNavLink>
@@ -278,7 +281,7 @@ const Navbar = () => {
             <span>SHOP</span>
             <ChevronDown
               size={16}
-              className={`${mobileDropdownVisible ? "rotate-180" : ""}`}
+              className={`transition-transform ${mobileDropdownVisible ? "rotate-180" : ""}`}
             />
           </button>
           {mobileDropdownVisible && (
@@ -286,21 +289,21 @@ const Navbar = () => {
               <NavLink
                 to="/shop/acrylic"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2"
+                className="block py-2 text-gray-700 hover:text-gray-900"
               >
                 Acrylic
               </NavLink>
               <NavLink
                 to="/shop/canvas"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2"
+                className="block py-2 text-gray-700 hover:text-gray-900"
               >
                 Canvas
               </NavLink>
               <NavLink
                 to="/shop/backlight-frames"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2"
+                className="block py-2 text-gray-700 hover:text-gray-900"
               >
                 Backlight
               </NavLink>

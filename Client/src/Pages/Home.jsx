@@ -22,30 +22,30 @@ const Home = () => {
       <Faq />
       <ShippingDetails />
 
-      {/* ✅ Floating WhatsApp Button - Responsive */}
+      {/* ✅ Floating Instagram Button - Responsive */}
       <a
-        href="https://wa.me/919043619797" // 🔁 Replace with your WhatsApp number
+        href="https://www.instagram.com/photoparkk_"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-5 right-5 z-50 group"
-        title="Chat with us on WhatsApp"
+        title="Follow us on Instagram"
       >
-        <div className="flex items-center sm:gap-3 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-xl transition-transform duration-300 transform hover:scale-105 ring-2 ring-green-400">
-          {/* WhatsApp Icon */}
-          <div className="bg-white text-green-500 rounded-full p-2 shadow-md group-hover:rotate-12 transition-transform">
+        <div className="flex items-center sm:gap-3 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white px-4 py-3 rounded-full shadow-xl transition-transform duration-300 transform hover:scale-105 ring-2 ring-pink-300">
+          {/* Instagram Icon */}
+          <div className="bg-white text-pink-500 rounded-full p-2 shadow-md group-hover:rotate-12 transition-transform">
             <svg
               xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512"
               className="h-6 w-6"
               fill="currentColor"
-              viewBox="0 0 24 24"
             >
-              <path d="M12.004 2C6.486 2 2 6.486 2 12c0 2.084.802 3.979 2.121 5.428L2 22l4.677-2.068A9.953 9.953 0 0012.004 22c5.518 0 10.004-4.486 10.004-10S17.522 2 12.004 2zm0 18c-1.764 0-3.402-.578-4.741-1.553l-.336-.237-2.775 1.228.604-2.934-.215-.31C4.549 15.019 4 13.547 4 12c0-4.411 3.594-8 8.004-8 4.408 0 7.996 3.589 7.996 8s-3.588 8-7.996 8zm4.594-5.475c-.252-.126-1.484-.733-1.714-.818-.23-.084-.398-.126-.566.126-.168.252-.648.817-.794.985-.147.168-.293.189-.545.063-.252-.126-1.065-.392-2.028-1.25-.75-.668-1.257-1.491-1.404-1.743-.147-.252-.016-.388.11-.514.112-.112.252-.293.378-.44.126-.147.168-.252.252-.42.084-.168.042-.315-.021-.44-.063-.126-.566-1.37-.774-1.877-.204-.493-.412-.426-.566-.434-.147-.007-.315-.009-.483-.009s-.44.063-.671.315c-.231.252-.882.862-.882 2.102 0 1.241.903 2.441 1.028 2.609.126.168 1.77 2.705 4.29 3.79.6.258 1.067.411 1.43.525.6.191 1.147.164 1.578.1.481-.072 1.484-.605 1.693-1.189.209-.585.209-1.086.147-1.189-.063-.105-.231-.168-.483-.294z" />
+              <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.59-30.59C297.51,120,224,120,224,120s-73.51,0-94.12,10.12a54,54,0,0,0-30.59,30.59C89.17,183.27,89.17,256,89.17,256s0,72.73,10.12,94.12a54,54,0,0,0,30.59,30.59C150.49,390,224,390,224,390s73.51,0,94.12-10.12a54,54,0,0,0,30.59-30.59C358.83,328.73,358.83,256,358.83,256S358.83,183.27,348.71,161.68ZM224,338a82,82,0,1,1,82-82A82,82,0,0,1,224,338Zm85-148.62a19.14,19.14,0,1,1,19.14-19.14A19.14,19.14,0,0,1,309,189.38Z"/>
             </svg>
           </div>
 
           {/* Text - visible on sm and up */}
           <span className="hidden sm:inline font-semibold text-sm tracking-wide">
-            Call & Book Bulk Order
+            Follow us on Instagram
           </span>
         </div>
       </a>

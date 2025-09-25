@@ -1,8 +1,15 @@
 // src/utils/axiosInstance.js
 import axios from "axios";
 
+// Resolve base URL from env with safe fallbacks
+// Priority: explicit Vite env -> window env injection -> relative "/api"
+const envBaseUrl =
+  import.meta?.env?.VITE_API_BASE_URL ||
+  (typeof window !== "undefined" && window.__API_BASE_URL__) ||
+  "/api";
+
 const axiosInstance = axios.create({
-  baseURL: "https://api.photoparkk.com/api",
+  baseURL: envBaseUrl,
 });
 
 // ✅ Add token to every request
@@ -30,7 +37,7 @@ axiosInstance.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem("refreshToken");
 
-        const res = await axios.post("https://api.photoparkk.com/api/users/refresh-token", {
+        const res = await axios.post(`${envBaseUrl}/users/refresh-token`, {
           refreshToken,
         });
 

@@ -9,7 +9,42 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://api.photoparkk.com',
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/newarrivalsUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/addtocartUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/specialoffersUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/acryliccustomizeUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/canvascustomizeUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/backlightcustomizeUploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/frameuploads': {
+        target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       }

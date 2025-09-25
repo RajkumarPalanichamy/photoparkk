@@ -27,8 +27,12 @@ export const CartProvider = ({ children }) => {
 
     try {
       const parsedUser = JSON.parse(user);
+      if (!parsedUser || !parsedUser._id) {
+        setCartCount(0);
+        setCartItems([]);
+        return;
+      }
       const { data } = await axiosInstance.get(`/cart/user/${parsedUser._id}`);
-      
       const items = data || [];
       setCartItems(items);
       setCartCount(items.length);

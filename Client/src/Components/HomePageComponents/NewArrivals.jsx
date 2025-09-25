@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -13,9 +13,7 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get(
-          "https://api.photoparkk.com/api/newarrivals"
-        );
+        const response = await axiosInstance.get("/newarrivals");
         setItems(response.data);
         setLoading(false);
       } catch (error) {

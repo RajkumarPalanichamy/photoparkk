@@ -8,7 +8,7 @@ import {
   FaEnvelope,
   FaStar,
 } from "react-icons/fa";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import { useCart } from "../../context/CartContext";
 
 const NewArrivalOrderPage = () => {
@@ -37,8 +37,8 @@ const NewArrivalOrderPage = () => {
     const formData = new FormData();
     formData.append("image", uploadedImage);
     try {
-      const res = await axios.post(
-        "https://api.photoparkk.com/api/cart/api/upload-image",
+      const res = await axiosInstance.post(
+        "/cart/api/upload-image",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -121,8 +121,8 @@ const NewArrivalOrderPage = () => {
 
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(
-          `https://api.photoparkk.com/api/newarrivals/${id}`
+        const res = await axiosInstance.get(
+          `/newarrivals/${id}`
         );
         setProduct(res.data);
         if (res.data.sizes?.length > 0) setSelectedSize(res.data.sizes[0]);

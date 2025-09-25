@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import {
   MdFileUpload,
@@ -27,8 +27,8 @@ const Frames = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://api.photoparkk.com/api/framecustomize")
+    axiosInstance
+      .get("/framecustomize")
       .then((res) => {
         setFrames(res.data.map((f) => f.shapeData));
       })
@@ -50,7 +50,8 @@ const Frames = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      const safeFrameImageUrl = `https://api.photoparkk.com/${selectedFrameImage.imageUrl.replace(
+      // Build static asset URL against server root, not "/api"
+      const safeFrameImageUrl = `/${selectedFrameImage.imageUrl.replace(
         /\\/g,
         "/"
       )}`;
@@ -216,7 +217,7 @@ const Frames = () => {
                 <div key={i} className="border p-3 mb-3 rounded-lg bg-gray-50">
                   <p className="font-semibold text-lg">{frame.title}</p>
                   <img
-                    src={`https://api.photoparkk.com/${frame.imageUrl.replace(
+                    src={`/${frame.imageUrl.replace(
                       /\\/g,
                       "/"
                     )}`}

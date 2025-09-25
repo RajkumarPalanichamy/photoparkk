@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaPhoneAlt, FaTruck, FaLock } from "react-icons/fa";
 import { BsPatchCheckFill } from "react-icons/bs";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const AcrylicSquareOrderpage = () => {
   const location = useLocation();
@@ -88,7 +88,7 @@ const AcrylicSquareOrderpage = () => {
         cartData.productId = photoData.productId;
       }
 
-      await axios.post("https://api.photoparkk.com/api/cart", cartData);
+      await axiosInstance.post("/cart", cartData);
       alert("Item added to cart successfully!");
       navigate("/cart");
     } catch (error) {

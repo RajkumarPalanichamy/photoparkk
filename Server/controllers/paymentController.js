@@ -11,11 +11,16 @@ export const createOrder = async (req, res) => {
     // Generate a unique receipt ID (max 40 chars for Razorpay)
     // Use a shorter timestamp and truncate cartItemId if needed
     const shortTimestamp = Date.now().toString().slice(-8); // Last 8 digits
-    const shortCartId = cartItemId.toString().slice(0, 20); // Max 20 chars
+    const shortCartId = (cartItemId ? String(cartItemId) : "no_cart").slice(0, 20); // Max 20 chars
     const receipt = `rcpt_${shortCartId}_${shortTimestamp}`;
 
+    const safeAmount = Number(amount);
+    if (!safeAmount || safeAmount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+
     const options = {
-      amount: amount * 100, // ₹ to paisa
+      amount: Math.round(safeAmount * 100), // ₹ to paisa
       currency: 'INR',
       receipt,
     };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaPhoneAlt } from "react-icons/fa";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const CanvasPortraitOrderpage = () => {
   const location = useLocation();
@@ -87,7 +87,7 @@ const CanvasPortraitOrderpage = () => {
         cartData.productId = photoData.productId;
       }
 
-      await axios.post("https://api.photoparkk.com/api/cart", cartData);
+      await axiosInstance.post("/cart", cartData);
       alert("✅ Item added to cart successfully!");
       navigate("/cart"); // 🔄 Navigate to cart
     } catch (error) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import { State, City } from "country-state-city";
 import { createPaymentOrder, initializePayment } from "../../utils/paymentUtils";
 
 const CommonCheckout = () => {
@@ -11,14 +12,24 @@ const CommonCheckout = () => {
   const [cartItem, setCartItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("ONLINE");
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
+    state: "",
+    stateCode: "",
+    district: "",
+    city: "",
     pincode: "",
   });
+
+  const [statesList, setStatesList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
+
+  const SHIPPING_CHARGE = 100;
 
   useEffect(() => {
     const fetchCartItem = async () => {
@@ -33,6 +44,22 @@ const CommonCheckout = () => {
     };
     fetchCartItem();
   }, [cartItemId]);
+
+  // Load India states on mount
+  useEffect(() => {
+    const allStates = State.getStatesOfCountry("IN") || [];
+    setStatesList(allStates);
+  }, []);
+
+  // Load cities when state changes
+  useEffect(() => {
+    if (!form.stateCode) {
+      setCitiesList([]);
+      return;
+    }
+    const allCities = City.getCitiesOfState("IN", form.stateCode) || [];
+    setCitiesList(allCities);
+  }, [form.stateCode]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +91,16 @@ const CommonCheckout = () => {
       return false;
     }
 
+    if (!form.state) {
+      alert("Please select a state");
+      return false;
+    }
+
+    if (!form.city) {
+      alert("Please select a city");
+      return false;
+    }
+
     if (!pincodeRegex.test(form.pincode)) {
       alert("Please enter a valid 6-digit pincode");
       return false;
@@ -85,25 +122,50 @@ const CommonCheckout = () => {
         return;
       }
 
-      // Calculate total amount
-      const totalAmount = cartItem.totalAmount || cartItem.price || 0;
+      // Calculate total amount + shipping
+      const itemsTotal = Number(cartItem.totalAmount || cartItem.price || 0);
+      const totalAmount = itemsTotal + SHIPPING_CHARGE;
 
-      // Create payment order
-      const paymentData = {
-        amount: totalAmount,
-        cartItemId: cartItem._id,
-        productType: cartItem.productType || "custom",
-        deliveryDetails: form,
-      };
+      if (paymentMethod === "COD") {
+        // Create regular order directly via /orders (multipart/form-data)
+        const fd = new FormData();
+        fd.append("cartItemId", cartItem._id);
+        fd.append("productType", cartItem.productType || "custom");
+        fd.append("amount", String(totalAmount));
+        fd.append("deliveryDetails", JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          state: form.state,
+          district: form.district,
+          city: form.city,
+          pincode: form.pincode,
+          shippingCharge: SHIPPING_CHARGE,
+          itemsTotal,
+        }));
 
-      const orderData = await createPaymentOrder(paymentData);
+        await axiosInstance.post("/orders", fd);
+        alert("✅ Order placed with Cash on Delivery.");
+        navigate("/orders");
+      } else {
+        // Online payment via Razorpay
+        const paymentData = {
+          amount: totalAmount,
+          cartItemId: cartItem._id,
+          productType: cartItem.productType || "custom",
+          deliveryDetails: {
+            ...form,
+            shippingCharge: SHIPPING_CHARGE,
+            itemsTotal,
+          },
+        };
 
-      // Initialize Razorpay payment
-      await initializePayment(orderData, form);
-
-      // Payment successful - redirect to success page
-      alert("✅ Payment successful! Your order has been placed.");
-      navigate("/orders"); // or wherever you want to redirect after successful payment
+        const orderData = await createPaymentOrder(paymentData);
+        await initializePayment(orderData, form);
+        alert("✅ Payment successful! Your order has been placed.");
+        navigate("/orders");
+      }
       
     } catch (error) {
       console.error("Payment failed:", error);
@@ -131,9 +193,20 @@ const CommonCheckout = () => {
         <p>Size: {cartItem.size}</p>
         <p>Thickness: {cartItem.thickness}</p>
         <p>Quantity: {cartItem.quantity}</p>
-        <p className="text-xl font-semibold text-green-600">
-          Total: ₹{cartItem.totalAmount}
-        </p>
+        <div className="mt-2 pt-2 border-t">
+          <div className="flex justify-between text-gray-700">
+            <span>Items Total</span>
+            <span className="font-medium">₹{Number(cartItem.totalAmount || cartItem.price || 0)}</span>
+          </div>
+          <div className="flex justify-between text-gray-700">
+            <span>Shipping</span>
+            <span className="font-medium">₹{SHIPPING_CHARGE}</span>
+          </div>
+          <div className="flex justify-between text-green-700 text-lg font-semibold">
+            <span>Grand Total</span>
+            <span>₹{Number(cartItem.totalAmount || cartItem.price || 0) + SHIPPING_CHARGE}</span>
+          </div>
+        </div>
       </div>
 
       {/* Right: User Form */}
@@ -184,6 +257,50 @@ const CommonCheckout = () => {
           required
         />
 
+        {/* State / District / City */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {/* State */}
+          <select
+            required
+            value={form.stateCode}
+            onChange={(e) => {
+              const code = e.target.value;
+              const st = statesList.find((s) => s.isoCode === code);
+              setForm((prev) => ({ ...prev, stateCode: code, state: st?.name || "", district: "", city: "" }));
+            }}
+            className="w-full px-3 py-2 border rounded"
+          >
+            <option value="">Select State</option>
+            {statesList.map((st) => (
+              <option key={st.isoCode} value={st.isoCode}>{st.name}</option>
+            ))}
+          </select>
+
+          {/* District (optional) */}
+          <input
+            name="district"
+            placeholder="District (optional)"
+            value={form.district}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border rounded"
+            disabled={!form.stateCode}
+          />
+
+          {/* City */}
+          <select
+            required
+            value={form.city}
+            onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
+            className="w-full px-3 py-2 border rounded"
+            disabled={!form.stateCode}
+          >
+            <option value="">Select City</option>
+            {citiesList.map((c) => (
+              <option key={`${c.name}-${c.latitude}-${c.longitude}`} value={c.name}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
         <input
           name="pincode"
           placeholder="Pincode *"
@@ -192,6 +309,31 @@ const CommonCheckout = () => {
           className="w-full px-4 py-2 border rounded"
           required
         />
+
+        {/* Payment Method */}
+        <div className="mt-1">
+          <p className="font-medium mb-2">Payment Method</p>
+          <div className="flex items-center gap-4">
+            <label className={`flex items-center gap-2 px-3 py-2 rounded border ${paymentMethod === 'ONLINE' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300'}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                checked={paymentMethod === "ONLINE"}
+                onChange={() => setPaymentMethod("ONLINE")}
+              />
+              <span>Online (Razorpay)</span>
+            </label>
+            <label className={`flex items-center gap-2 px-3 py-2 rounded border ${paymentMethod === 'COD' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300'}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                checked={paymentMethod === "COD"}
+                onChange={() => setPaymentMethod("COD")}
+              />
+              <span>Cash on Delivery (COD)</span>
+            </label>
+          </div>
+        </div>
 
         <button
           onClick={handlePayment}

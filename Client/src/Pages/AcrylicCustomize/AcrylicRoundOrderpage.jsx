@@ -8,7 +8,7 @@ import {
   FaExclamationTriangle,
   FaWhatsapp,
 } from "react-icons/fa";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const AcrylicRoundOrderpage = () => {
   const location = useLocation();
@@ -96,7 +96,7 @@ const AcrylicRoundOrderpage = () => {
         cartData.productId = photoData.productId;
       }
 
-      await axios.post("https://api.photoparkk.com/api/cart", cartData);
+      await axiosInstance.post("/cart", cartData);
       alert("✅ Item added to cart successfully!");
       navigate("/cart");
     } catch (error) {
