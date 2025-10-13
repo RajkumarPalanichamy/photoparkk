@@ -37,9 +37,19 @@ export const CartProvider = ({ children }) => {
       setCartItems(items);
       setCartCount(items.length);
     } catch (error) {
-      console.error("Error fetching cart data:", error);
-      setCartCount(0);
-      setCartItems([]);
+      // Handle 401 errors gracefully - user might not be authenticated
+      if (error.response?.status === 401) {
+        console.log("User not authenticated, clearing cart data");
+        localStorage.removeItem("user");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setCartCount(0);
+        setCartItems([]);
+      } else {
+        console.error("Error fetching cart data:", error);
+        setCartCount(0);
+        setCartItems([]);
+      }
     }
   };
 

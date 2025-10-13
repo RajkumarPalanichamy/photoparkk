@@ -27,9 +27,16 @@ export const createNewArrival = async (req, res) => {
 
     // ✅ Upload to Cloudinary
     let imageUrl = null;
-    if (req.file?.path) {
-      const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-        folder: "new_arrivals",
+    if (req.file?.buffer) {
+      const cloudUpload = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "new_arrivals" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
       });
       imageUrl = cloudUpload.secure_url;
     }
@@ -109,9 +116,16 @@ export const updateNewArrival = async (req, res) => {
       });
     }
 
-    if (req.file?.path) {
-      const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-        folder: "new_arrivals",
+    if (req.file?.buffer) {
+      const cloudUpload = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "new_arrivals" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
       });
       post.image = cloudUpload.secure_url;
     }

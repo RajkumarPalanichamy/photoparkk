@@ -54,10 +54,9 @@ export const verifyPayment = async (req, res) => {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      frameId,
-      productType,
-      deliveryDetails,
     } = req.body;
+
+    console.log('🔍 Verifying payment:', { razorpay_order_id, razorpay_payment_id });
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -65,24 +64,19 @@ export const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
+      console.error('❌ Signature mismatch:', { expectedSignature, razorpay_signature });
       return res.status(400).json({ success: false, message: "Payment verification failed" });
     }
 
-    if (productType === "frame") {
-      await Frame.findByIdAndUpdate(frameId, { isPaid: true });
-    }
-
-    const newOrder = await Order.create({
-      userId: req.user._id,
-      cartItemId: frameId,
-      productType,
-      deliveryDetails,
-      status: "paid",
+    console.log('✅ Payment signature verified successfully');
+    res.status(200).json({ 
+      success: true, 
+      message: "Payment verified successfully",
+      paymentId: razorpay_payment_id,
+      orderId: razorpay_order_id
     });
-
-    res.status(200).json({ success: true, order: newOrder });
   } catch (err) {
     console.error("❌ Payment verification error:", err);
-    res.status(500).json({ error: "Failed to verify payment" });
+    res.status(500).json({ error: "Failed to verify payment", details: err.message });
   }
 };

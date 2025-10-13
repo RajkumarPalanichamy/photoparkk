@@ -1,4 +1,5 @@
 import Order from "../models/orders.js";
+import AddToCart from "../models/addtocart.js";
 import { uploadToCloudinary } from "../config/cloudinary.js";
 
 // ✅ Create Order with Cloudinary image upload
@@ -6,23 +7,42 @@ export const createOrder = async (req, res) => {
   try {
     const { cartItemId, productType, deliveryDetails, amount } = req.body;
     const userId = req.user._id;
+    
+    // Parse deliveryDetails if it's a string
+    let parsedDeliveryDetails = deliveryDetails;
+    if (typeof deliveryDetails === 'string') {
+      try {
+        parsedDeliveryDetails = JSON.parse(deliveryDetails);
+      } catch (err) {
+        console.error('Failed to parse deliveryDetails:', err);
+        return res.status(400).json({ error: "Invalid deliveryDetails format" });
+      }
+    }
 
-    const allowedTypes = ["acrylic", "canvas", "backlight", "square", "circle"];
+    const allowedTypes = ["acrylic", "canvas", "backlight", "square", "circle", "Newarrivaldata", "SpecialOffersdata", "AcrylicCustomizedata", "Canvascustomizedata", "Backlightcustomizedata"];
     if (!allowedTypes.includes(productType)) {
       return res.status(400).json({ error: "❌ Invalid productType" });
     }
 
     let imageUrl = null;
+    
+    // If a file is uploaded, use it; otherwise, get image from cart item
     if (req.file) {
       const result = await uploadToCloudinary(req.file.buffer, "orders");
       imageUrl = result.secure_url;
+    } else if (cartItemId) {
+      // Get image from cart item
+      const cartItem = await AddToCart.findById(cartItemId);
+      if (cartItem) {
+        imageUrl = cartItem.image || cartItem.uploadedImageUrl;
+      }
     }
 
     const newOrder = await Order.create({
       userId,
       cartItemId,
       productType,
-      deliveryDetails,
+      deliveryDetails: parsedDeliveryDetails,
       amount,
       image: imageUrl,
     });

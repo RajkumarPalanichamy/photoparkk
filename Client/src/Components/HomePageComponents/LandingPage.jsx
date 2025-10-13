@@ -1,114 +1,275 @@
-import React from "react";
-import { motion } from "framer-motion";
-import parkvideo from "../../assets/frontend_assets/HomeSlides/photoparkk Video.mp4";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Play, Pause, Volume2, VolumeX, ArrowRight, Sparkles } from "lucide-react";
+import parkvideo from "../../assets/frontend_assets/HomeSlides/photoparkk Video.mp4";
 
 export default function LandingPage() {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [currentOffer, setCurrentOffer] = useState(0);
+
+  const offers = [
+    "🎉 50% OFF on All Premium Frames - Limited Time!",
+    "✨ Buy 2 Get 1 Free on Canvas Prints",
+    "🔥 Exclusive Backlight Frames - 40% OFF",
+    "⭐ Free Shipping on Orders Over $99"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentOffer((prev) => (prev + 1) % offers.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div>
-      {/* OFFERS SCROLLING */}
-      <div
-        style={{
-          height: "40px",
-          backgroundColor: "black",
-          display: "flex",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-        className="z-0"
-      >
-        <motion.div
-          style={{
-            color: "white",
-            fontSize: "18px",
-            fontWeight: "bold",
-            whiteSpace: "nowrap",
-          }}
-          initial={{ x: "100%" }}
-          animate={{ x: "-100%" }}
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-        >
-          50% Product Sales going on here! Check it and Buy Soon &nbsp; &bull;
-          &nbsp; 50% Product Sales going on here!
-        </motion.div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Enhanced Offers Bar */}
+      <div className="relative bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 py-2 sm:py-3 overflow-hidden border-b border-purple-500/30">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
+        <div className="relative flex flex-col sm:flex-row items-center justify-center px-4 sm:px-0 gap-2 sm:gap-0">
+          <div className="flex items-center">
+            <Sparkles size={14} className="text-yellow-400 mr-2 sm:mr-3 animate-spin" />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentOffer}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wide text-center"
+              >
+                {offers[currentOffer]}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="sm:ml-4"
+          >
+            <Link
+              to="/offers"
+              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-3 sm:px-4 py-1 rounded-full text-xs font-bold hover:shadow-lg transition-all duration-300 hover:from-yellow-300 hover:to-orange-400 whitespace-nowrap"
+            >
+              SHOP NOW
+            </Link>
+          </motion.div>
+        </div>
       </div>
 
-      {/* ---------------- Landing Page ---------------- */}
-      <div className="relative w-full">
-        {/* ✅ Mobile: video with 16:9 aspect ratio */}
-        <div className="block sm:hidden pt-[56.25%] relative w-full">
+      {/* Main Landing Section */}
+      <div className="relative w-full h-screen">
+        {/* Video Background */}
+        <div className="absolute inset-0">
           <video
             autoPlay
             loop
-            muted
+            muted={isMuted}
             playsInline
-            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            className="w-full h-full object-cover"
           >
             <source src={parkvideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-
-          {/* ✅ Mobile: small content box at top-left */}
-          <div className="absolute top-20 left-2 z-10 bg-black bg-opacity-75 border border-white p-3 w-[40%]">
-            <Link to="/Offers">
-              <div className="text-sm font-bold text-white leading-snug">
-                SPECIAL{" "}
-                <span className="bg-red-600 px-1 py-[2px] rounded">50%</span>{" "}
-                OFFERS COLLECTIONS
-              </div>
-              <button className="mt-3 bg-white text-black text-xs px-2 py-1 rounded">
-                PURCHASE HERE
-              </button>
-            </Link>
-          </div>
+          
+          {/* Enhanced Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/20 to-black/60" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/30 to-black/60" />
         </div>
 
-        {/* ✅ Desktop: original layout preserved */}
-        <div className="hidden sm:block relative w-full h-[600px] overflow-hidden">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        {/* Video Controls */}
+        <div className="absolute top-4 right-4 z-20 flex gap-2">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="bg-black/50 backdrop-blur-sm text-white p-2 rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300"
           >
-            <source src={parkvideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsMuted(!isMuted)}
+            className="bg-black/50 backdrop-blur-sm text-white p-2 rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300"
+          >
+            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </motion.button>
+        </div>
 
-          {/* Original Desktop Content Box (unchanged) */}
-          <div className="absolute z-10 opacity-75 text-white bg-black border border-white top-50 w-80 left-8 p-5 w-100 p-10 left-20 top-55">
-            <Link to="/Offers">
-              <div
-                style={{
-                  fontSize: "44px",
-                  fontWeight: "bold",
-                  color: "white",
-                }}
+        {/* Content */}
+        <div className="relative z-10 h-full flex items-center">
+          {/* Mobile Content */}
+          <div className="block sm:hidden w-full px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-gradient-to-br from-black/80 to-purple-900/60 backdrop-blur-md rounded-3xl border border-white/20 p-8 shadow-2xl"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", delay: 0.5 }}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 rounded-full mb-6"
+              >
+                <Sparkles size={16} />
+                <span className="text-white font-bold text-sm uppercase tracking-wide">
+                  Limited Offer
+                </span>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-4xl font-bold text-white mb-4 leading-tight"
               >
                 SPECIAL{" "}
-                <span style={{ backgroundColor: "red", padding: "5px" }}>
+                <span className="bg-gradient-to-r from-red-500 to-pink-600 text-transparent bg-clip-text">
                   50%
                 </span>{" "}
-                OFFERS COLLECTIONS
-              </div>
+                OFF
+              </motion.h1>
 
-              <button
-                style={{
-                  marginTop: "10px",
-                  fontSize: "18px",
-                  backgroundColor: "white",
-                  color: "black",
-                  padding: "10px 20px",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                }}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-gray-200 text-lg mb-8 leading-relaxed"
               >
-                PURCHASE HERE
-              </button>
-            </Link>
+                Premium Photography Collections
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                <Link to="/offers">
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(255, 255, 255, 0.3)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg w-full flex items-center justify-center gap-3 hover:shadow-2xl transition-all duration-300"
+                  >
+                    EXPLORE COLLECTION
+                    <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={20} />
+                  </motion.button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Desktop Content */}
+          <div className="hidden sm:block w-full max-w-7xl mx-auto px-8">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+              className="max-w-2xl"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", delay: 0.3 }}
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-600 px-6 py-3 rounded-full mb-8 shadow-2xl"
+              >
+                <Sparkles size={20} className="text-white" />
+                <span className="text-white font-bold text-lg uppercase tracking-wider">
+                  Exclusive Limited Time Offer
+                </span>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="text-7xl font-bold text-white mb-6 leading-tight"
+              >
+                SPECIAL{" "}
+                <motion.span
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", delay: 0.8 }}
+                  className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-transparent bg-clip-text inline-block"
+                >
+                  50%
+                </motion.span>{" "}
+                OFF
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.7 }}
+                className="text-2xl text-gray-200 mb-12 leading-relaxed max-w-2xl"
+              >
+                Discover our premium photography collections with exclusive discounts. 
+                Transform your memories into timeless art.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.9 }}
+                className="flex gap-6"
+              >
+                <Link to="/offers">
+                  <motion.button
+                    whileHover={{ 
+                      scale: 1.05, 
+                      boxShadow: "0 20px 40px -10px rgba(255, 255, 255, 0.3)" 
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-12 py-6 rounded-2xl font-bold text-xl flex items-center gap-4 hover:shadow-2xl transition-all duration-300"
+                  >
+                    SHOP COLLECTION
+                    <ArrowRight className="group-hover:translate-x-2 transition-transform duration-300" size={24} />
+                  </motion.button>
+                </Link>
+                
+                <Link to="/customize">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group border-2 border-white/30 text-white px-8 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                  >
+                    CUSTOMIZE
+                  </motion.button>
+                </Link>
+              </motion.div>
+
+              {/* Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 1.1 }}
+                className="flex gap-8 mt-16"
+              >
+                {[
+                  { number: "25K+", label: "Happy Customers" },
+                  { number: "1996", label: "Since Year" },
+                  { number: "4.9★", label: "Rating" }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.3 + index * 0.2 }}
+                    className="text-center"
+                  >
+                    <div className="text-2xl font-bold text-white">{stat.number}</div>
+                    <div className="text-gray-300 text-sm">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
           </div>
         </div>
+
+       
       </div>
     </div>
   );

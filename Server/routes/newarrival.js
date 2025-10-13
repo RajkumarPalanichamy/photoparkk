@@ -6,7 +6,7 @@ import {
   updateNewArrival,
   deleteNewArrival,
 } from "../controllers/newArrivalController.js";
-import { upload } from "../utils/multerConfig.js";
+import upload from "../Middleware/uploadMiddleware.js";
 
 const router = express.Router();
 

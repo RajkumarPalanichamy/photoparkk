@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const NewArrivalAddForm = () => {
@@ -95,7 +95,7 @@ const NewArrivalAddForm = () => {
       }
       data.append("image", imageFile);
 
-      await axios.post("https://api.photoparkk.com/api/newarrivals", data, {
+      await axiosInstance.post("/newarrivals", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

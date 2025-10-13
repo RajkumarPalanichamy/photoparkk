@@ -44,6 +44,8 @@ const Framescheckout = () => {
     if (stored) {
       const parsedData = JSON.parse(stored);
       console.log("✅ checkoutFrameData from sessionStorage:", parsedData);
+      console.log("🖼️ Frame Image URL:", parsedData.frameImageUrl);
+      console.log("🎨 Selected Color:", parsedData.color);
       setCheckoutData(parsedData);
     }
 
@@ -182,16 +184,24 @@ const Framescheckout = () => {
         // Create frame order directly, skip Razorpay
         await axiosInstance.post('/frameorders/create', orderPayload);
         alert("✅ Order placed with Cash on Delivery.");
+        // Navigate to orders page after COD
+        window.location.href = '/my-orders';
       } else {
-        const orderData = await createPaymentOrder(paymentData);
-        // Pass orderPayload to initializePayment
-        orderData.orderPayload = orderPayload;
-        await initializePayment(orderData, {
-          name: fullName,
-          email,
-          phone: `+91${phone}`,
-          address,
-        });
+        try {
+          const orderData = await createPaymentOrder(paymentData);
+          // Pass orderPayload to initializePayment
+          orderData.orderPayload = orderPayload;
+          await initializePayment(orderData, {
+            name: fullName,
+            email,
+            phone: `+91${phone}`,
+            address,
+          });
+        } catch (paymentError) {
+          console.error('❌ Payment initialization failed:', paymentError);
+          alert('❌ Payment initialization failed. Please try again.');
+          return;
+        }
       }
 
       // Order will be created in payment success handler
@@ -223,8 +233,26 @@ const Framescheckout = () => {
         <h2 className="text-2xl font-semibold mb-4 text-center text-gray-900">
           🖼️ Frame Preview
         </h2>
+        <div className="text-center mb-4">
+          <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+            {color} Frame
+          </span>
+        </div>
         <div className="mb-6 flex justify-center">
-          <div className="inline-block border-[10px] rounded-2xl border-gray-300 p-1 bg-white shadow-sm">
+          <div className={`inline-block border-[10px] rounded-2xl p-1 bg-white shadow-sm ${
+            color.toLowerCase() === 'black' ? 'border-black' :
+            color.toLowerCase() === 'white' ? 'border-gray-300' :
+            color.toLowerCase() === 'brown' ? 'border-amber-800' :
+            color.toLowerCase() === 'gold' ? 'border-yellow-500' :
+            color.toLowerCase() === 'silver' ? 'border-gray-400' :
+            color.toLowerCase() === 'blue' ? 'border-blue-500' :
+            color.toLowerCase() === 'red' ? 'border-red-500' :
+            color.toLowerCase() === 'green' ? 'border-green-500' :
+            color.toLowerCase() === 'purple' ? 'border-purple-500' :
+            color.toLowerCase() === 'pink' ? 'border-pink-500' :
+            color.toLowerCase() === 'orange' ? 'border-orange-500' :
+            'border-gray-300'
+          }`}>
             <img
               src={userImageUrl}
               alt="User"
@@ -265,21 +293,6 @@ const Framescheckout = () => {
           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-lg font-medium mb-2 text-gray-900">🖼️ Frame Design</h3>
-          {(() => {
-            const src = frameImageUrl?.startsWith("http")
-              ? frameImageUrl
-              : (frameImageUrl?.startsWith("/") ? frameImageUrl : `/${frameImageUrl || ""}`);
-            return (
-          <img
-            src={src}
-            alt="Frame"
-            className="w-full h-auto rounded-xl border border-gray-200"
-          />
-            );
-          })()}
-        </div>
       </div>
 
       {/* Shipping Form */}
@@ -383,15 +396,23 @@ const Framescheckout = () => {
               ))}
             </select>
           </div>
-          <label className="block text-sm font-medium text-gray-700">Pincode</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Pincode
+            {pincode.length === 6 && /^\d{6}$/.test(pincode) && (
+              <span className="ml-2 text-green-600 text-xs">✓ Valid</span>
+            )}
+          </label>
           <input
             type="text"
             required
-            pattern="\\d{6}"
+            pattern="[0-9]{6}"
             maxLength={6}
             value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-            placeholder="Pincode"
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+              setPincode(value);
+            }}
+            placeholder="Enter 6-digit pincode"
             className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
 

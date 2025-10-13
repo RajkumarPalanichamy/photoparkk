@@ -18,28 +18,29 @@ export const createFrameCustomize = async (req, res) => {
     }
 
     // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload_stream(
-      { folder: "framescustomize" },
-      async (error, cloudinaryResult) => {
-        if (error) return res.status(500).json({ message: error.message });
+    const cloudUpload = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "framescustomize" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
-        const newFrame = new FrameCustomize({
-          shapeData: JSON.parse(shapeData),
-          selectedShape,
-          selectedColor,
-          selectedFrameImage,
-          selectedSize,
-          quantity,
-          userUploadedImage: cloudinaryResult.secure_url,
-        });
+    const newFrame = new FrameCustomize({
+      shapeData: JSON.parse(shapeData),
+      selectedShape,
+      selectedColor,
+      selectedFrameImage,
+      selectedSize,
+      quantity,
+      userUploadedImage: cloudUpload.secure_url,
+    });
 
-        const saved = await newFrame.save();
-        res.status(201).json(saved);
-      }
-    );
-
-    // pipe memory buffer to upload_stream
-    result.end(req.file.buffer);
+    const saved = await newFrame.save();
+    res.status(201).json(saved);
   } catch (err) {
     console.error("POST Error:", err);
     res.status(500).json({ message: err.message });
@@ -51,16 +52,20 @@ export const uploadFrameImage = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    const result = await cloudinary.uploader.upload_stream(
-      { folder: "framescustomize/frames" },
-      (error, cloudinaryResult) => {
-        if (error) return res.status(500).json({ message: error.message });
-        return res.json({ url: cloudinaryResult.secure_url });
-      }
-    );
+    const cloudUpload = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "framescustomize/frames" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
 
-    result.end(req.file.buffer);
+    res.json({ url: cloudUpload.secure_url });
   } catch (err) {
+    console.error("Upload frame image error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -69,7 +74,33 @@ export const uploadFrameImage = async (req, res) => {
 export const getAllFrames = async (req, res) => {
   try {
     const data = await FrameCustomize.find().sort({ createdAt: -1 });
-    res.json(data);
+    
+    // Transform old data structure to new structure for backward compatibility
+    const transformedData = data.map(item => {
+      if (item.shapeData && item.shapeData.colorOptions) {
+        item.shapeData.colorOptions = item.shapeData.colorOptions.map(color => {
+          // If color has frameImages directly (old structure), wrap them in a default style
+          if (color.frameImages && !color.styles) {
+            console.log(`Transforming old structure for color: ${color.color}`);
+            return {
+              color: color.color,
+              styles: [{
+                styleName: "Default Style",
+                frameImages: color.frameImages.map(frame => ({
+                  ...frame,
+                  imageUrl: frame.imageUrl // Ensure imageUrl is preserved
+                }))
+              }]
+            };
+          }
+          // If color already has styles (new structure), return as is
+          return color;
+        });
+      }
+      return item;
+    });
+    
+    res.json(transformedData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -80,6 +111,28 @@ export const getFrameById = async (req, res) => {
   try {
     const item = await FrameCustomize.findById(req.params.id);
     if (!item) return res.status(404).json({ message: "Item not found" });
+    
+    // Transform old data structure to new structure for backward compatibility
+    if (item.shapeData && item.shapeData.colorOptions) {
+      item.shapeData.colorOptions = item.shapeData.colorOptions.map(color => {
+        // If color has frameImages directly (old structure), wrap them in a default style
+        if (color.frameImages && !color.styles) {
+          return {
+            color: color.color,
+            styles: [{
+              styleName: "Default Style",
+              frameImages: color.frameImages.map(frame => ({
+                ...frame,
+                imageUrl: frame.imageUrl // Ensure imageUrl is preserved
+              }))
+            }]
+          };
+        }
+        // If color already has styles (new structure), return as is
+        return color;
+      });
+    }
+    
     res.json(item);
   } catch (err) {
     res.status(500).json({ message: err.message });

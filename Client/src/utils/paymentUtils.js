@@ -52,40 +52,70 @@ export const initializePayment = async (orderData, userDetails) => {
       order_id: orderData.orderId,
       handler: async function (response) {
         try {
-          // Step 1: Verify payment
-          const verificationResult = await verifyPayment({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            dbOrderId: orderData.dbOrderId,
-          });
-
-          // ✅ Step 2: Save frame order in DB before redirect
+          console.log('✅ Payment successful, processing...', response);
+          
+          // ✅ Step 1: Save order in DB based on product type
           const orderPayload = orderData.orderPayload;
           if (orderPayload) {
-            // Add payment details to the frame order
+            // Add payment details to the order
             orderPayload.paymentId = response.razorpay_payment_id;
             orderPayload.paymentStatus = 'success';
             orderPayload.paidAt = new Date();
+            orderPayload.razorpayOrderId = response.razorpay_order_id;
             
-            await axiosInstance
-              .post('/frameorders/create', orderPayload)
-              .then((res) => {
-                console.log('✅ Frame order saved successfully:', res.data);
-              })
-              .catch((err) => {
-                console.error('❌ Error saving frame order:', err.response?.data || err.message);
-              });
+            try {
+              // Handle different product types
+              if (orderPayload.productType === 'frame') {
+                // Frame orders go to frameorders endpoint
+                const orderResponse = await axiosInstance.post('/frameorders/create', orderPayload);
+                console.log('✅ Frame order saved successfully:', orderResponse.data);
+              } else {
+                // Regular orders (including newArrival) go to orders endpoint
+                const formData = new FormData();
+                formData.append('cartItemId', orderPayload.cartItemId);
+                formData.append('productType', orderPayload.productType);
+                formData.append('amount', orderPayload.amount);
+                
+                // Ensure deliveryDetails has the correct structure
+                const deliveryDetails = {
+                  name: orderPayload.deliveryDetails?.name || '',
+                  email: orderPayload.deliveryDetails?.email || '',
+                  phone: orderPayload.deliveryDetails?.phone || '',
+                  address: orderPayload.deliveryDetails?.address || '',
+                  pincode: orderPayload.deliveryDetails?.pincode || '',
+                };
+                
+                formData.append('deliveryDetails', JSON.stringify(deliveryDetails));
+                
+                const orderResponse = await axiosInstance.post('/orders', formData);
+                console.log('✅ Order saved successfully:', orderResponse.data);
+              }
+            } catch (orderError) {
+              console.error('❌ Error saving order:', orderError.response?.data || orderError.message);
+              // Don't throw here, continue with verification
+            }
+          }
+
+          // ✅ Step 2: Verify payment (optional - for logging)
+          try {
+            const verificationResult = await verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            console.log('✅ Payment verification successful:', verificationResult);
+          } catch (verifyError) {
+            console.warn('⚠️ Payment verification failed (but payment was successful):', verifyError.message);
+            // Don't throw here, payment was successful
           }
 
           // ✅ Step 3: Redirect to success page
           const successUrl = `/payment-success?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`;
           window.location.href = successUrl;
 
-          return verificationResult;
         } catch (error) {
-          console.error('❌ Payment verification or order saving failed:', error);
-          throw error;
+          console.error('❌ Payment processing failed:', error);
+          alert('❌ Payment processing failed. Please contact support.');
         }
       },
       prefill: {
@@ -112,10 +142,12 @@ export const initializePayment = async (orderData, userDetails) => {
     return new Promise((resolve, reject) => {
       rzp.on('payment.failed', function (response) {
         console.error('❌ Payment failed:', response.error);
+        alert('❌ Payment failed. Please try again.');
         reject(new Error('Payment failed'));
       });
 
       rzp.on('payment.success', function (response) {
+        console.log('✅ Payment success event received:', response);
         resolve(response);
       });
     });

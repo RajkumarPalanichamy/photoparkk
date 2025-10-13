@@ -18,11 +18,20 @@ const frameImageSchema = new mongoose.Schema(
 );
 
 
-// 🎨 Each Color → contains multiple frame images
+// ✨ Each Style → contains multiple frame images
+const styleSchema = new mongoose.Schema(
+  {
+    styleName: { type: String, required: true }, // Example: "Classic Frame"
+    frameImages: [frameImageSchema],              // Array of frame images with sizes
+  },
+  { _id: true }
+);
+
+// 🎨 Each Color → contains multiple styles
 const colorOptionSchema = new mongoose.Schema(
   {
     color: { type: String, required: true }, // Example: "Black"
-    frameImages: [frameImageSchema],         // Array of frame images with sizes
+    styles: [styleSchema],                   // Array of styles
   },
   { _id: true }
 );

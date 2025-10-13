@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
     pincode: String,
   },
   image: { type: String }, // Cloudinary image URL
-  status: { type: String, default: "pending", enum: ["pending", "completed", "failed", "cancelled"] },
+  status: { type: String, default: "Pending", enum: ["Pending", "Shipped", "Out for Delivery", "Delivered", "Cancelled"] },
   amount: { type: Number, required: true },
   paymentId: { type: String },
   paymentStatus: { type: String, enum: ["pending", "success", "failed"], default: "pending" },

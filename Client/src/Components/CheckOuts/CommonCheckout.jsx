@@ -147,7 +147,7 @@ const CommonCheckout = () => {
 
         await axiosInstance.post("/orders", fd);
         alert("✅ Order placed with Cash on Delivery.");
-        navigate("/orders");
+        navigate("/my-orders");
       } else {
         // Online payment via Razorpay
         const paymentData = {
@@ -163,8 +163,7 @@ const CommonCheckout = () => {
 
         const orderData = await createPaymentOrder(paymentData);
         await initializePayment(orderData, form);
-        alert("✅ Payment successful! Your order has been placed.");
-        navigate("/orders");
+        // Note: Navigation will be handled by payment success handler
       }
       
     } catch (error) {

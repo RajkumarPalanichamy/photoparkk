@@ -7,13 +7,15 @@ const StyledNavLink = ({ to, children, className }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex flex-col items-center gap-1 ${
-        isActive ? "text-gray-900 font-semibold" : "text-gray-700"
+      `relative px-3 py-2 text-sm font-medium transition-all duration-300 ${
+        isActive 
+          ? "text-gray-900 font-semibold" 
+          : "text-gray-600 hover:text-gray-900"
       } ${className || ""}`
     }
   >
     {children}
-    <div className="h-[2px] w-0 bg-gray-900 transition-all duration-300 group-hover:w-full" />
+    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 group-hover:w-full" />
   </NavLink>
 );
 
@@ -25,6 +27,7 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userName, setUserName] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
   const navigate = useNavigate();
   const navRef = useRef(null);
@@ -58,8 +61,16 @@ const Navbar = () => {
 
     loadAuthFromLocalStorage();
     window.addEventListener("storage", loadAuthFromLocalStorage);
-    return () =>
+    
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
       window.removeEventListener("storage", loadAuthFromLocalStorage);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -90,262 +101,295 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="py-5 px-4 md:px-6 z-10 font-medium relative" ref={navRef}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <NavLink to="/">
-          <div className="flex flex-col leading-tight">
-            <span className="text-xl font-bold text-gray-900 tracking-wide uppercase">
-              PHOTO PARKK
-            </span>
-            <span className="text-[14px] font-medium text-center text-gray-500 tracking-wider uppercase">
-              (since 1996)
-            </span>
-          </div>
-        </NavLink>
-
-        {/* Desktop Menu */}
-        <ul className="hidden sm:flex gap-5 text-sm">
-          <li className="group">
-            <StyledNavLink to="/">HOME</StyledNavLink>
-          </li>
-
-          <li className="group relative">
-  {/* Trigger */}
-  <div
-    className="flex items-center gap-1 cursor-pointer text-gray-700  transition"
-    onClick={() => setDropdownVisible((prev) => !prev)}
-  >
-    <span className="font-medium">SHOP</span>
-    <ChevronDown
-      size={14}
-      className={`transition-transform ${dropdownVisible ? "rotate-180" : ""}`}
-    />
-  </div>
-
-  {/* Dropdown */}
-  {dropdownVisible && (
-    <div className="absolute top-full mt-2 left-0 w-56 bg-white shadow-lg rounded-lg z-50 border border-gray-200 overflow-hidden">
-      <div className="flex flex-col">
-        <NavLink
-          to="/shop/acrylic"
-          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
-          onClick={() => setDropdownVisible(false)}
-        >
-          Acrylic
-        </NavLink>
-        <NavLink
-          to="/shop/canvas"
-          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
-          onClick={() => setDropdownVisible(false)}
-        >
-          Canvas
-        </NavLink>
-        <NavLink
-          to="/shop/backlight-frames"
-          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition"
-          onClick={() => setDropdownVisible(false)}
-        >
-          Backlight Photo Frames
-        </NavLink>
-      </div>
-    </div>
-  )}
-</li>
-
-          <li className="group">
-            <StyledNavLink to="/frames">FRAMES</StyledNavLink>
-          </li>
-          <li className="group">
-            <StyledNavLink to="/customize">CUSTOMIZE</StyledNavLink>
-          </li>
-          <li className="group">
-            <StyledNavLink to="/about">ABOUT</StyledNavLink>
-          </li>
-          <li className="group">
-            <StyledNavLink to="/contact">CONTACT</StyledNavLink>
-          </li>
-          {isAdmin && (
-            <li className="group">
-              <StyledNavLink to="/adminpanel">ADMIN PANEL</StyledNavLink>
-            </li>
-          )}
-        </ul>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-4">
-          {isAuthenticated && (
-            <span className="text-sm text-gray-700 font-medium max-w-[120px] truncate">
-              Hello, {userName || "Guest"}
-            </span>
-          )}
-
-          {/* Profile Icon */}
-          <div className="relative" ref={profileRef}>
-            <button onClick={() => setProfileDropdown(!profileDropdown)}>
-              <User size={20} strokeWidth={1.5} className="text-gray-800" />
-            </button>
-            {profileDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md border z-50 py-1">
-                {isAuthenticated ? (
-                  <>
-                    <NavLink
-                      to="/my-orders"
-                      onClick={() => setProfileDropdown(false)}
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      My Orders
-                    </NavLink>
-                    {isAdmin && (
-                      <NavLink
-                        to="/adminpanel"
-                        onClick={() => setProfileDropdown(false)}
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        ADMIN PANEL
-                      </NavLink>
-                    )}
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
-                    >
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <NavLink
-                    to="/login"
-                    onClick={() => setProfileDropdown(false)}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Login
-                  </NavLink>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Cart Icon */}
-          <NavLink to="/cart" className="relative">
-            <ShoppingCart
-              size={20}
-              strokeWidth={1.5}
-              className="text-gray-800"
-            />
-            {cartCount > 0 && (
-              <span className="absolute -right-1.5 -bottom-1.5 w-4 h-4 flex items-center justify-center bg-gray-900 text-white text-[10px] rounded-full">
-                {cartCount}
+    <nav 
+      ref={navRef}
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? "bg-white/95 backdrop-blur-md shadow-lg py-3 border-b border-gray-100" 
+          : "bg-white py-4"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <NavLink to="/" className="flex-shrink-0 group">
+            <div className="flex flex-col leading-tight">
+              <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent tracking-tight">
+                PHOTO PARK
               </span>
-            )}
+              <span className="text-xs font-medium text-gray-500 tracking-wider uppercase mt-0.5">
+                Since 1996
+              </span>
+            </div>
           </NavLink>
 
-          {/* Mobile Menu Button */}
-          <button onClick={() => setMobileMenuOpen(true)} className="sm:hidden">
-            <Menu size={20} strokeWidth={1.5} className="text-gray-800" />
-          </button>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-1">
+            <StyledNavLink to="/">Home</StyledNavLink>
+            
+            {/* Shop Dropdown */}
+            <div className="relative group">
+              <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">
+                Shop
+                <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+              </button>
+              <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <div className="py-2">
+                  <NavLink
+                    to="/shop/acrylic"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 border-l-2 border-transparent hover:border-blue-500"
+                  >
+                    <div className="font-medium">Acrylic Prints</div>
+                    <div className="text-xs text-gray-500 mt-0.5">Premium acrylic displays</div>
+                  </NavLink>
+                  <NavLink
+                    to="/shop/canvas"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 border-l-2 border-transparent hover:border-blue-500"
+                  >
+                    <div className="font-medium">Canvas Prints</div>
+                    <div className="text-xs text-gray-500 mt-0.5">Gallery-quality canvas</div>
+                  </NavLink>
+                  <NavLink
+                    to="/shop/backlight-frames"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 border-l-2 border-transparent hover:border-blue-500"
+                  >
+                    <div className="font-medium">Backlight Frames</div>
+                    <div className="text-xs text-gray-500 mt-0.5">Illuminated displays</div>
+                  </NavLink>
+                </div>
+              </div>
+            </div>
+
+            <StyledNavLink to="/frames">Frames</StyledNavLink>
+            <StyledNavLink to="/customize">Customize</StyledNavLink>
+            <StyledNavLink to="/about">About</StyledNavLink>
+            <StyledNavLink to="/contact">Contact</StyledNavLink>
+            {isAdmin && (
+              <StyledNavLink to="/adminpanel" className="text-purple-600 hover:text-purple-700">
+                Admin Panel
+              </StyledNavLink>
+            )}
+          </div>
+
+          {/* Right Section */}
+          <div className="flex items-center gap-3">
+            {/* User Greeting */}
+            {isAuthenticated && (
+              <span className="hidden sm:block text-sm text-gray-600 font-medium max-w-[120px] truncate">
+                Hello, {userName}
+              </span>
+            )}
+
+            {/* Profile Dropdown */}
+            <div className="relative" ref={profileRef}>
+              <button 
+                onClick={() => setProfileDropdown(!profileDropdown)}
+                className="p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 group"
+              >
+                <User size={18} className="text-gray-600 group-hover:text-gray-900" />
+              </button>
+              
+              {profileDropdown && (
+                <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                  <div className="p-2">
+                    {isAuthenticated ? (
+                      <>
+                        <div className="px-3 py-2 border-b border-gray-100">
+                          <p className="text-sm font-medium text-gray-900">Welcome back!</p>
+                          <p className="text-xs text-gray-500 truncate">{userName}</p>
+                        </div>
+                        <NavLink
+                          to="/my-orders"
+                          onClick={() => setProfileDropdown(false)}
+                          className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200"
+                        >
+                          My Orders
+                        </NavLink>
+                        {isAdmin && (
+                          <NavLink
+                            to="/adminpanel"
+                            onClick={() => setProfileDropdown(false)}
+                            className="flex items-center px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200"
+                          >
+                            Admin Panel
+                          </NavLink>
+                        )}
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 mt-1"
+                        >
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <NavLink
+                        to="/login"
+                        onClick={() => setProfileDropdown(false)}
+                        className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200"
+                      >
+                        Sign In
+                      </NavLink>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Cart */}
+            <NavLink 
+              to="/cart" 
+              className="relative p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 group"
+            >
+              <ShoppingCart size={18} className="text-gray-600 group-hover:text-gray-900" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </NavLink>
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+            >
+              <Menu size={20} className="text-gray-600" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-40"
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
-        ></div>
+        />
       )}
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-80 max-w-full bg-white/95 backdrop-blur-md shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center px-4 py-3 border-b">
-          <h3 className="text-lg font-semibold">Menu</h3>
-          <button onClick={() => setMobileMenuOpen(false)}>
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+          <div className="flex flex-col">
+            <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
+              PHOTO PARK
+            </span>
+            <span className="text-xs text-gray-500">Since 1996</span>
+          </div>
+          <button 
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          >
             <X size={20} />
           </button>
         </div>
-        <div className="py-2">
+
+        {/* Menu Items */}
+        <div className="p-4 space-y-2">
           <NavLink
             to="/"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2 border-b"
+            className="block px-4 py-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium"
           >
-            HOME
+            Home
           </NavLink>
-          <button
-            onClick={() => setMobileDropdownVisible(!mobileDropdownVisible)}
-            className="w-full text-left px-4 py-2 border-b flex justify-between items-center"
-          >
-            <span>SHOP</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform ${mobileDropdownVisible ? "rotate-180" : ""}`}
-            />
-          </button>
-          {mobileDropdownVisible && (
-            <div className="pl-6 bg-gray-50">
-              <NavLink
-                to="/shop/acrylic"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-gray-700 hover:text-gray-900"
-              >
-                Acrylic
-              </NavLink>
-              <NavLink
-                to="/shop/canvas"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-gray-700 hover:text-gray-900"
-              >
-                Canvas
-              </NavLink>
-              <NavLink
-                to="/shop/backlight-frames"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-gray-700 hover:text-gray-900"
-              >
-                Backlight
-              </NavLink>
-            </div>
-          )}
-          <NavLink
-            to="/frames"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2 border-b"
-          >
-            FRAMES
-          </NavLink>
-          <NavLink
-            to="/customize"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2 border-b"
-          >
-            CUSTOMIZE
-          </NavLink>
-          <NavLink
-            to="/about"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2 border-b"
-          >
-            ABOUT
-          </NavLink>
-          <NavLink
-            to="/contact"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-4 py-2 border-b"
-          >
-            CONTACT
-          </NavLink>
+
+          {/* Mobile Shop Dropdown */}
+          <div className="border-b border-gray-100">
+            <button
+              onClick={() => setMobileDropdownVisible(!mobileDropdownVisible)}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium"
+            >
+              <span>Shop</span>
+              <ChevronDown
+                size={16}
+                className={`transition-transform ${mobileDropdownVisible ? "rotate-180" : ""}`}
+              />
+            </button>
+            {mobileDropdownVisible && (
+              <div className="pl-6 py-2 space-y-1">
+                <NavLink
+                  to="/shop/acrylic"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                >
+                  Acrylic Prints
+                </NavLink>
+                <NavLink
+                  to="/shop/canvas"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                >
+                  Canvas Prints
+                </NavLink>
+                <NavLink
+                  to="/shop/backlight-frames"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                >
+                  Backlight Frames
+                </NavLink>
+              </div>
+            )}
+          </div>
+
+          {["Frames", "Customize", "About", "Contact"].map((item) => (
+            <NavLink
+              key={item}
+              to={`/${item.toLowerCase()}`}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 font-medium"
+            >
+              {item}
+            </NavLink>
+          ))}
+
           {isAdmin && (
             <NavLink
               to="/adminpanel"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 border-b"
+              className="block px-4 py-3 rounded-xl text-purple-600 hover:bg-purple-50 transition-all duration-200 font-medium"
             >
-              ADMIN PANEL
+              Admin Panel
             </NavLink>
           )}
+
+          {/* User Section in Mobile */}
+          <div className="pt-4 mt-4 border-t border-gray-100">
+            {isAuthenticated ? (
+              <>
+                <div className="px-4 py-2 text-sm text-gray-500">
+                  Signed in as <span className="font-medium text-gray-900">{userName}</span>
+                </div>
+                <NavLink
+                  to="/my-orders"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
+                >
+                  My Orders
+                </NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-200"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <NavLink
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-center font-medium hover:shadow-lg transition-all duration-200"
+              >
+                Sign In
+              </NavLink>
+            )}
+          </div>
         </div>
       </div>
     </nav>
