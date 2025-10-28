@@ -14,12 +14,10 @@ const NewArrivalProducts = () => {
         const response = await axios.get(
           "https://api.photoparkk.com/api/newarrivals"
         );
-        console.log("Admin NewArrivals API Response:", response.data);
         
         if (Array.isArray(response.data)) {
           setNewArrivalItems(response.data);
         } else {
-          console.error("API response is not an array:", response.data);
           setNewArrivalItems([]);
         }
       } catch (error) {

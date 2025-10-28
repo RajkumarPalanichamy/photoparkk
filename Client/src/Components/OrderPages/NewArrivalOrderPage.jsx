@@ -126,7 +126,6 @@ const NewArrivalOrderPage = () => {
         const res = await axiosInstance.get(
           `/newarrivals/${id}`
         );
-        console.log("Product API Response:", res.data);
         
         if (res.data) {
           setProduct(res.data);
@@ -137,7 +136,6 @@ const NewArrivalOrderPage = () => {
             setSelectedThickness(res.data.thickness);
           }
         } else {
-          console.error("No product data received");
           setProduct(null);
         }
       } catch (error) {

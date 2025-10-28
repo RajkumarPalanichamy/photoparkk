@@ -9,12 +9,6 @@ const envBaseUrl =
   (typeof window !== "undefined" && window.location.hostname !== "localhost" && "https://api.photoparkk.com/api") ||
   "/api";
 
-// Debug logging for production
-if (typeof window !== "undefined") {
-  console.log("API Base URL:", envBaseUrl);
-  console.log("Current hostname:", window.location.hostname);
-}
-
 const axiosInstance = axios.create({
   baseURL: envBaseUrl,
 });
@@ -30,12 +24,8 @@ axiosInstance.interceptors.request.use((config) => {
 
 // 🔄 Handle token refresh if accessToken expires
 axiosInstance.interceptors.response.use(
-  (res) => {
-    console.log("API Response:", res.config.url, res.status, res.data);
-    return res;
-  },
+  (res) => res,
   async (err) => {
-    console.error("API Error:", err.config?.url, err.response?.status, err.response?.data);
     const originalRequest = err.config;
 
     if (
