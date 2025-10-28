@@ -38,6 +38,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// ✅ Root route for API health check
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "🟢 API is working perfectly!",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
 // ✅ Serve static files
 app.use("/newarrivalsUploads", express.static(path.join(__dirname, "newarrivalsUploads")));
 app.use("/addtocartUploads", express.static(path.join(__dirname, "addtocartUploads")));
