@@ -14,10 +14,19 @@ const NewArrivals = () => {
     const fetchNewArrivals = async () => {
       try {
         const response = await axiosInstance.get("/newarrivals");
-        setItems(response.data);
+        console.log("NewArrivals API Response:", response.data);
+        
+        // Ensure response.data is an array
+        if (Array.isArray(response.data)) {
+          setItems(response.data);
+        } else {
+          console.error("API response is not an array:", response.data);
+          setItems([]); // Set empty array as fallback
+        }
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch new arrivals:", error);
+        setItems([]); // Set empty array on error
         setLoading(false);
       }
     };
@@ -64,7 +73,7 @@ const NewArrivals = () => {
             }}
             className="py-4"
           >
-            {items.map((item, index) => {
+            {Array.isArray(items) && items.map((item, index) => {
               const firstSize =
                 item.sizes && item.sizes.length > 0 ? item.sizes[0] : null;
               const isNew = index < 2; // First 2 items are "NEW"

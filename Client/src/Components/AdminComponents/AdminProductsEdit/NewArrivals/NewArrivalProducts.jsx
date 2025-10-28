@@ -14,9 +14,17 @@ const NewArrivalProducts = () => {
         const response = await axios.get(
           "https://api.photoparkk.com/api/newarrivals"
         );
-        setNewArrivalItems(response.data);
+        console.log("Admin NewArrivals API Response:", response.data);
+        
+        if (Array.isArray(response.data)) {
+          setNewArrivalItems(response.data);
+        } else {
+          console.error("API response is not an array:", response.data);
+          setNewArrivalItems([]);
+        }
       } catch (error) {
         console.error("Failed to fetch new arrivals:", error);
+        setNewArrivalItems([]);
       } finally {
         setLoading(false);
       }
@@ -66,7 +74,7 @@ const NewArrivalProducts = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-          {newArrivalItems.map((item) => {
+          {Array.isArray(newArrivalItems) && newArrivalItems.map((item) => {
             const selectedSize = selectedSizes[item._id] || item.sizes?.[0];
             return (
               <div

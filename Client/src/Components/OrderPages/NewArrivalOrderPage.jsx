@@ -126,11 +126,23 @@ const NewArrivalOrderPage = () => {
         const res = await axiosInstance.get(
           `/newarrivals/${id}`
         );
-        setProduct(res.data);
-        if (res.data.sizes?.length > 0) setSelectedSize(res.data.sizes[0]);
-        if (res.data.thickness) setSelectedThickness(res.data.thickness);
+        console.log("Product API Response:", res.data);
+        
+        if (res.data) {
+          setProduct(res.data);
+          if (Array.isArray(res.data.sizes) && res.data.sizes.length > 0) {
+            setSelectedSize(res.data.sizes[0]);
+          }
+          if (res.data.thickness) {
+            setSelectedThickness(res.data.thickness);
+          }
+        } else {
+          console.error("No product data received");
+          setProduct(null);
+        }
       } catch (error) {
         console.error("Failed to fetch product:", error);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
@@ -262,7 +274,7 @@ const NewArrivalOrderPage = () => {
                 Select Size
               </label>
               <div className="grid grid-cols-2 gap-3">
-                {product.sizes?.map((sizeObj, i) => (
+                {Array.isArray(product.sizes) && product.sizes.map((sizeObj, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedSize(sizeObj)}
