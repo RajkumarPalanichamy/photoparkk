@@ -13,6 +13,11 @@ import {
   FaPaperPlane,
   FaWhatsapp
 } from "react-icons/fa";
+import {
+  CONTACT_DISPLAY_NUMBER,
+  CONTACT_TEL_LINK_WITH_COUNTRY,
+  CONTACT_WHATSAPP_LINK,
+} from "../constants/contact";
 
 const Contact = () => {
   const form = useRef();
@@ -67,11 +72,11 @@ const Contact = () => {
     {
       icon: FaPhone,
       label: "Phone",
-      value: "+91 96296 74444",
+      value: CONTACT_DISPLAY_NUMBER,
       color: "from-green-500 to-emerald-500",
       bgColor: "bg-green-50",
       delay: 0.2,
-      link: "tel:+919629674444"
+      link: CONTACT_TEL_LINK_WITH_COUNTRY
     },
     {
       icon: FaInstagram,
@@ -85,11 +90,11 @@ const Contact = () => {
     {
       icon: FaWhatsapp,
       label: "WhatsApp",
-      value: "+91 96296 74444",
+      value: CONTACT_DISPLAY_NUMBER,
       color: "from-green-500 to-green-600",
       bgColor: "bg-green-50",
       delay: 0.35,
-      link: "https://wa.me/919629674444"
+      link: CONTACT_WHATSAPP_LINK
     },
     {
       icon: FaMapMarkerAlt,

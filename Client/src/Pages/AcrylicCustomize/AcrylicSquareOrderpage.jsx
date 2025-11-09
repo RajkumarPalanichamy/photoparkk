@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaPhoneAlt, FaTruck, FaLock } from "react-icons/fa";
 import { BsPatchCheckFill } from "react-icons/bs";
 import axiosInstance from "../../utils/axiosInstance";
+import {
+  CONTACT_TEL_LINK,
+  CONTACT_WHATSAPP_LINK,
+} from "../../constants/contact";
 
 const AcrylicSquareOrderpage = () => {
   const location = useLocation();
@@ -246,7 +250,7 @@ const AcrylicSquareOrderpage = () => {
             </p>
 
             <button
-              onClick={() => (window.location.href = "tel:9940770011")}
+              onClick={() => (window.location.href = CONTACT_TEL_LINK)}
               className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg w-full flex items-center justify-center gap-3 font-semibold transition duration-200 shadow"
             >
               <FaPhoneAlt size={18} />
@@ -255,7 +259,7 @@ const AcrylicSquareOrderpage = () => {
 
             <button
               onClick={() =>
-                window.open("https://wa.me/919940770011", "_blank")
+                window.open(CONTACT_WHATSAPP_LINK, "_blank")
               }
               className="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg w-full flex items-center justify-center gap-3 font-semibold transition duration-200 shadow"
             >

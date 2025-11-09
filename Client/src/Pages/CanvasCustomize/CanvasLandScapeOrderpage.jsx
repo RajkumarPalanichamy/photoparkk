@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
 import { FaShoppingCart, FaPhoneAlt } from "react-icons/fa";
 import axios from "axios";
+import {
+  CONTACT_TEL_LINK,
+  CONTACT_WHATSAPP_LINK,
+} from "../../constants/contact";
 
 const CanvasLandScapeOrderpage = () => {
   const location = useLocation();
@@ -245,16 +249,14 @@ const CanvasLandScapeOrderpage = () => {
               Perfect for Gifts and Return Gifts for any occasion.
             </p>
             <button
-              onClick={() => (window.location.href = "tel:9940770011")}
+              onClick={() => (window.location.href = CONTACT_TEL_LINK)}
               className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg w-full flex items-center justify-center gap-3 font-semibold transition duration-200 shadow"
             >
               <FaPhoneAlt size={18} />
               Call & Book Bulk Orders
             </button>
             <button
-              onClick={() =>
-                window.open("https://wa.me/919940770011", "_blank")
-              }
+              onClick={() => window.open(CONTACT_WHATSAPP_LINK, "_blank")}
               className="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-lg w-full flex items-center justify-center gap-3 font-semibold transition duration-200 shadow"
             >
               <FaPhoneAlt size={18} />
