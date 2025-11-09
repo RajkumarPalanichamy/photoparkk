@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Play, Pause, Volume2, VolumeX, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import parkvideo from "../../assets/frontend_assets/HomeSlides/photoparkk Video.mp4";
 
 export default function LandingPage() {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const [currentOffer, setCurrentOffer] = useState(0);
 
   const offers = [
     "🎉 50% OFF on All Premium Frames - Limited Time!",
     "✨ Buy 2 Get 1 Free on Canvas Prints",
     "🔥 Exclusive Backlight Frames - 40% OFF",
-    "⭐ Free Shipping on Orders Over $99"
+    "⭐ Free Shipping on Orders Over $99",
   ];
 
   useEffect(() => {
@@ -30,7 +28,10 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
         <div className="relative flex flex-col sm:flex-row items-center justify-center px-4 sm:px-0 gap-2 sm:gap-0">
           <div className="flex items-center">
-            <Sparkles size={14} className="text-yellow-400 mr-2 sm:mr-3 animate-spin" />
+            <Sparkles
+              size={14}
+              className="text-yellow-400 mr-2 sm:mr-3 animate-spin"
+            />
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentOffer}
@@ -66,37 +67,17 @@ export default function LandingPage() {
           <video
             autoPlay
             loop
-            muted={isMuted}
+            muted
             playsInline
             className="w-full h-full object-cover"
           >
             <source src={parkvideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          
+
           {/* Enhanced Overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/20 to-black/60" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/30 to-black/60" />
-        </div>
-
-        {/* Video Controls */}
-        <div className="absolute top-4 right-4 z-20 flex gap-2">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-black/50 backdrop-blur-sm text-white p-2 rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300"
-          >
-            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsMuted(!isMuted)}
-            className="bg-black/50 backdrop-blur-sm text-white p-2 rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300"
-          >
-            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-          </motion.button>
         </div>
 
         {/* Content */}
@@ -150,12 +131,18 @@ export default function LandingPage() {
               >
                 <Link to="/offers">
                   <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(255, 255, 255, 0.3)" }}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 10px 30px -10px rgba(255, 255, 255, 0.3)",
+                    }}
                     whileTap={{ scale: 0.95 }}
                     className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg w-full flex items-center justify-center gap-3 hover:shadow-2xl transition-all duration-300"
                   >
                     EXPLORE COLLECTION
-                    <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={20} />
+                    <ArrowRight
+                      className="group-hover:translate-x-1 transition-transform duration-300"
+                      size={20}
+                    />
                   </motion.button>
                 </Link>
               </motion.div>
@@ -206,8 +193,8 @@ export default function LandingPage() {
                 transition={{ duration: 1, delay: 0.7 }}
                 className="text-2xl text-gray-200 mb-12 leading-relaxed max-w-2xl"
               >
-                Discover our premium photography collections with exclusive discounts. 
-                Transform your memories into timeless art.
+                Discover our premium photography collections with exclusive
+                discounts. Transform your memories into timeless art.
               </motion.p>
 
               <motion.div
@@ -218,18 +205,21 @@ export default function LandingPage() {
               >
                 <Link to="/offers">
                   <motion.button
-                    whileHover={{ 
-                      scale: 1.05, 
-                      boxShadow: "0 20px 40px -10px rgba(255, 255, 255, 0.3)" 
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 20px 40px -10px rgba(255, 255, 255, 0.3)",
                     }}
                     whileTap={{ scale: 0.95 }}
                     className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-12 py-6 rounded-2xl font-bold text-xl flex items-center gap-4 hover:shadow-2xl transition-all duration-300"
                   >
                     SHOP COLLECTION
-                    <ArrowRight className="group-hover:translate-x-2 transition-transform duration-300" size={24} />
+                    <ArrowRight
+                      className="group-hover:translate-x-2 transition-transform duration-300"
+                      size={24}
+                    />
                   </motion.button>
                 </Link>
-                
+
                 <Link to="/customize">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -251,7 +241,7 @@ export default function LandingPage() {
                 {[
                   { number: "25K+", label: "Happy Customers" },
                   { number: "1996", label: "Since Year" },
-                  { number: "4.9★", label: "Rating" }
+                  { number: "4.9★", label: "Rating" },
                 ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
@@ -260,7 +250,9 @@ export default function LandingPage() {
                     transition={{ delay: 1.3 + index * 0.2 }}
                     className="text-center"
                   >
-                    <div className="text-2xl font-bold text-white">{stat.number}</div>
+                    <div className="text-2xl font-bold text-white">
+                      {stat.number}
+                    </div>
                     <div className="text-gray-300 text-sm">{stat.label}</div>
                   </motion.div>
                 ))}
@@ -268,8 +260,6 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </div>
-
-       
       </div>
     </div>
   );
