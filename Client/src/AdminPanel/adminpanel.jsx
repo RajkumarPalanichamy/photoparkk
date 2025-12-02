@@ -17,24 +17,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import axiosInstance from "../utils/axiosInstance";
 
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ArcElement,
-  Tooltip,
-  Legend
-);
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const numberFormatter = new Intl.NumberFormat("en-IN");
-const currencyFormatter = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-  maximumFractionDigits: 0,
-});
 
 const AdminPanel = () => {
   const [stats, setStats] = useState({
@@ -53,7 +41,6 @@ const AdminPanel = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     fetchDashboardStats();
@@ -79,7 +66,6 @@ const AdminPanel = () => {
           frameRevenue: payload.breakdown?.frameRevenue || 0,
         },
       });
-      setLastUpdated(new Date());
     } catch (err) {
       console.error("Failed to fetch dashboard stats:", err);
       setError("Failed to load dashboard statistics");
@@ -114,14 +100,6 @@ const AdminPanel = () => {
       color: "bg-purple-500",
       link: "/admin/frames",
       ctaLabel: "Customize frames",
-    },
-    {
-      icon: BarChart3,
-      label: "Revenue",
-      value: loading ? "..." : currencyFormatter.format(stats.totalRevenue),
-      color: "bg-indigo-500",
-      link: "/admin/revenue",
-      ctaLabel: "View revenue",
     },
   ];
 
@@ -208,52 +186,6 @@ const AdminPanel = () => {
     },
   };
 
-  const revenueBreakdownData = {
-    labels: ["Frame Revenue", "Common Revenue"],
-    datasets: [
-      {
-        label: "Revenue",
-        data: [breakdown.frameRevenue || 0, breakdown.commonRevenue || 0],
-        backgroundColor: ["rgba(129, 140, 248, 1)", "rgba(34, 197, 94, 1)"],
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const doughnutOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: "70%",
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          padding: 15,
-          font: {
-            size: 12,
-            weight: "500",
-          },
-          usePointStyle: true,
-        },
-      },
-      tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        padding: 12,
-        titleFont: {
-          size: 14,
-          weight: "600",
-        },
-        bodyFont: {
-          size: 13,
-        },
-        callbacks: {
-          label: (context) =>
-            `${context.label}: ${currencyFormatter.format(context.parsed)}`,
-        },
-      },
-    },
-  };
-
   const insightList = [
     {
       label: "Special offers live",
@@ -264,15 +196,6 @@ const AdminPanel = () => {
       label: "New arrival traction",
       value: breakdown.newArrivals,
       detail: "recent catalog orders",
-    },
-    {
-      label: "Frames contribution",
-      value: `${Math.round(
-        stats.totalRevenue
-          ? (breakdown.frameRevenue / Math.max(stats.totalRevenue, 1)) * 100
-          : 0
-      )}%`,
-      detail: "of total revenue",
     },
   ];
 
@@ -359,25 +282,6 @@ const AdminPanel = () => {
               </div>
             ) : (
               <Bar data={orderBreakdownData} options={orderChartOptions} />
-            )}
-          </div>
-        </div>
-
-        {/* Revenue Mix Chart */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Revenue Mix</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Frame vs Common revenue
-            </p>
-          </div>
-          <div className="h-80">
-            {loading ? (
-              <div className="flex h-full items-center justify-center text-gray-400">
-                <Loader2 className="h-8 w-8 animate-spin" />
-              </div>
-            ) : (
-              <Doughnut data={revenueBreakdownData} options={doughnutOptions} />
             )}
           </div>
         </div>

@@ -221,16 +221,6 @@ export default function LandingPage() {
                     />
                   </motion.button>
                 </Link>
-
-                <Link to="/customize">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="group border-2 border-white/30 text-white px-8 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
-                  >
-                    CUSTOMIZE
-                  </motion.button>
-                </Link>
               </motion.div>
 
               {/* Stats */}

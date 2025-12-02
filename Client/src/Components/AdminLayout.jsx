@@ -70,11 +70,6 @@ const AdminLayout = () => {
       label: "Manage Frames",
       path: "/admin/frames",
     },
-    {
-      icon: BarChart3,
-      label: "Monthly Revenue",
-      path: "/admin/revenue",
-    },
   ];
 
   const isActive = (path) => {

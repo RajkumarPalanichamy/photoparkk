@@ -190,7 +190,6 @@ const Navbar = () => {
             </div>
 
             <StyledNavLink to="/frames">Frames</StyledNavLink>
-            <StyledNavLink to="/customize">Customize</StyledNavLink>
             <StyledNavLink to="/about">About</StyledNavLink>
             <StyledNavLink to="/contact">Contact</StyledNavLink>
             {isAdmin && (

@@ -1,17 +1,17 @@
 // 📁 src/components/admin/FrameForm.jsx
 import React, { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-import { 
-  Plus, 
-  Trash2, 
-  Upload, 
-  Palette, 
-  Image as ImageIcon, 
+import {
+  Plus,
+  Trash2,
+  Upload,
+  Palette,
+  Image as ImageIcon,
   Ruler,
   Loader,
   X,
   Save,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 const FrameForm = ({ initialData, onSuccess, onClose }) => {
@@ -113,15 +113,15 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
   const compressImage = (file, maxSizeKB = 5000) => {
     return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
       const img = new Image();
-      
+
       img.onload = () => {
         // Calculate new dimensions
         let { width, height } = img;
         const maxDimension = 1200; // Max width or height
-        
+
         if (width > height && width > maxDimension) {
           height = (height * maxDimension) / width;
           width = maxDimension;
@@ -129,49 +129,63 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
           width = (width * maxDimension) / height;
           height = maxDimension;
         }
-        
+
         canvas.width = width;
         canvas.height = height;
-        
+
         // Draw and compress
         ctx.drawImage(img, 0, 0, width, height);
-        
-        canvas.toBlob((blob) => {
-          if (blob.size <= maxSizeKB * 1024) {
-            resolve(blob);
-          } else {
-            // If still too large, compress more
-            canvas.toBlob((compressedBlob) => {
-              resolve(compressedBlob);
-            }, 'image/jpeg', 0.7);
-          }
-        }, 'image/jpeg', 0.8);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob.size <= maxSizeKB * 1024) {
+              resolve(blob);
+            } else {
+              // If still too large, compress more
+              canvas.toBlob(
+                (compressedBlob) => {
+                  resolve(compressedBlob);
+                },
+                "image/jpeg",
+                0.7
+              );
+            }
+          },
+          "image/jpeg",
+          0.8
+        );
       };
-      
+
       img.src = URL.createObjectURL(file);
     });
   };
 
   const handleFileChange = async (colorIdx, styleIdx, imgIdx, file) => {
     if (!file) return;
-    
+
     // Check file size (10MB limit)
     const maxSizeBytes = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSizeBytes) {
-      alert(`File size too large. Maximum allowed size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB. The image will be compressed.`);
+      alert(
+        `File size too large. Maximum allowed size is 10MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB. The image will be compressed.`
+      );
     }
-    
+
     try {
       setCompressing(true);
       // Compress the image
       const compressedFile = await compressImage(file);
-      
+
       const updated = [...colorOptions];
-      updated[colorIdx].styles[styleIdx].frameImages[imgIdx].file = compressedFile;
+      updated[colorIdx].styles[styleIdx].frameImages[imgIdx].file =
+        compressedFile;
       setColorOptions(updated);
     } catch (error) {
-      console.error('Error compressing image:', error);
-      alert('Error processing image. Please try a different file.');
+      console.error("Error compressing image:", error);
+      alert("Error processing image. Please try a different file.");
     } finally {
       setCompressing(false);
     }
@@ -195,22 +209,40 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
   };
 
   // Size handlers (same as before but with style level)
-  const handleSizeChange = (colorIdx, styleIdx, imgIdx, sizeIdx, field, value) => {
+  const handleSizeChange = (
+    colorIdx,
+    styleIdx,
+    imgIdx,
+    sizeIdx,
+    field,
+    value
+  ) => {
     const updated = [...colorOptions];
-    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes[sizeIdx][field] = value;
+    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes[sizeIdx][
+      field
+    ] = value;
     setColorOptions(updated);
   };
 
   const addSize = (colorIdx, styleIdx, imgIdx) => {
     const updated = [...colorOptions];
-    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.push({ label: "", amount: "" });
+    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.push({
+      label: "",
+      amount: "",
+    });
     setColorOptions(updated);
   };
 
   const removeSize = (colorIdx, styleIdx, imgIdx, sizeIdx) => {
     const updated = [...colorOptions];
-    if (updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.length === 1) return;
-    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.splice(sizeIdx, 1);
+    if (
+      updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.length === 1
+    )
+      return;
+    updated[colorIdx].styles[styleIdx].frameImages[imgIdx].sizes.splice(
+      sizeIdx,
+      1
+    );
     setColorOptions(updated);
   };
 
@@ -236,7 +268,11 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       for (let styleIdx = 0; styleIdx < color.styles.length; styleIdx++) {
         const style = color.styles[styleIdx];
         if (!style.styleName.trim()) {
-          alert(`Please enter a style name for style ${styleIdx + 1} in color ${color.color}`);
+          alert(
+            `Please enter a style name for style ${styleIdx + 1} in color ${
+              color.color
+            }`
+          );
           setLoading(false);
           return;
         }
@@ -244,12 +280,20 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
         for (let imgIdx = 0; imgIdx < style.frameImages.length; imgIdx++) {
           const img = style.frameImages[imgIdx];
           if (!img.title.trim()) {
-            alert(`Please enter a title for frame image ${imgIdx + 1} in style ${style.styleName}`);
+            alert(
+              `Please enter a title for frame image ${imgIdx + 1} in style ${
+                style.styleName
+              }`
+            );
             setLoading(false);
             return;
           }
           if (!img.file && !img.imageUrl) {
-            alert(`Please upload an image for frame image ${imgIdx + 1} in style ${style.styleName}`);
+            alert(
+              `Please upload an image for frame image ${imgIdx + 1} in style ${
+                style.styleName
+              }`
+            );
             setLoading(false);
             return;
           }
@@ -257,7 +301,11 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
           for (let sizeIdx = 0; sizeIdx < img.sizes.length; sizeIdx++) {
             const size = img.sizes[sizeIdx];
             if (!size.label.trim() || !size.amount) {
-              alert(`Please fill in all size details for frame image ${imgIdx + 1} in style ${style.styleName}`);
+              alert(
+                `Please fill in all size details for frame image ${
+                  imgIdx + 1
+                } in style ${style.styleName}`
+              );
               setLoading(false);
               return;
             }
@@ -309,7 +357,9 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                         sizes: img.sizes,
                       };
                     } else {
-                      throw new Error("All frame images must have a file or existing imageUrl");
+                      throw new Error(
+                        "All frame images must have a file or existing imageUrl"
+                      );
                     }
                   })
                 );
@@ -330,10 +380,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       formData.append("shapeData", JSON.stringify(shapeData));
 
       if (initialData?._id) {
-        await axiosInstance.put(
-          `/framecustomize/${initialData._id}`,
-          formData
-        );
+        await axiosInstance.put(`/framecustomize/${initialData._id}`, formData);
       } else {
         await axiosInstance.post("/framecustomize", formData);
       }
@@ -342,11 +389,13 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       onClose();
     } catch (err) {
       console.error("Submit error:", err);
-      
+
       // Show specific error messages
       if (err.response?.data?.message) {
         if (err.response.data.message.includes("File size too large")) {
-          alert("File size too large! Please compress your images or use smaller files. Maximum size is 10MB.");
+          alert(
+            "File size too large! Please compress your images or use smaller files. Maximum size is 10MB."
+          );
         } else {
           alert(`Error: ${err.response.data.message}`);
         }
@@ -359,26 +408,26 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-lg p-6">
       {/* Shape Input */}
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Shape Name *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Shape Name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           value={shape}
           onChange={(e) => setShape(e.target.value)}
-          className="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+          className="block w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
           placeholder="Enter shape name (e.g., Rectangle, Circle, Heart...)"
         />
       </div>
 
       {/* User Image Upload */}
-      <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
-        <label className="block text-sm font-semibold text-blue-900 mb-3">
-          <Upload className="w-4 h-4 inline mr-2" />
-          Dummy User Image *
+      <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5">
+        <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+          <Upload className="w-4 h-4 text-indigo-600" />
+          Dummy User Image <span className="text-red-500">*</span>
         </label>
         <div className="flex items-center gap-4">
           <label className="flex-1 cursor-pointer">
@@ -388,39 +437,44 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
               onChange={async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
-                
+
                 // Check file size (10MB limit)
                 const maxSizeBytes = 10 * 1024 * 1024; // 10MB
                 if (file.size > maxSizeBytes) {
-                  alert(`File size too large. Maximum allowed size is 10MB. Your file is ${(file.size / (1024 * 1024)).toFixed(1)}MB. The image will be compressed.`);
+                  alert(
+                    `File size too large. Maximum allowed size is 10MB. Your file is ${(
+                      file.size /
+                      (1024 * 1024)
+                    ).toFixed(1)}MB. The image will be compressed.`
+                  );
                 }
-                
+
                 try {
                   setCompressing(true);
                   // Compress the image
                   const compressedFile = await compressImage(file);
                   setUserUploadedImage(compressedFile);
                 } catch (error) {
-                  console.error('Error compressing user image:', error);
-                  alert('Error processing image. Please try a different file.');
+                  console.error("Error compressing user image:", error);
+                  alert("Error processing image. Please try a different file.");
                 } finally {
                   setCompressing(false);
                 }
               }}
               className="hidden"
             />
-            <div className="border-2 border-dashed border-blue-300 rounded-xl p-6 text-center hover:bg-blue-100 transition-colors duration-200">
-              <Upload className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-              <p className="text-blue-700 font-medium">
+            <div className="border-2 border-dashed border-indigo-300 rounded-lg p-6 text-center hover:bg-indigo-100 transition-colors duration-200">
+              <Upload className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
+              <p className="text-indigo-700 font-medium">
                 {compressing ? "Compressing image..." : "Click to upload image"}
               </p>
-              <p className="text-blue-600 text-sm mt-1">
+              <p className="text-indigo-600 text-sm mt-1">
                 {userUploadedImage ? userUploadedImage.name : "No file chosen"}
               </p>
             </div>
           </label>
           {userUploadedImage && (
-            <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-300">
+            <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-indigo-300 shadow-sm">
               <img
                 src={URL.createObjectURL(userUploadedImage)}
                 alt="Preview"
@@ -434,14 +488,14 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       {/* Color Options */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <label className="block text-lg font-semibold text-gray-800">
-            <Palette className="w-5 h-5 inline mr-2" />
+          <label className="block text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <Palette className="w-5 h-5 text-indigo-600" />
             Color & Style Options
           </label>
           <button
             type="button"
             onClick={addColor}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition"
           >
             <Plus className="w-4 h-4" />
             Add Color
@@ -449,26 +503,31 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
         </div>
 
         {colorOptions.map((color, colorIdx) => (
-          <div key={colorIdx} className="border border-gray-300 rounded-2xl bg-white overflow-hidden">
+          <div
+            key={colorIdx}
+            className="border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm"
+          >
             {/* Color Header */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="p-2 bg-white rounded-lg shadow-sm">
-                    <Palette className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-indigo-100 rounded-lg">
+                    <Palette className="w-5 h-5 text-indigo-600" />
                   </div>
                   <input
                     type="text"
                     placeholder="Color name (e.g., Blue, White, Gold...)"
                     value={color.color}
-                    onChange={(e) => handleColorChange(colorIdx, "color", e.target.value)}
-                    className="bg-transparent text-xl font-bold text-gray-800 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[200px]"
+                    onChange={(e) =>
+                      handleColorChange(colorIdx, "color", e.target.value)
+                    }
+                    className="bg-transparent text-lg font-semibold text-gray-900 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[200px]"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => removeColor(colorIdx)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                   title="Remove Color"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -479,14 +538,14 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
             {/* Styles */}
             <div className="p-6 space-y-6">
               <div className="flex items-center justify-between">
-                <label className="block text-md font-semibold text-gray-700 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  Styles for {color.color}
+                <label className="block text-md font-semibold text-gray-900 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-purple-600" />
+                  Styles for {color.color || "this color"}
                 </label>
                 <button
                   type="button"
                   onClick={() => addStyle(colorIdx)}
-                  className="flex items-center gap-2 px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors duration-200"
+                  className="flex items-center gap-2 px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition"
                 >
                   <Plus className="w-4 h-4" />
                   Add Style
@@ -494,9 +553,12 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
               </div>
 
               {color.styles.map((style, styleIdx) => (
-                <div key={styleIdx} className="border border-gray-200 rounded-xl bg-gray-50 overflow-hidden">
+                <div
+                  key={styleIdx}
+                  className="border border-gray-200 rounded-lg bg-gray-50 overflow-hidden"
+                >
                   {/* Style Header */}
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-5 py-3 border-b border-gray-200">
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-3 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <Sparkles className="w-4 h-4 text-purple-600" />
@@ -504,14 +566,21 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                           type="text"
                           placeholder="Style name (e.g., Classic Frame, Shade Frame, Modern Border...)"
                           value={style.styleName}
-                          onChange={(e) => handleStyleChange(colorIdx, styleIdx, "styleName", e.target.value)}
-                          className="bg-transparent text-lg font-semibold text-gray-800 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[300px]"
+                          onChange={(e) =>
+                            handleStyleChange(
+                              colorIdx,
+                              styleIdx,
+                              "styleName",
+                              e.target.value
+                            )
+                          }
+                          className="bg-transparent text-base font-semibold text-gray-900 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[250px]"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => removeStyle(colorIdx, styleIdx)}
-                        className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors duration-200"
+                        className="p-1.5 text-red-600 hover:bg-red-100 rounded transition"
                         title="Remove Style"
                       >
                         <X className="w-4 h-4" />
@@ -520,18 +589,25 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                   </div>
 
                   {/* Frame Images */}
-                  <div className="p-5 space-y-4">
+                  <div className="p-4 space-y-4">
                     {style.frameImages.map((img, imgIdx) => (
-                      <div key={imgIdx} className="border border-gray-200 rounded-lg bg-white p-4">
+                      <div
+                        key={imgIdx}
+                        className="border border-gray-200 rounded-lg bg-white p-4"
+                      >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <ImageIcon className="w-4 h-4 text-gray-600" />
-                            <span className="font-semibold text-gray-700">Frame Image {imgIdx + 1}</span>
+                            <ImageIcon className="w-4 h-4 text-indigo-600" />
+                            <span className="font-semibold text-gray-900">
+                              Frame Image {imgIdx + 1}
+                            </span>
                           </div>
                           <button
                             type="button"
-                            onClick={() => removeFrameImage(colorIdx, styleIdx, imgIdx)}
-                            className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors duration-200"
+                            onClick={() =>
+                              removeFrameImage(colorIdx, styleIdx, imgIdx)
+                            }
+                            className="p-1.5 text-red-600 hover:bg-red-100 rounded transition"
                             title="Remove Frame Image"
                           >
                             <X className="w-4 h-4" />
@@ -545,16 +621,22 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                             placeholder="Frame title (e.g., Floral Border, Classic Frame...)"
                             value={img.title}
                             onChange={(e) =>
-                              handleFrameImageChange(colorIdx, styleIdx, imgIdx, "title", e.target.value)
+                              handleFrameImageChange(
+                                colorIdx,
+                                styleIdx,
+                                imgIdx,
+                                "title",
+                                e.target.value
+                              )
                             }
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                            className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
                           />
                         </div>
 
                         {/* File Upload */}
                         <div className="mb-4">
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Frame Image *
+                            Frame Image <span className="text-red-500">*</span>
                           </label>
                           <div className="flex items-center gap-4">
                             <label className="flex-1 cursor-pointer">
@@ -562,27 +644,42 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) =>
-                                  handleFileChange(colorIdx, styleIdx, imgIdx, e.target.files[0])
+                                  handleFileChange(
+                                    colorIdx,
+                                    styleIdx,
+                                    imgIdx,
+                                    e.target.files[0]
+                                  )
                                 }
                                 className="hidden"
                               />
-                              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors duration-200">
-                                <Upload className="w-6 h-6 text-gray-500 mx-auto mb-1" />
-                                <p className="text-gray-700 text-sm">Upload frame image</p>
+                              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 hover:border-indigo-400 transition">
+                                <Upload className="w-6 h-6 text-indigo-600 mx-auto mb-1" />
+                                <p className="text-gray-700 text-sm font-medium">
+                                  Upload frame image
+                                </p>
                                 <p className="text-gray-500 text-xs mt-1">
                                   {img.file ? img.file.name : "No file chosen"}
                                 </p>
                               </div>
                             </label>
                             {(img.file || img.imageUrl) && (
-                              <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-300">
+                              <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-indigo-300 shadow-sm">
                                 <img
-                                  src={img.file ? URL.createObjectURL(img.file) : img.imageUrl}
+                                  src={
+                                    img.file
+                                      ? URL.createObjectURL(img.file)
+                                      : img.imageUrl
+                                  }
                                   alt="Preview"
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
-                                    console.error("Form image failed to load:", img.imageUrl);
-                                    e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMiA5VjE1TTkgMTJIMTUiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+";
+                                    console.error(
+                                      "Form image failed to load:",
+                                      img.imageUrl
+                                    );
+                                    e.target.src =
+                                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMiA5VjE1TTkgMTJIMTUiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+";
                                   }}
                                 />
                               </div>
@@ -594,13 +691,15 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                              <Ruler className="w-4 h-4" />
+                              <Ruler className="w-4 h-4 text-indigo-600" />
                               Sizes & Pricing
                             </label>
                             <button
                               type="button"
-                              onClick={() => addSize(colorIdx, styleIdx, imgIdx)}
-                              className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                              onClick={() =>
+                                addSize(colorIdx, styleIdx, imgIdx)
+                              }
+                              className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition"
                             >
                               <Plus className="w-3 h-3" />
                               Add Size
@@ -609,15 +708,25 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
                           <div className="space-y-3">
                             {img.sizes.map((size, sizeIdx) => (
-                              <div key={sizeIdx} className="flex items-center gap-3">
+                              <div
+                                key={sizeIdx}
+                                className="flex items-center gap-3"
+                              >
                                 <input
                                   type="text"
                                   placeholder="Size label (e.g., 8x10, A4...)"
                                   value={size.label}
                                   onChange={(e) =>
-                                    handleSizeChange(colorIdx, styleIdx, imgIdx, sizeIdx, "label", e.target.value)
+                                    handleSizeChange(
+                                      colorIdx,
+                                      styleIdx,
+                                      imgIdx,
+                                      sizeIdx,
+                                      "label",
+                                      e.target.value
+                                    )
                                   }
-                                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                  className="flex-1 px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition text-sm"
                                 />
                                 <div className="relative flex-1">
                                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -628,17 +737,35 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                     placeholder="Amount"
                                     value={size.amount}
                                     onChange={(e) =>
-                                      handleSizeChange(colorIdx, styleIdx, imgIdx, sizeIdx, "amount", e.target.value)
+                                      handleSizeChange(
+                                        colorIdx,
+                                        styleIdx,
+                                        imgIdx,
+                                        sizeIdx,
+                                        "amount",
+                                        e.target.value
+                                      )
                                     }
-                                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                                    className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition text-sm"
                                   />
                                 </div>
                                 <button
                                   type="button"
-                                  onClick={() => removeSize(colorIdx, styleIdx, imgIdx, sizeIdx)}
-                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+                                  onClick={() =>
+                                    removeSize(
+                                      colorIdx,
+                                      styleIdx,
+                                      imgIdx,
+                                      sizeIdx
+                                    )
+                                  }
+                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-30 disabled:cursor-not-allowed"
                                   disabled={img.sizes.length === 1}
-                                  title={img.sizes.length === 1 ? "At least one size required" : "Remove Size"}
+                                  title={
+                                    img.sizes.length === 1
+                                      ? "At least one size required"
+                                      : "Remove Size"
+                                  }
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -653,7 +780,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                     <button
                       type="button"
                       onClick={() => addFrameImage(colorIdx, styleIdx)}
-                      className="flex items-center gap-2 w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                      className="flex items-center gap-2 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition"
                     >
                       <Plus className="w-5 h-5" />
                       Add Another Frame Image to this Style
@@ -667,24 +794,29 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       </div>
 
       {/* Submit Button */}
-      <div className="flex gap-3 pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 flex-1 justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none text-lg"
+          className="flex items-center justify-center gap-2 flex-1 px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
-            <Loader className="w-5 h-5 animate-spin" />
+            <>
+              <Loader className="w-5 h-5 animate-spin" />
+              <span>Saving...</span>
+            </>
           ) : (
-            <Save className="w-5 h-5" />
+            <>
+              <Save className="w-5 h-5" />
+              <span>{initialData ? "Update Frame" : "Create Frame"}</span>
+            </>
           )}
-          {loading ? "Saving..." : initialData ? "Update Frame" : "Create Frame"}
         </button>
-        
+
         <button
           type="button"
           onClick={onClose}
-          className="px-8 py-4 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200 text-lg"
+          className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
         >
           Cancel
         </button>
