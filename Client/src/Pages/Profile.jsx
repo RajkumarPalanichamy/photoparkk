@@ -40,15 +40,27 @@ const Profile = () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
 
-      await axiosInstance.post("/users/logout", { refreshToken });
-
+      // Try to call backend logout (but don't block if it fails)
+      if (refreshToken) {
+        try {
+          await axiosInstance.post("/users/logout", { refreshToken });
+        } catch (err) {
+          // Log error but continue with logout anyway
+          console.log(
+            "Backend logout failed (user may already be logged out):",
+            err.message
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      // Always clear local storage and redirect
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
-
+      localStorage.removeItem("role");
       navigate("/");
-    } catch (err) {
-      console.error("Logout failed:", err);
     }
   };
 

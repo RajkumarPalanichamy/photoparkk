@@ -92,8 +92,10 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Content Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-30 z-10"></div>
+        {/* Content Overlay - Darker for better text visibility */}
+        <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+        {/* Additional gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-transparent to-black/50 z-10"></div>
 
         {/* Main Content */}
         <div className="relative z-20 h-full flex items-center">

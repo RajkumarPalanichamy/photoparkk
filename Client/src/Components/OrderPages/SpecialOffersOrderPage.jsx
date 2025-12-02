@@ -15,6 +15,7 @@ import {
   CONTACT_TEL_LINK,
   CONTACT_WHATSAPP_LINK,
 } from "../../constants/contact";
+import { SERVICEABLE_PINCODES } from "../../constants/serviceablePincodes";
 
 const SpecialOffersOrderPage = () => {
   const { id } = useParams();
@@ -125,15 +126,8 @@ const SpecialOffersOrderPage = () => {
       return;
     }
     setError("");
-    const serviceablePincodes = [
-      "600001",
-      "110001",
-      "560001",
-      "994077",
-      "638459",
-    ];
     setDeliveryStatus(
-      serviceablePincodes.includes(pincode) ? "Available" : "Unavailable"
+      SERVICEABLE_PINCODES.includes(pincode) ? "Available" : "Unavailable"
     );
   };
 

@@ -74,16 +74,9 @@ const CommonOrder = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Management</h1>
-          <p className="text-gray-600">Manage and track all customer orders</p>
-        </div>
-
+    <div className="w-full">
         {/* Search Bar */}
-        <div className="mb-8 max-w-md mx-auto">
+        <div className="mb-6 max-w-md">
           <div className="relative">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
@@ -97,7 +90,7 @@ const CommonOrder = () => {
         </div>
 
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
             <div className="text-gray-400 text-6xl mb-4">📦</div>
             <h3 className="text-xl font-semibold text-gray-600 mb-2">No orders found</h3>
             <p className="text-gray-500">Try adjusting your search criteria</p>
@@ -251,7 +244,6 @@ const CommonOrder = () => {
             })}
           </div>
         )}
-      </div>
     </div>
   );
 };

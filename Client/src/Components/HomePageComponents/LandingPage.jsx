@@ -75,9 +75,11 @@ export default function LandingPage() {
             Your browser does not support the video tag.
           </video>
 
-          {/* Enhanced Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/20 to-black/60" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/30 to-black/60" />
+          {/* Enhanced Overlay - Darker for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/75 via-purple-900/50 to-black/75" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/50 to-black/75" />
+          {/* Additional dark overlay for better text contrast */}
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         {/* Content */}

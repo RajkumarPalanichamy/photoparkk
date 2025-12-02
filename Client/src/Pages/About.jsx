@@ -106,8 +106,11 @@ const About = () => {
             <source src={AboutVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-gray-900/50" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/50" />
+          {/* Darker overlays for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-blue-900/60 to-gray-900/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/50 to-black/70" />
+          {/* Additional dark overlay for better text contrast */}
+          <div className="absolute inset-0 bg-black/50" />
         </div>
 
         {/* Video Controls */}

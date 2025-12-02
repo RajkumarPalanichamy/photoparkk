@@ -1,17 +1,20 @@
 import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import emailjs from "@emailjs/browser";
 import contact from "../assets/frontend_assets/Contact/Contact-banner-image.jpg";
-import { 
-  FaEnvelope, 
-  FaPhone, 
-  FaInstagram, 
+import {
+  FaEnvelope,
+  FaPhone,
+  FaInstagram,
   FaMapMarkerAlt,
   FaClock,
   FaCheckCircle,
   FaComments,
   FaPaperPlane,
-  FaWhatsapp
+  FaWhatsapp,
 } from "react-icons/fa";
 import {
   CONTACT_DISPLAY_NUMBER,
@@ -19,44 +22,96 @@ import {
   CONTACT_WHATSAPP_LINK,
 } from "../constants/contact";
 
+// Zod schema for form validation
+const contactFormSchema = z.object({
+  user_name: z
+    .string()
+    .min(1, "Name is required")
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name is too long")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name contains invalid characters")
+    .trim(),
+  user_email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .max(254, "Email address is too long")
+    .refine(
+      (email) => {
+        const parts = email.split("@");
+        if (parts.length !== 2) return false;
+        const [localPart, domain] = parts;
+        if (localPart.length > 64) return false;
+        if (!domain || domain.length === 0) return false;
+        const domainRegex =
+          /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+        return domainRegex.test(domain);
+      },
+      {
+        message: "Invalid email domain format",
+      }
+    ),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message is too long (maximum 2000 characters)")
+    .trim(),
+});
+
 const Contact = () => {
-  const form = useRef();
+  const form = useRef(null);
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  // React Hook Form setup with Zod resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+    reset,
+  } = useForm({
+    resolver: zodResolver(contactFormSchema),
+    mode: "onSubmit", // Only validate on submit
+    reValidateMode: "onSubmit", // Re-validate only on submit
+  });
+
+  // Watch message field for character counter
+  const messageValue = watch("message") || "";
+  const messageLength = messageValue.length;
 
   const backgroundStyle = {
     backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${contact})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundAttachment: "fixed"
+    backgroundAttachment: "fixed",
   };
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  // Form submission handler
+  const onSubmit = async () => {
     setError("");
 
-    emailjs
-      .sendForm(
+    if (!form.current) {
+      setError("Form reference is missing. Please refresh the page.");
+      return;
+    }
+
+    try {
+      await emailjs.sendForm(
         "service_2udw4si",
         "template_cfs794h",
         form.current,
         "E18ixUzrdeFZEoTww"
-      )
-      .then(
-        () => {
-          setIsSent(true);
-          setIsLoading(false);
-          form.current.reset();
-          setTimeout(() => setIsSent(false), 5000);
-        },
-        (err) => {
-          console.error(err.text);
-          setError("Failed to send message. Please try again later.");
-          setIsLoading(false);
-        }
       );
+
+      setIsSent(true);
+      reset(); // Reset form using react-hook-form
+      setTimeout(() => setIsSent(false), 5000);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setError("Failed to send message. Please try again later.");
+    }
   };
 
   const contactInfo = [
@@ -67,7 +122,7 @@ const Contact = () => {
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-50",
       delay: 0.1,
-      link: "mailto:photoparkk.prints@gmail.com"
+      link: "mailto:photoparkk.prints@gmail.com",
     },
     {
       icon: FaPhone,
@@ -76,7 +131,7 @@ const Contact = () => {
       color: "from-green-500 to-emerald-500",
       bgColor: "bg-green-50",
       delay: 0.2,
-      link: CONTACT_TEL_LINK_WITH_COUNTRY
+      link: CONTACT_TEL_LINK_WITH_COUNTRY,
     },
     {
       icon: FaInstagram,
@@ -85,7 +140,7 @@ const Contact = () => {
       color: "from-pink-500 to-rose-500",
       bgColor: "bg-pink-50",
       delay: 0.3,
-      link: "https://instagram.com/photoparkk"
+      link: "https://instagram.com/photoparkk",
     },
     {
       icon: FaWhatsapp,
@@ -94,7 +149,7 @@ const Contact = () => {
       color: "from-green-500 to-green-600",
       bgColor: "bg-green-50",
       delay: 0.35,
-      link: CONTACT_WHATSAPP_LINK
+      link: CONTACT_WHATSAPP_LINK,
     },
     {
       icon: FaMapMarkerAlt,
@@ -103,20 +158,20 @@ const Contact = () => {
       color: "from-purple-500 to-indigo-500",
       bgColor: "bg-purple-50",
       delay: 0.4,
-      link: "https://maps.google.com/?q=Photo+Parkk+Tiruppur"
-    }
+      link: "https://maps.google.com/?q=Photo+Parkk+Tiruppur",
+    },
   ];
 
   const stats = [
     { value: "24h", label: "Response Time", icon: FaClock },
     { value: "100%", label: "Satisfaction", icon: FaCheckCircle },
-    { value: "500+", label: "Happy Clients", icon: FaComments }
+    { value: "500+", label: "Happy Clients", icon: FaComments },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
       {/* Hero Header */}
-      <section 
+      <section
         style={backgroundStyle}
         className="relative h-96 md:h-[500px] flex items-center justify-center overflow-hidden"
       >
@@ -157,7 +212,8 @@ const Contact = () => {
             transition={{ duration: 1, delay: 0.7 }}
             className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed"
           >
-            Ready to transform your memories into timeless art? We're here to help.
+            Ready to transform your memories into timeless art? We're here to
+            help.
           </motion.p>
         </motion.div>
       </section>
@@ -178,7 +234,9 @@ const Contact = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
                   <stat.icon className="text-2xl text-white" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">
+                  {stat.value}
+                </div>
                 <div className="text-gray-600 font-medium">{stat.label}</div>
               </motion.div>
             ))}
@@ -211,7 +269,7 @@ const Contact = () => {
                     Conversation
                   </span>
                 </motion.h2>
-                
+
                 <motion.p
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -219,29 +277,40 @@ const Contact = () => {
                   viewport={{ once: true }}
                   className="text-lg text-gray-600 leading-relaxed mb-8"
                 >
-                  Have a project in mind? We'd love to hear about it. Send us a message and we'll respond within 24 hours.
+                  Have a project in mind? We'd love to hear about it. Send us a
+                  message and we'll respond within 24 hours.
                 </motion.p>
               </div>
 
               <div className="space-y-4">
-                {contactInfo.map((item, index) => (
+                {contactInfo.map((item) => (
                   <motion.a
                     key={item.label}
                     href={item.link}
-                    target={item.link.startsWith('http') ? "_blank" : "_self"}
-                    rel={item.link.startsWith('http') ? "noopener noreferrer" : ""}
+                    target={item.link.startsWith("http") ? "_blank" : "_self"}
+                    rel={
+                      item.link.startsWith("http") ? "noopener noreferrer" : ""
+                    }
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: item.delay }}
                     viewport={{ once: true }}
                     className="flex items-start gap-4 p-6 rounded-2xl hover:shadow-lg transition-all duration-300 group cursor-pointer bg-white/50 backdrop-blur-sm border border-white/20 hover:bg-white/70 block"
                   >
-                    <div className={`p-3 rounded-2xl ${item.bgColor} group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                      <item.icon className={`text-2xl bg-gradient-to-r ${item.color} text-transparent bg-clip-text`} />
+                    <div
+                      className={`p-3 rounded-2xl ${item.bgColor} group-hover:scale-110 transition-transform duration-300 shadow-sm`}
+                    >
+                      <item.icon
+                        className={`text-2xl bg-gradient-to-r ${item.color} text-transparent bg-clip-text`}
+                      />
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900 mb-1 text-lg">{item.label}</div>
-                      <div className="text-gray-600 font-medium">{item.value}</div>
+                      <div className="font-semibold text-gray-900 mb-1 text-lg">
+                        {item.label}
+                      </div>
+                      <div className="text-gray-600 font-medium">
+                        {item.value}
+                      </div>
                     </div>
                   </motion.a>
                 ))}
@@ -259,7 +328,7 @@ const Contact = () => {
               <div className="bg-white/80 backdrop-blur-md rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20">
                 <motion.form
                   ref={form}
-                  onSubmit={sendEmail}
+                  onSubmit={handleSubmit(onSubmit)}
                   className="space-y-6"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -267,7 +336,9 @@ const Contact = () => {
                   viewport={{ once: true }}
                 >
                   <div className="text-center mb-8">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">Send us a Message</h3>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-2">
+                      Send us a Message
+                    </h3>
                     <p className="text-gray-600">We'll get back to you soon</p>
                   </div>
 
@@ -281,8 +352,12 @@ const Contact = () => {
                       >
                         <FaCheckCircle className="text-2xl text-green-600" />
                         <div>
-                          <div className="font-semibold text-green-900">Message sent successfully!</div>
-                          <div className="text-green-700 text-sm">We'll get back to you within 24 hours.</div>
+                          <div className="font-semibold text-green-900">
+                            Message sent successfully!
+                          </div>
+                          <div className="text-green-700 text-sm">
+                            We'll get back to you within 24 hours.
+                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -296,7 +371,9 @@ const Contact = () => {
                       >
                         <FaComments className="text-2xl text-red-600" />
                         <div>
-                          <div className="font-semibold text-red-900">Error sending message</div>
+                          <div className="font-semibold text-red-900">
+                            Error sending message
+                          </div>
                           <div className="text-red-700 text-sm">{error}</div>
                         </div>
                       </motion.div>
@@ -310,15 +387,27 @@ const Contact = () => {
                     viewport={{ once: true }}
                   >
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Your Name
+                      Your Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
-                      name="user_name"
-                      required
                       placeholder="Enter your full name"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                      {...register("user_name")}
+                      className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 ${
+                        errors.user_name
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                      }`}
                     />
+                    {errors.user_name && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-600 text-sm mt-1"
+                      >
+                        {errors.user_name.message}
+                      </motion.p>
+                    )}
                   </motion.div>
 
                   <motion.div
@@ -328,15 +417,27 @@ const Contact = () => {
                     viewport={{ once: true }}
                   >
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Email Address
+                      Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
-                      name="user_email"
-                      required
                       placeholder="your.email@example.com"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                      {...register("user_email")}
+                      className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 ${
+                        errors.user_email
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                      }`}
                     />
+                    {errors.user_email && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-600 text-sm mt-1"
+                      >
+                        {errors.user_email.message}
+                      </motion.p>
+                    )}
                   </motion.div>
 
                   <motion.div
@@ -346,25 +447,53 @@ const Contact = () => {
                     viewport={{ once: true }}
                   >
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Your Message
+                      Your Message <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       rows="5"
-                      name="message"
-                      required
                       placeholder="Tell us about your project..."
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                      maxLength={2000}
+                      {...register("message")}
+                      className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
+                        errors.message
+                          ? "border-red-500 focus:ring-red-500"
+                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                      }`}
                     />
+                    <div className="flex justify-between items-center mt-1">
+                      {errors.message ? (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-red-600 text-sm"
+                        >
+                          {errors.message.message}
+                        </motion.p>
+                      ) : (
+                        <div></div>
+                      )}
+                      <span
+                        className={`text-xs ${
+                          messageLength > 2000
+                            ? "text-red-500"
+                            : messageLength > 1800
+                            ? "text-orange-500"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {messageLength}/2000 characters
+                      </span>
+                    </div>
                   </motion.div>
 
                   <motion.button
                     type="submit"
-                    disabled={isLoading}
-                    whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                    disabled={isSubmitting}
+                    whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                   >
-                    {isLoading ? (
+                    {isSubmitting ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         Sending...
@@ -412,7 +541,8 @@ const Contact = () => {
               viewport={{ once: true }}
               className="text-lg text-gray-600 max-w-2xl mx-auto"
             >
-              Come see where the magic happens. Our studio is equipped with state-of-the-art technology to bring your vision to life.
+              Come see where the magic happens. Our studio is equipped with
+              state-of-the-art technology to bring your vision to life.
             </motion.p>
           </div>
 

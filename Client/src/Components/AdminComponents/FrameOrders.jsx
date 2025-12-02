@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const FrameOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -9,11 +9,13 @@ const FrameOrders = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = () => {
-    axios
-      .get("https://api.photoparkk.com/api/frameorders")
-      .then((res) => setOrders(res.data))
-      .catch((err) => console.error("Failed to load orders", err));
+  const fetchOrders = async () => {
+    try {
+      const res = await axiosInstance.get("/frameorders");
+      setOrders(res.data);
+    } catch (err) {
+      console.error("Failed to load orders", err);
+    }
   };
 
   const getNextStatus = (current) => {
@@ -34,12 +36,9 @@ const FrameOrders = () => {
     if (!nextStatus) return;
 
     try {
-      await axios.patch(
-        `https://api.photoparkk.com/api/frameorders/${orderId}/status`,
-        {
-          status: nextStatus,
-        }
-      );
+      await axiosInstance.patch(`/frameorders/${orderId}/status`, {
+        status: nextStatus,
+      });
       fetchOrders();
     } catch (err) {
       console.error("Error updating order status", err);
@@ -77,27 +76,26 @@ const FrameOrders = () => {
   );
 
   return (
-    <div className="p-6 font-[Poppins] min-h-screen bg-gray-50">
-      <h2 className="text-3xl font-bold mb-6 text-center">📦 Frame Orders</h2>
-
+    <div className="w-full">
       {/* 🔍 Filter by Name */}
-      <div className="mb-6 max-w-md mx-auto">
+      <div className="mb-6 max-w-md">
         <input
           type="text"
           placeholder="Search by user name..."
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
-      {filteredOrders.length === 0 && (
-        <p className="text-center text-gray-500 text-lg">
-          No matching orders found.
-        </p>
-      )}
+      {filteredOrders.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+          <p className="text-gray-500 text-lg">No matching orders found.</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
 
-      {filteredOrders.map((order) => (
+          {filteredOrders.map((order) => (
         <div
           key={order._id}
           className="border p-6 rounded-xl shadow-md mb-6 bg-white"
@@ -211,7 +209,9 @@ const FrameOrders = () => {
             ))}
           </div>
         </div>
-      ))}
+          ))}
+        </div>
+      )}
     </div>
   );
 };

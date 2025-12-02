@@ -7,25 +7,38 @@ export const createOrder = async (req, res) => {
   try {
     const { cartItemId, productType, deliveryDetails, amount } = req.body;
     const userId = req.user._id;
-    
+
     // Parse deliveryDetails if it's a string
     let parsedDeliveryDetails = deliveryDetails;
-    if (typeof deliveryDetails === 'string') {
+    if (typeof deliveryDetails === "string") {
       try {
         parsedDeliveryDetails = JSON.parse(deliveryDetails);
       } catch (err) {
-        console.error('Failed to parse deliveryDetails:', err);
-        return res.status(400).json({ error: "Invalid deliveryDetails format" });
+        console.error("Failed to parse deliveryDetails:", err);
+        return res
+          .status(400)
+          .json({ error: "Invalid deliveryDetails format" });
       }
     }
 
-    const allowedTypes = ["acrylic", "canvas", "backlight", "square", "circle", "Newarrivaldata", "SpecialOffersdata", "AcrylicCustomizedata", "Canvascustomizedata", "Backlightcustomizedata"];
+    const allowedTypes = [
+      "acrylic",
+      "canvas",
+      "backlight",
+      "square",
+      "circle",
+      "Newarrivaldata",
+      "SpecialOffersdata",
+      "AcrylicCustomizedata",
+      "Canvascustomizedata",
+      "Backlightcustomizedata",
+    ];
     if (!allowedTypes.includes(productType)) {
       return res.status(400).json({ error: "❌ Invalid productType" });
     }
 
     let imageUrl = null;
-    
+
     // If a file is uploaded, use it; otherwise, get image from cart item
     if (req.file) {
       const result = await uploadToCloudinary(req.file.buffer, "orders");
@@ -66,15 +79,106 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-// ✅ Get user-specific orders
+// ✅ Get user-specific orders with search, filter, sort, and pagination
 export const getUserOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.params.userId })
-      .populate("cartItemId")
-      .sort({ createdAt: -1 });
-    res.json(orders);
+    const { status, search, sortBy, page = 1, limit = 10 } = req.query;
+    const userId = req.params.userId;
+
+    // Build query
+    let query = { userId };
+
+    // Apply status filter
+    if (status && status !== "All Orders") {
+      if (status === "Completed") {
+        query.status = "Delivered";
+      } else if (status === "Processing") {
+        query.status = { $in: ["Pending", "Shipped", "Out for Delivery"] };
+      } else if (status === "Cancelled") {
+        query.status = "Cancelled";
+      }
+    }
+
+    // Apply search filter
+    if (search) {
+      query.$or = [{ _id: { $regex: search, $options: "i" } }];
+    }
+
+    // Build sort
+    let sort = { createdAt: -1 }; // Default: newest first
+    if (sortBy === "Oldest") {
+      sort = { createdAt: 1 };
+    } else if (
+      sortBy === "Price (High to Low)" ||
+      sortBy === "Price (Low to High)"
+    ) {
+      sort = { amount: sortBy === "Price (High to Low)" ? -1 : 1 };
+    }
+
+    // Calculate pagination
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+    // Execute query
+    const [orders, total] = await Promise.all([
+      Order.find(query)
+        .populate("cartItemId")
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum),
+      Order.countDocuments(query),
+    ]);
+
+    res.json({
+      orders,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+    });
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch user orders", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch user orders", error: err.message });
+  }
+};
+
+// ✅ Get single order by ID with all details (optimized)
+export const getOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.query.userId; // Optional: verify ownership
+
+    const order = await Order.findById(id)
+      .populate({
+        path: "cartItemId",
+        select:
+          "title size color quantity totalAmount image uploadedImageUrl productType",
+      })
+      .populate({
+        path: "userId",
+        select: "name email phone",
+      })
+      .lean(); // Use lean() for better performance
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Verify ownership if userId is provided
+    if (
+      userId &&
+      order.userId._id?.toString() !== userId &&
+      order.userId.toString() !== userId
+    ) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    res.json(order);
+  } catch (err) {
+    console.error("❌ Failed to fetch order:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 

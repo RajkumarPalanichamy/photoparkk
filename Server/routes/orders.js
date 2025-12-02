@@ -3,6 +3,7 @@ import {
   createOrder,
   getAllOrders,
   getUserOrders,
+  getOrderById,
   updateOrderStatus,
 } from "../controllers/orderController.js";
 import { protect } from "../Middleware/authmiddleware.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 router.post("/", protect, upload.single("image"), createOrder);
 router.get("/", getAllOrders);
 router.get("/user/:userId", getUserOrders);
+router.get("/:id", getOrderById); // Get single order details - must be after /user/:userId
 router.put("/:id", updateOrderStatus);
 
 export default router;
