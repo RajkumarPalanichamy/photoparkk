@@ -262,7 +262,7 @@ const Cart = () => {
                         <div className="flex flex-row sm:flex-col gap-2 sm:items-end">
                           <Link
                             to={getCheckoutLink(item)}
-                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm"
+                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 text-sm"
                           >
                             <ArrowRight className="w-4 h-4" />
                             Checkout

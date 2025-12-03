@@ -19,8 +19,8 @@ const AdminOrderPage = () => {
               Order Management
             </h1>
             <p className="text-gray-500 mt-1">
-              Manage and track all customer orders
-            </p>
+          Manage and track all customer orders
+        </p>
           </div>
         </div>
       </div>

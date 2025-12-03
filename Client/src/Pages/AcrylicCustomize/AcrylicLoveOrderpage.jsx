@@ -214,12 +214,12 @@ const AcrylicLoveOrderpage = () => {
                     </div>
                   </div>
 
-                  <div className="text-center p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="text-center p-4 bg-indigo-50 rounded-xl border border-indigo-200">
                     <p className="text-sm text-gray-700">
                       <span className="font-semibold">Preview:</span> Your photo will be printed in a{" "}
-                      <span className="font-bold text-green-700">{selectedSize?.label}</span> heart frame
+                      <span className="font-bold text-indigo-700">{selectedSize?.label}</span> heart frame
                       {selectedThickness && (
-                        <> with <span className="font-bold text-green-700">{selectedThickness}</span> thickness</>
+                        <> with <span className="font-bold text-indigo-700">{selectedThickness}</span> thickness</>
                       )}
                     </p>
                   </div>
@@ -244,7 +244,7 @@ const AcrylicLoveOrderpage = () => {
                       <span className="text-xl text-gray-400 line-through">
                         ₹{selectedSize.original}
                       </span>
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                      <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold">
                         Free Shipping
                       </span>
                     </div>
@@ -336,8 +336,8 @@ const AcrylicLoveOrderpage = () => {
                     <FaTruck className="text-pink-600" />
                     <span className="text-sm">Estimated delivery in 4–7 working days</span>
                   </div>
-                  <div className="flex items-center gap-3 text-green-700 font-semibold">
-                    <FaLock className="text-green-600" />
+                  <div className="flex items-center gap-3 text-indigo-700 font-semibold">
+                    <FaLock className="text-indigo-600" />
                     <span className="text-sm">Secure Checkout | Satisfaction Guaranteed</span>
                   </div>
                 </div>
@@ -345,7 +345,7 @@ const AcrylicLoveOrderpage = () => {
             </div>
 
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+              <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <CheckCircle2 className="w-6 h-6" />
                   Product Highlights
@@ -358,7 +358,7 @@ const AcrylicLoveOrderpage = () => {
                       key={i}
                       className="flex items-start gap-3 py-1.5 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"
                     >
-                      <BsPatchCheckFill className="text-green-600 mt-0.5 flex-shrink-0 w-4 h-4" />
+                      <BsPatchCheckFill className="text-indigo-600 mt-0.5 flex-shrink-0 w-4 h-4" />
                       <span className="text-sm text-gray-700 leading-relaxed">
                         {item}
                       </span>
@@ -369,7 +369,7 @@ const AcrylicLoveOrderpage = () => {
             </div>
 
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-orange-500 to-red-600 px-6 py-4">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <Package className="w-6 h-6" />
                   Bulk Orders
@@ -380,7 +380,7 @@ const AcrylicLoveOrderpage = () => {
                   <p className="text-lg font-bold text-gray-900">
                     Need Bulk Quantities?
                   </p>
-                  <p className="text-base text-orange-600 font-semibold">
+                  <p className="text-base text-purple-600 font-semibold">
                     Special Deals on Bulk Orders!
                   </p>
                   <p className="text-sm text-gray-600 leading-relaxed">
@@ -391,7 +391,7 @@ const AcrylicLoveOrderpage = () => {
                 <div className="space-y-3 pt-2">
                   <button
                     onClick={() => (window.location.href = CONTACT_TEL_LINK)}
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <FaPhoneAlt size={18} />
                     <span>Call for Bulk Orders</span>
@@ -399,7 +399,7 @@ const AcrylicLoveOrderpage = () => {
 
                   <button
                     onClick={() => window.open(CONTACT_WHATSAPP_LINK, "_blank")}
-                    className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <FaPhoneAlt size={18} />
                     <span>WhatsApp Us</span>

@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaPhoneAlt, FaTruck, FaLock } from "react-icons/fa";
 import { BsPatchCheckFill } from "react-icons/bs";
-import { Sparkles, Package, Ruler, Box, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  Sparkles,
+  Package,
+  Ruler,
+  Box,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
 import {
   CONTACT_TEL_LINK,
@@ -15,7 +22,7 @@ const AcrylicSquareOrderpage = () => {
   const navigate = useNavigate();
   const { photoData } = location.state || {};
 
-  const [product, setProduct] = useState({
+  const [product] = useState({
     title: "Square Acrylic Customize",
     sizes: [
       { label: "8x8", price: 499, original: 699 },
@@ -142,8 +149,12 @@ const AcrylicSquareOrderpage = () => {
     );
   }
 
-  const frameDims = selectedSize ? getFrameDimensions(selectedSize.label) : { width: 8, height: 8 };
-  const borderWidth = selectedThickness ? getBorderWidth(selectedThickness) : "10px";
+  const frameDims = selectedSize
+    ? getFrameDimensions(selectedSize.label)
+    : { width: 8, height: 8 };
+  const borderWidth = selectedThickness
+    ? getBorderWidth(selectedThickness)
+    : "10px";
   const aspectRatio = selectedSize ? getAspectRatio(selectedSize.label) : 1;
 
   return (
@@ -159,7 +170,8 @@ const AcrylicSquareOrderpage = () => {
             Complete Your Order
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Select your preferred size and thickness to see your custom frame preview
+            Select your preferred size and thickness to see your custom frame
+            preview
           </p>
         </div>
 
@@ -173,7 +185,7 @@ const AcrylicSquareOrderpage = () => {
                   Live Frame Preview
                 </h2>
               </div>
-              
+
               <div className="p-8">
                 <div className="flex flex-col items-center justify-center space-y-6">
                   {/* Size Display */}
@@ -209,7 +221,7 @@ const AcrylicSquareOrderpage = () => {
                         />
                       </div>
                     </div>
-                    
+
                     {/* Dimension Labels */}
                     <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 text-sm font-semibold text-gray-700 bg-white px-2 py-1 rounded shadow-md">
                       {frameDims.height}"
@@ -219,12 +231,23 @@ const AcrylicSquareOrderpage = () => {
                     </div>
                   </div>
 
-                  <div className="text-center p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="text-center p-4 bg-indigo-50 rounded-xl border border-indigo-200">
                     <p className="text-sm text-gray-700">
-                      <span className="font-semibold">Preview:</span> Your photo will be printed in a{" "}
-                      <span className="font-bold text-green-700">{selectedSize?.label}</span> square frame
+                      <span className="font-semibold">Preview:</span> Your photo
+                      will be printed in a{" "}
+                      <span className="font-bold text-indigo-700">
+                        {selectedSize?.label}
+                      </span>{" "}
+                      square frame
                       {selectedThickness && (
-                        <> with <span className="font-bold text-green-700">{selectedThickness}</span> thickness</>
+                        <>
+                          {" "}
+                          with{" "}
+                          <span className="font-bold text-indigo-700">
+                            {selectedThickness}
+                          </span>{" "}
+                          thickness
+                        </>
                       )}
                     </p>
                   </div>
@@ -238,7 +261,9 @@ const AcrylicSquareOrderpage = () => {
             {/* Product Details Card */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
-                <h2 className="text-xl font-bold text-white">{product.title}</h2>
+                <h2 className="text-xl font-bold text-white">
+                  {product.title}
+                </h2>
               </div>
 
               <div className="p-6 space-y-6">
@@ -252,7 +277,7 @@ const AcrylicSquareOrderpage = () => {
                       <span className="text-xl text-gray-400 line-through">
                         ₹{selectedSize.original}
                       </span>
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                      <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold">
                         Free Shipping
                       </span>
                     </div>
@@ -281,7 +306,9 @@ const AcrylicSquareOrderpage = () => {
                         }`}
                       >
                         <div className="font-bold">{sizeObj.label}</div>
-                        <div className="text-xs mt-1 opacity-80">₹{sizeObj.price}</div>
+                        <div className="text-xs mt-1 opacity-80">
+                          ₹{sizeObj.price}
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -313,16 +340,20 @@ const AcrylicSquareOrderpage = () => {
                 {/* Quantity & Add to Cart */}
                 <div className="space-y-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center gap-4">
-                    <label className="text-lg font-medium text-gray-700">Quantity:</label>
+                    <label className="text-lg font-medium text-gray-700">
+                      Quantity:
+                    </label>
                     <input
                       type="number"
                       min="1"
                       value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+                      onChange={(e) =>
+                        setQuantity(Math.max(1, Number(e.target.value)))
+                      }
                       className="w-24 px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 font-semibold text-center"
                     />
                   </div>
-                  
+
                   <button
                     onClick={handleAddToCart}
                     disabled={loading || !selectedSize || !selectedThickness}
@@ -346,11 +377,15 @@ const AcrylicSquareOrderpage = () => {
                 <div className="space-y-3 pt-4 border-t border-gray-200">
                   <div className="flex items-center gap-3 text-gray-700">
                     <FaTruck className="text-indigo-600" />
-                    <span className="text-sm">Estimated delivery in 4–7 working days</span>
+                    <span className="text-sm">
+                      Estimated delivery in 4–7 working days
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3 text-green-700 font-semibold">
-                    <FaLock className="text-green-600" />
-                    <span className="text-sm">Secure Checkout | Satisfaction Guaranteed</span>
+                  <div className="flex items-center gap-3 text-indigo-700 font-semibold">
+                    <FaLock className="text-indigo-600" />
+                    <span className="text-sm">
+                      Secure Checkout | Satisfaction Guaranteed
+                    </span>
                   </div>
                 </div>
               </div>
@@ -358,7 +393,7 @@ const AcrylicSquareOrderpage = () => {
 
             {/* Product Highlights Section */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+              <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <CheckCircle2 className="w-6 h-6" />
                   Product Highlights
@@ -371,7 +406,7 @@ const AcrylicSquareOrderpage = () => {
                       key={i}
                       className="flex items-start gap-3 py-1.5 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors"
                     >
-                      <BsPatchCheckFill className="text-green-600 mt-0.5 flex-shrink-0 w-4 h-4" />
+                      <BsPatchCheckFill className="text-indigo-600 mt-0.5 flex-shrink-0 w-4 h-4" />
                       <span className="text-sm text-gray-700 leading-relaxed">
                         {item}
                       </span>
@@ -383,7 +418,7 @@ const AcrylicSquareOrderpage = () => {
 
             {/* Bulk Orders Section */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-orange-500 to-red-600 px-6 py-4">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <Package className="w-6 h-6" />
                   Bulk Orders
@@ -394,7 +429,7 @@ const AcrylicSquareOrderpage = () => {
                   <p className="text-lg font-bold text-gray-900">
                     Need Bulk Quantities?
                   </p>
-                  <p className="text-base text-orange-600 font-semibold">
+                  <p className="text-base text-purple-600 font-semibold">
                     Special Deals on Bulk Orders!
                   </p>
                   <p className="text-sm text-gray-600 leading-relaxed">
@@ -405,7 +440,7 @@ const AcrylicSquareOrderpage = () => {
                 <div className="space-y-3 pt-2">
                   <button
                     onClick={() => (window.location.href = CONTACT_TEL_LINK)}
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <FaPhoneAlt size={18} />
                     <span>Call for Bulk Orders</span>
@@ -413,7 +448,7 @@ const AcrylicSquareOrderpage = () => {
 
                   <button
                     onClick={() => window.open(CONTACT_WHATSAPP_LINK, "_blank")}
-                    className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-5 py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <FaPhoneAlt size={18} />
                     <span>WhatsApp Us</span>
