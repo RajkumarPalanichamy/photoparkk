@@ -335,7 +335,7 @@ const UserOrderPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200"
-                  placeholder="Search orders..."
+                  placeholder="Search by username..."
                 />
               </div>
             </div>

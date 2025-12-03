@@ -1,56 +1,60 @@
 import React, { useState } from "react";
 import FrameOrders from "./FrameOrders";
 import CommonOrder from "./CommonOrder";
-import { Frame, Package } from "lucide-react";
+import { Frame, Package, ShoppingBag } from "lucide-react";
 
 const AdminOrderPage = () => {
   const [activeTab, setActiveTab] = useState("frame");
 
   return (
     <div className="w-full">
+      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Order Management</h1>
-        <p className="text-gray-600 mt-2">
-          Manage and track all customer orders
-        </p>
-      </div>
-
-      {/* Tabs */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab("frame")}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
-              activeTab === "frame"
-                ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <Frame className="w-5 h-5" />
-              <span>Frame Orders</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab("common")}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
-              activeTab === "common"
-                ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <Package className="w-5 h-5" />
-              <span>Acrylic, Canvas, Backlight Orders</span>
-            </div>
-          </button>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 bg-indigo-100 rounded-lg">
+            <ShoppingBag className="w-6 h-6 text-indigo-600" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Order Management
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Manage and track all customer orders
+            </p>
+          </div>
         </div>
       </div>
 
+      {/* Tabs */}
+      <ul className="flex flex-wrap text-sm font-medium text-center text-gray-600 border-b border-gray-200 mb-6">
+        <li className="me-2">
+          <button
+            onClick={() => setActiveTab("frame")}
+            className={`inline-block p-4 rounded-t-lg transition-colors ${
+              activeTab === "frame"
+                ? "text-indigo-600 bg-gray-100"
+                : "hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            Frame Orders
+          </button>
+        </li>
+        <li className="me-2">
+          <button
+            onClick={() => setActiveTab("common")}
+            className={`inline-block p-4 rounded-t-lg transition-colors ${
+              activeTab === "common"
+                ? "text-indigo-600 bg-gray-100"
+                : "hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            Product Orders
+          </button>
+        </li>
+      </ul>
+
       {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === "frame" ? <FrameOrders /> : <CommonOrder />}
-      </div>
+      <div>{activeTab === "frame" ? <FrameOrders /> : <CommonOrder />}</div>
     </div>
   );
 };

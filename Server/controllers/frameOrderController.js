@@ -1,4 +1,5 @@
 import FrameOrder from "../models/framesorder.js";
+import User from "../models/users.js";
 import { v2 as cloudinary } from "cloudinary";
 
 // ✅ Create a new frame order
@@ -8,7 +9,9 @@ export const createFrameOrder = async (req, res) => {
     const { items, shippingDetails } = req.body;
 
     if (!items?.length || !shippingDetails?.fullName) {
-      return res.status(400).json({ success: false, message: "Missing fields" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing fields" });
     }
 
     const uploadedItems = [];
@@ -77,10 +80,14 @@ export const getUserFrameOrders = async (req, res) => {
   try {
     const { status, search, sortBy, page = 1, limit = 10 } = req.query;
     const userId = req.params.userId;
-    
+
+    // Calculate pagination first (needed for early returns)
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
     // Build query
     let query = { userId };
-    
+
     // Apply status filter
     if (status && status !== "All Orders") {
       if (status === "Completed") {
@@ -91,40 +98,47 @@ export const getUserFrameOrders = async (req, res) => {
         query.status = "Cancelled";
       }
     }
-    
-    // Apply search filter (search in order ID or item titles)
+
+    // USER: Search should match his own name → if matches → show all orders
+    // If not → return empty
     if (search) {
-      query.$or = [
-        { _id: { $regex: search, $options: "i" } },
-        { "items.title": { $regex: search, $options: "i" } },
-      ];
+      const user = await User.findById(userId).select("name");
+
+      if (!user || !user.name || !new RegExp(search, "i").test(user.name)) {
+        // search doesn't match username → no results
+        return res.json({
+          orders: [],
+          total: 0,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: 0,
+        });
+      }
+      // Username matches - show all orders for this user (query already filtered by userId)
     }
-    
+
     // Build sort
     let sort = { createdAt: -1 }; // Default: newest first
     if (sortBy === "Oldest") {
       sort = { createdAt: 1 };
-    } else if (sortBy === "Price (High to Low)" || sortBy === "Price (Low to High)") {
+    } else if (
+      sortBy === "Price (High to Low)" ||
+      sortBy === "Price (Low to High)"
+    ) {
       // For frame orders, we need to calculate total from items
       // This is complex, so we'll sort by createdAt and let frontend handle it
       // Or we can add a virtual field for total
       sort = { createdAt: -1 };
     }
-    
-    // Calculate pagination
-    const pageNum = parseInt(page);
-    const limitNum = parseInt(limit);
+
     const skip = (pageNum - 1) * limitNum;
-    
+
     // Execute query
     const [orders, total] = await Promise.all([
-      FrameOrder.find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limitNum),
+      FrameOrder.find(query).sort(sort).skip(skip).limit(limitNum),
       FrameOrder.countDocuments(query),
     ]);
-    
+
     res.status(200).json({
       orders,
       total,
@@ -156,7 +170,11 @@ export const getFrameOrderById = async (req, res) => {
     }
 
     // Verify ownership if userId is provided
-    if (userId && order.userId._id?.toString() !== userId && order.userId.toString() !== userId) {
+    if (
+      userId &&
+      order.userId._id?.toString() !== userId &&
+      order.userId.toString() !== userId
+    ) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -182,11 +200,83 @@ export const updateFrameOrderStatus = async (req, res) => {
   }
 };
 
-// ✅ Admin: Get all orders
+// ✅ Admin: Get all orders with search, filter, sort, and pagination
 export const getAllFrameOrders = async (req, res) => {
   try {
-    const orders = await FrameOrder.find().sort({ createdAt: -1 });
-    res.json(orders);
+    const { status, search, sortBy, page = 1, limit = 10 } = req.query;
+
+    // Calculate pagination first (needed for early returns)
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
+    // Build query
+    let query = {};
+
+    // Apply status filter
+    if (status && status !== "All Orders") {
+      if (status === "Completed") {
+        query.status = "Delivered";
+      } else if (status === "Processing") {
+        query.status = { $in: ["Pending", "Shipped", "Out for Delivery"] };
+      } else if (status === "Cancelled") {
+        query.status = "Cancelled";
+      }
+    }
+
+    // ADMIN: SEARCH ONLY BY USERNAME
+    if (search) {
+      const matchingUsers = await User.find({
+        name: { $regex: search, $options: "i" },
+      }).select("_id");
+
+      const userIds = matchingUsers.map((u) => u._id);
+
+      // If no user matches → return empty result
+      if (userIds.length === 0) {
+        return res.json({
+          orders: [],
+          total: 0,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: 0,
+        });
+      }
+
+      query.userId = { $in: userIds };
+    }
+
+    // Build sort
+    let sort = { createdAt: -1 }; // Default: newest first
+    if (sortBy === "Oldest") {
+      sort = { createdAt: 1 };
+    } else if (
+      sortBy === "Price (High to Low)" ||
+      sortBy === "Price (Low to High)"
+    ) {
+      // For price sorting, we'll sort by createdAt and let frontend handle it
+      // Or we can add aggregation to calculate total
+      sort = { createdAt: -1 };
+    }
+
+    const skip = (pageNum - 1) * limitNum;
+
+    // Execute query
+    const [orders, total] = await Promise.all([
+      FrameOrder.find(query)
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum)
+        .populate("userId", "name email"),
+      FrameOrder.countDocuments(query),
+    ]);
+
+    res.status(200).json({
+      orders,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+    });
   } catch (err) {
     console.error("❌ Failed to fetch all orders:", err);
     res.status(500).json({ error: err.message });

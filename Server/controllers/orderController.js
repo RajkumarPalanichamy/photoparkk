@@ -1,5 +1,6 @@
 import Order from "../models/orders.js";
 import AddToCart from "../models/addtocart.js";
+import User from "../models/users.js";
 import { uploadToCloudinary } from "../config/cloudinary.js";
 
 // ✅ Create Order with Cloudinary image upload
@@ -67,15 +68,86 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// ✅ Get all orders (Admin)
+// ✅ Get all orders (Admin) with search, filter, sort, and pagination
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find()
-      .populate("cartItemId")
-      .populate("userId", "name email");
-    res.json(orders);
+    const { status, search, sortBy, page = 1, limit = 10 } = req.query;
+
+    // Calculate pagination first (needed for early returns)
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
+    // Build query
+    let query = {};
+
+    // Apply status filter
+    if (status && status !== "All Orders") {
+      if (status === "Completed") {
+        query.status = "Delivered";
+      } else if (status === "Processing") {
+        query.status = { $in: ["Pending", "Shipped", "Out for Delivery"] };
+      } else if (status === "Cancelled") {
+        query.status = "Cancelled";
+      }
+    }
+
+    // ADMIN: SEARCH ONLY BY USERNAME
+    if (search) {
+      const matchingUsers = await User.find({
+        name: { $regex: search, $options: "i" },
+      }).select("_id");
+
+      const userIds = matchingUsers.map((u) => u._id);
+
+      // If no user matches → return empty result
+      if (userIds.length === 0) {
+        return res.json({
+          orders: [],
+          total: 0,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: 0,
+        });
+      }
+
+      query.userId = { $in: userIds };
+    }
+
+    // Build sort
+    let sort = { createdAt: -1 }; // Default: newest first
+    if (sortBy === "Oldest") {
+      sort = { createdAt: 1 };
+    } else if (sortBy === "Price (High to Low)") {
+      sort = { amount: -1 };
+    } else if (sortBy === "Price (Low to High)") {
+      sort = { amount: 1 };
+    }
+
+    const skip = (pageNum - 1) * limitNum;
+
+    // Execute query
+    const [orders, total] = await Promise.all([
+      Order.find(query)
+        .populate("cartItemId")
+        .populate("userId", "name email")
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum),
+      Order.countDocuments(query),
+    ]);
+
+    res.json({
+      orders,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+    });
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch orders" });
+    console.error("❌ Failed to fetch orders:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch orders", message: err.message });
   }
 };
 
@@ -84,6 +156,10 @@ export const getUserOrders = async (req, res) => {
   try {
     const { status, search, sortBy, page = 1, limit = 10 } = req.query;
     const userId = req.params.userId;
+
+    // Calculate pagination first (needed for early returns)
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
 
     // Build query
     let query = { userId };
@@ -99,9 +175,22 @@ export const getUserOrders = async (req, res) => {
       }
     }
 
-    // Apply search filter
+    // USER: Search should match his own name → if matches → show all orders
+    // If not → return empty
     if (search) {
-      query.$or = [{ _id: { $regex: search, $options: "i" } }];
+      const user = await User.findById(userId).select("name");
+
+      if (!user || !user.name || !new RegExp(search, "i").test(user.name)) {
+        // search doesn't match username → no results
+        return res.json({
+          orders: [],
+          total: 0,
+          page: pageNum,
+          limit: limitNum,
+          totalPages: 0,
+        });
+      }
+      // Username matches - show all orders for this user (query already filtered by userId)
     }
 
     // Build sort
@@ -115,9 +204,6 @@ export const getUserOrders = async (req, res) => {
       sort = { amount: sortBy === "Price (High to Low)" ? -1 : 1 };
     }
 
-    // Calculate pagination
-    const pageNum = parseInt(page);
-    const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
     // Execute query
