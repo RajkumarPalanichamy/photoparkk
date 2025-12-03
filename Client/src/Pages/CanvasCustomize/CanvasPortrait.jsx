@@ -114,13 +114,13 @@ const CanvasPortrait = () => {
           </p>
         </div>
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleChange}
-          accept="image/*"
-          className="hidden"
-        />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleChange}
+        accept="image/*"
+        className="hidden"
+      />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Upload Section */}
@@ -129,21 +129,21 @@ const CanvasPortrait = () => {
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <Image className="w-6 h-6" />
                 Upload Your Photo
-              </h2>
+            </h2>
             </div>
             
             <div className="p-6">
-              {!photoData ? (
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
+            {!photoData ? (
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
-                    isDragging
+                  isDragging
                       ? "border-blue-500 bg-blue-50 scale-[1.02]"
                       : "border-gray-300 hover:border-blue-400 hover:bg-gray-50"
-                  }`}
-                >
+                }`}
+              >
                   <div className="flex flex-col items-center justify-center space-y-6">
                     <div className={`p-4 rounded-full transition-all ${
                       isDragging ? "bg-blue-100 scale-110" : "bg-gray-100"
@@ -151,20 +151,20 @@ const CanvasPortrait = () => {
                       <Image className={`w-12 h-12 transition-colors ${
                         isDragging ? "text-blue-600" : "text-gray-500"
                       }`} />
-                    </div>
+                  </div>
                     <div>
                       <p className="text-lg font-semibold text-gray-700 mb-2">
                         Drag and drop your photo here
-                      </p>
+                  </p>
                       <p className="text-sm text-gray-500 mb-4">or</p>
-                      <button
-                        onClick={handleReplaceClick}
+                  <button
+                    onClick={handleReplaceClick}
                         disabled={isUploading}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
-                      >
+                  >
                         <Upload className="w-5 h-5" />
                         Browse Files
-                      </button>
+                  </button>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <CheckCircle2 className="w-4 h-4" />
@@ -182,23 +182,23 @@ const CanvasPortrait = () => {
                       <div>
                         <p className="font-semibold text-gray-900">{photoData.name}</p>
                         <p className="text-sm text-gray-500">{formatFileSize(photoData.size)}</p>
-                      </div>
                     </div>
-                    <button
-                      onClick={handleRemovePhoto}
-                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
                   </div>
+                  <button
+                    onClick={handleRemovePhoto}
+                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
                   <div className="relative w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden border-2 border-gray-200 shadow-inner">
-                    <img
-                      src={photoData.url}
-                      alt="Uploaded preview"
+                  <img
+                    src={photoData.url}
+                    alt="Uploaded preview"
                       className="w-full h-full object-contain"
-                    />
-                  </div>
+                  />
+                </div>
 
                   <button
                     onClick={handleReplaceClick}
@@ -210,7 +210,7 @@ const CanvasPortrait = () => {
                   </button>
                 </div>
               )}
-            </div>
+              </div>
           </div>
 
           {/* Preview Section */}
@@ -220,31 +220,31 @@ const CanvasPortrait = () => {
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Eye className="w-6 h-6" />
                   Live Preview
-                </h2>
-                <button
-                  onClick={handlePreviewClick}
-                  disabled={!photoData}
+              </h2>
+              <button
+                onClick={handlePreviewClick}
+                disabled={!photoData}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    photoData
+                  photoData
                       ? "bg-white text-purple-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transform hover:scale-105"
                       : "bg-white/20 text-white/50 cursor-not-allowed"
-                  }`}
-                >
+                }`}
+              >
                   View Full Preview
-                </button>
+              </button>
               </div>
             </div>
 
             <div className="p-8">
               <div className="relative w-full max-w-sm mx-auto">
                 <div className="relative aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-2xl border-8 border-gray-800">
-                  {photoData ? (
-                    <img
-                      src={photoData.url}
-                      alt="Portrait Preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
+              {photoData ? (
+                <img
+                  src={photoData.url}
+                  alt="Portrait Preview"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
                     <div className="flex flex-col items-center justify-center h-full text-gray-400">
                       <div className="p-4 bg-gray-200 rounded-full mb-4">
                         <Image className="w-12 h-12" />

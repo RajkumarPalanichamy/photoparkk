@@ -56,7 +56,7 @@ const AdminProducts = () => {
       </ul>
 
       {/* Tab Content */}
-      <div>
+       <div>
         {activeTab === "newarrivals" ? (
           <NewArrivalProducts />
         ) : (

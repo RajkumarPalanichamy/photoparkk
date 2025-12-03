@@ -120,13 +120,13 @@ const AcrylicLove = () => {
           </p>
         </div>
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleChange}
-          accept="image/*"
-          className="hidden"
-        />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleChange}
+        accept="image/*"
+        className="hidden"
+      />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Upload Section */}
@@ -135,114 +135,114 @@ const AcrylicLove = () => {
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <Image className="w-6 h-6" />
                 Upload Your Photo
-              </h2>
+            </h2>
             </div>
             
             <div className="p-6">
-              {!photoData ? (
-                <div
+            {!photoData ? (
+                             <div
                   onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
+                 onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
-                    isUploading
-                      ? "border-gray-200 bg-gray-50 cursor-not-allowed"
-                      : isDragging
+                   isUploading
+                     ? "border-gray-200 bg-gray-50 cursor-not-allowed"
+                     : isDragging
                       ? "border-pink-500 bg-pink-50 scale-[1.02]"
                       : "border-gray-300 hover:border-pink-400 hover:bg-gray-50"
-                  }`}
-                >
+                 }`}
+               >
                   <div className="flex flex-col items-center justify-center space-y-6">
-                    {isUploading ? (
-                      <>
-                        <div className="bg-gray-100 p-3 rounded-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
-                        </div>
+                   {isUploading ? (
+                     <>
+                       <div className="bg-gray-100 p-3 rounded-full">
+                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
+                       </div>
                         <p className="text-lg font-semibold text-gray-700">
-                          Uploading your image...
-                        </p>
-                        <div className="w-full max-w-xs">
-                          <div className="flex justify-between text-sm text-gray-600 mb-2">
-                            <span>Progress</span>
-                            <span>{uploadProgress}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-pink-500 h-2 rounded-full transition-all duration-300 ease-out"
-                              style={{ width: `${uploadProgress}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
+                         Uploading your image...
+                       </p>
+                       <div className="w-full max-w-xs">
+                         <div className="flex justify-between text-sm text-gray-600 mb-2">
+                           <span>Progress</span>
+                           <span>{uploadProgress}%</span>
+                         </div>
+                         <div className="w-full bg-gray-200 rounded-full h-2">
+                           <div
+                             className="bg-pink-500 h-2 rounded-full transition-all duration-300 ease-out"
+                             style={{ width: `${uploadProgress}%` }}
+                           ></div>
+                         </div>
+                       </div>
+                     </>
+                   ) : (
+                     <>
                         <div className={`p-4 rounded-full transition-all ${
                           isDragging ? "bg-pink-100 scale-110" : "bg-gray-100"
                         }`}>
                           <Image className={`w-12 h-12 transition-colors ${
                             isDragging ? "text-pink-600" : "text-gray-500"
                           }`} />
-                        </div>
+                       </div>
                         <div>
                           <p className="text-lg font-semibold text-gray-700 mb-2">
                             Drag and drop your photo here
-                          </p>
+                       </p>
                           <p className="text-sm text-gray-500 mb-4">or</p>
-                          <button
-                            onClick={handleReplaceClick}
+                       <button
+                         onClick={handleReplaceClick}
                             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-600 text-white rounded-lg hover:from-pink-600 hover:to-red-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
-                          >
+                       >
                             <Upload className="w-5 h-5" />
                             Browse Files
-                          </button>
+                       </button>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-gray-500">
                           <CheckCircle2 className="w-4 h-4" />
                           <span>PNG, JPG, JPEG up to 10MB</span>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ) : (
+                     </>
+                   )}
+                 </div>
+              </div>
+            ) : (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-pink-50 rounded-xl border border-green-200">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-green-100 rounded-lg">
                         <CheckCircle2 className="w-6 h-6 text-green-600" />
-                      </div>
+                    </div>
                       <div>
                         <p className="font-semibold text-gray-900">{photoData.name}</p>
                         <p className="text-sm text-gray-500">{formatFileSize(photoData.size)}</p>
-                      </div>
                     </div>
-                    <button
-                      onClick={handleRemovePhoto}
-                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
                   </div>
+                  <button
+                    onClick={handleRemovePhoto}
+                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
                   <div className="relative w-full aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden border-2 border-gray-200 shadow-inner">
-                    <img
-                      src={photoData.url}
-                      alt="Uploaded preview"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
+                     <img
+                       src={photoData.url}
+                       alt="Uploaded preview"
+                       className="w-full h-full object-contain"
+                     />
+                 </div>
 
-                  <button
-                    onClick={handleReplaceClick}
-                    disabled={isUploading}
+                                     <button
+                     onClick={handleReplaceClick}
+                     disabled={isUploading}
                     className="w-full py-3 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                   >
                     <Upload className="w-5 h-5" />
-                    Replace Photo
-                  </button>
+                         Replace Photo
+                   </button>
                 </div>
               )}
-            </div>
+              </div>
           </div>
 
           {/* Heart Preview */}
@@ -252,32 +252,32 @@ const AcrylicLove = () => {
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Heart className="w-6 h-6" />
                   Live Preview
-                </h2>
-                <button
-                  onClick={handlePreviewClick}
-                  disabled={!photoData}
+              </h2>
+              <button
+                onClick={handlePreviewClick}
+                disabled={!photoData}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    photoData
+                  photoData
                       ? "bg-white text-pink-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transform hover:scale-105"
                       : "bg-white/20 text-white/50 cursor-not-allowed"
-                  }`}
-                >
+                }`}
+              >
                   View Full Preview
-                </button>
+              </button>
               </div>
             </div>
 
             <div className="p-8">
               <div className="relative w-full max-w-md mx-auto">
-                <div className="heart-frame-container">
-                  <div className="heart-border"></div>
-                  <div className="heart-frame">
+            <div className="heart-frame-container">
+              <div className="heart-border"></div>
+              <div className="heart-frame">
                     {photoData ? (
-                      <img
-                        src={photoData.url}
-                        alt="Heart Preview"
-                        className="heart-photo"
-                      />
+                  <img
+                    src={photoData.url}
+                    alt="Heart Preview"
+                    className="heart-photo"
+                  />
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full text-gray-400">
                         <div className="p-4 bg-gray-200 rounded-full mb-4">

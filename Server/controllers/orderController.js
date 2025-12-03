@@ -128,7 +128,7 @@ export const getAllOrders = async (req, res) => {
     // Execute query
     const [orders, total] = await Promise.all([
       Order.find(query)
-        .populate("cartItemId")
+      .populate("cartItemId")
         .populate("userId", "name email")
         .sort(sort)
         .skip(skip)
