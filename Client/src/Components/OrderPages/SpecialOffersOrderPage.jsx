@@ -11,6 +11,11 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import axiosInstance from "../../utils/axiosInstance";
+import {
+  CONTACT_TEL_LINK,
+  CONTACT_WHATSAPP_LINK,
+} from "../../constants/contact";
+import { SERVICEABLE_PINCODES } from "../../constants/serviceablePincodes";
 
 const SpecialOffersOrderPage = () => {
   const { id } = useParams();
@@ -69,11 +74,9 @@ const SpecialOffersOrderPage = () => {
     const formData = new FormData();
     formData.append("image", uploadedImage);
     try {
-      const res = await axiosInstance.post(
-        "/cart/api/upload-image",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const res = await axiosInstance.post("/cart/api/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return res.data.imageUrl;
     } catch (error) {
       alert("Image upload failed. Please try again.");
@@ -123,39 +126,35 @@ const SpecialOffersOrderPage = () => {
       return;
     }
     setError("");
-    const serviceablePincodes = [
-      "600001",
-      "110001",
-      "560001",
-      "994077",
-      "638459",
-    ];
     setDeliveryStatus(
-      serviceablePincodes.includes(pincode) ? "Available" : "Unavailable"
+      SERVICEABLE_PINCODES.includes(pincode) ? "Available" : "Unavailable"
     );
   };
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-    </div>
-  );
-  if (!product) return (
-    <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
-      Product not found
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
+  if (!product)
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl text-gray-600">
+        Product not found
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Top Grid - 2 Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          
           {/* Left Column - Image Upload */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Upload Your Photo</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Upload Your Photo
+              </h2>
               <p className="text-gray-600">Ordered as Same material</p>
             </div>
 
@@ -164,14 +163,16 @@ const SpecialOffersOrderPage = () => {
               <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
                 <div className="flex flex-col items-center justify-center">
                   <FaUpload className="w-8 h-8 text-gray-400 mb-2" />
-                  <p className="text-gray-500 font-medium">Click to upload your photo</p>
+                  <p className="text-gray-500 font-medium">
+                    Click to upload your photo
+                  </p>
                   <p className="text-sm text-gray-400 mt-1">PNG, JPG, JPEG</p>
                 </div>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleImageChange} 
-                  className="hidden" 
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
                 />
               </label>
             </div>
@@ -198,8 +199,10 @@ const SpecialOffersOrderPage = () => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             {/* Product Header */}
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.title}</h1>
-              
+              <h1 className="text-3xl font-bold text-gray-900 mb-3">
+                {product.title}
+              </h1>
+
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
@@ -214,7 +217,9 @@ const SpecialOffersOrderPage = () => {
                       />
                     ))}
                   </div>
-                  <span className="text-gray-600 text-sm">({product.rating}/5)</span>
+                  <span className="text-gray-600 text-sm">
+                    ({product.rating}/5)
+                  </span>
                 </div>
                 <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
                   Quality Checked
@@ -267,8 +272,12 @@ const SpecialOffersOrderPage = () => {
                         : "border-gray-200 bg-white hover:border-gray-300"
                     }`}
                   >
-                    <div className="font-medium text-gray-900">{sizeObj.label}</div>
-                    <div className="text-orange-500 font-semibold">₹{sizeObj.price}</div>
+                    <div className="font-medium text-gray-900">
+                      {sizeObj.label}
+                    </div>
+                    <div className="text-orange-500 font-semibold">
+                      ₹{sizeObj.price}
+                    </div>
                   </button>
                 ))}
               </div>
@@ -348,15 +357,19 @@ const SpecialOffersOrderPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Highlights */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">HIGHLIGHTS</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
+              HIGHLIGHTS
+            </h3>
             <ul className="space-y-3">
-              {(product.highlights || [
-                "Premium Quality Material",
-                "Customizable Design",
-                "Secure Packaging",
-                "Fast Delivery",
-                "Eco-Friendly Process",
-              ]).map((item, i) => (
+              {(
+                product.highlights || [
+                  "Premium Quality Material",
+                  "Customizable Design",
+                  "Secure Packaging",
+                  "Fast Delivery",
+                  "Eco-Friendly Process",
+                ]
+              ).map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
                   <span className="text-gray-700">{item}</span>
@@ -368,21 +381,27 @@ const SpecialOffersOrderPage = () => {
           {/* Bulk Orders */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">BULK ORDERS</h3>
-              <p className="text-orange-600 font-medium mb-1">Amazing Deals Available!</p>
-              <p className="text-gray-600 text-sm">Perfect for Gifts and Events</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                BULK ORDERS
+              </h3>
+              <p className="text-orange-600 font-medium mb-1">
+                Amazing Deals Available!
+              </p>
+              <p className="text-gray-600 text-sm">
+                Perfect for Gifts and Events
+              </p>
             </div>
 
             <div className="space-y-3">
               <button
-                onClick={() => (window.location.href = "tel:9940770011")}
+                onClick={() => (window.location.href = CONTACT_TEL_LINK)}
                 className="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-3"
               >
                 <FaPhoneAlt />
                 Call for Bulk Orders
               </button>
               <button
-                onClick={() => window.open("https://wa.me/919940770011", "_blank")}
+                onClick={() => window.open(CONTACT_WHATSAPP_LINK, "_blank")}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-3"
               >
                 <FaPhoneAlt />
@@ -391,59 +410,71 @@ const SpecialOffersOrderPage = () => {
             </div>
           </div>
 
-         {/* Delivery Checker */}
-<div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-  <div className="text-center mb-4">
-    <div className="inline-flex items-center gap-2 text-blue-600 mb-2">
-      <FaMapMarkerAlt className="text-lg" />
-      <h3 className="text-xl font-bold">CHECK DELIVERY</h3>
-    </div>
-    <p className="text-gray-600 text-sm">Enter your pincode to check availability</p>
-  </div>
+          {/* Delivery Checker */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="text-center mb-4">
+              <div className="inline-flex items-center gap-2 text-blue-600 mb-2">
+                <FaMapMarkerAlt className="text-lg" />
+                <h3 className="text-xl font-bold">CHECK DELIVERY</h3>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Enter your pincode to check availability
+              </p>
+            </div>
 
-  <div className="space-y-4">
-    <div className="flex max-w-xs mx-auto">
-      <input
-        type="text"
-        value={pincode}
-        onChange={(e) => setPincode(e.target.value)}
-        placeholder="Enter pincode"
-        className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-        maxLength={6}
-      />
-      <button
-        onClick={checkDelivery}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-lg font-semibold transition-colors text-sm"
-      >
-        Check
-      </button>
-    </div>
+            <div className="space-y-4">
+              <div className="flex max-w-xs mx-auto">
+                <input
+                  type="text"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                  placeholder="Enter pincode"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  maxLength={6}
+                />
+                <button
+                  onClick={checkDelivery}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-lg font-semibold transition-colors text-sm"
+                >
+                  Check
+                </button>
+              </div>
 
-    {error && (
-      <p className="text-red-500 text-sm font-medium text-center">{error}</p>
-    )}
-    
-    {deliveryStatus === "Available" && (
-      <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center max-w-xs mx-auto">
-        <p className="text-green-700 font-semibold text-sm">🎉 Delivery Available!</p>
-        <p className="text-green-600 text-xs mt-1">We deliver to your location</p>
-      </div>
-    )}
-    
-    {deliveryStatus === "Unavailable" && (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center max-w-xs mx-auto">
-        <p className="text-red-700 font-semibold text-sm">❌ Delivery Not Available</p>
-        <p className="text-red-600 text-xs mt-1">Please check another pincode</p>
-      </div>
-    )}
+              {error && (
+                <p className="text-red-500 text-sm font-medium text-center">
+                  {error}
+                </p>
+              )}
 
-    <div className="text-center">
-      <p className="text-xs text-gray-500">
-        *Delivery available across India
-      </p>
-    </div>
-  </div>
-</div>
+              {deliveryStatus === "Available" && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center max-w-xs mx-auto">
+                  <p className="text-green-700 font-semibold text-sm">
+                    🎉 Delivery Available!
+                  </p>
+                  <p className="text-green-600 text-xs mt-1">
+                    We deliver to your location
+                  </p>
+                </div>
+              )}
+
+              {deliveryStatus === "Unavailable" && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center max-w-xs mx-auto">
+                  <p className="text-red-700 font-semibold text-sm">
+                    ❌ Delivery Not Available
+                  </p>
+                  <p className="text-red-600 text-xs mt-1">
+                    Please check another pincode
+                  </p>
+                </div>
+              )}
+
+              <div className="text-center">
+                <p className="text-xs text-gray-500">
+                  *Delivery available across India
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

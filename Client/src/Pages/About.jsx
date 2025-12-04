@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Play, Pause, Volume2, VolumeX, Factory, Shield, Zap, CheckCircle, Award } from "lucide-react";
+import { Factory, Shield, Zap, CheckCircle, Award } from "lucide-react";
 import machine1 from "../assets/frontend_assets/About/machine1.jpg";
 import machine2 from "../assets/frontend_assets/About/machine2.jpg";
 import machine3 from "../assets/frontend_assets/About/machine3.jpg";
@@ -32,9 +32,9 @@ const ImageCard = ({ src, alt, delay = 0 }) => {
       transition={{ duration: 0.8, delay }}
       className="relative group overflow-hidden rounded-3xl"
     >
-      <img 
-        src={src} 
-        alt={alt} 
+      <img
+        src={src}
+        alt={alt}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -43,52 +43,79 @@ const ImageCard = ({ src, alt, delay = 0 }) => {
 };
 
 const About = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-
   const features = [
     { icon: Zap, label: "Precision Cutting", value: "0.1mm Accuracy" },
     { icon: Shield, label: "Quality Assurance", value: "100% Tested" },
     { icon: Factory, label: "Production Capacity", value: "500+ Daily" },
-    { icon: Award, label: "Industry Experience", value: "25+ Years" }
+    { icon: Award, label: "Industry Experience", value: "25+ Years" },
   ];
 
   const processSteps = [
     {
       image: machine2,
       title: "Precision Engineering",
-      description: "Our state-of-the-art CNC machines deliver micron-level accuracy in every cut. Advanced laser guidance ensures perfect alignment and flawless execution for premium frame construction.",
-      features: ["CNC Precision Cutting", "Laser Guided Alignment", "Digital Calibration", "Quality Monitoring"],
-      icon: Zap
+      description:
+        "Our state-of-the-art CNC machines deliver micron-level accuracy in every cut. Advanced laser guidance ensures perfect alignment and flawless execution for premium frame construction.",
+      features: [
+        "CNC Precision Cutting",
+        "Laser Guided Alignment",
+        "Digital Calibration",
+        "Quality Monitoring",
+      ],
+      icon: Zap,
     },
     {
       image: machine4,
       title: "Automated Assembly",
-      description: "Robotic assembly lines ensure consistent quality and rapid production. Each frame undergoes 12-point verification during the assembly process for perfect results every time.",
-      features: ["Robotic Assembly", "12-Point Verification", "Automated Quality Control", "Real-time Monitoring"],
-      icon: Factory
+      description:
+        "Robotic assembly lines ensure consistent quality and rapid production. Each frame undergoes 12-point verification during the assembly process for perfect results every time.",
+      features: [
+        "Robotic Assembly",
+        "12-Point Verification",
+        "Automated Quality Control",
+        "Real-time Monitoring",
+      ],
+      icon: Factory,
     },
     {
       image: machine3,
       title: "Quality Inspection",
-      description: "Every product passes through our rigorous 25-point inspection protocol. Advanced imaging systems detect imperfections invisible to the naked eye.",
-      features: ["25-Point Inspection", "Digital Imaging", "Stress Testing", "Finish Verification"],
-      icon: Shield
+      description:
+        "Every product passes through our rigorous 25-point inspection protocol. Advanced imaging systems detect imperfections invisible to the naked eye.",
+      features: [
+        "25-Point Inspection",
+        "Digital Imaging",
+        "Stress Testing",
+        "Finish Verification",
+      ],
+      icon: Shield,
     },
     {
       image: machine1,
       title: "Advanced Finishing",
-      description: "Patented finishing technology creates durable, museum-quality surfaces. UV-resistant coatings ensure your frames maintain their brilliance for generations.",
-      features: ["UV-Resistant Coating", "Scratch Protection", "Climate Stability", "Lifetime Finish"],
-      icon: Award
+      description:
+        "Patented finishing technology creates durable, museum-quality surfaces. UV-resistant coatings ensure your frames maintain their brilliance for generations.",
+      features: [
+        "UV-Resistant Coating",
+        "Scratch Protection",
+        "Climate Stability",
+        "Lifetime Finish",
+      ],
+      icon: Award,
     },
     {
       image: machine5,
       title: "Final Certification",
-      description: "Each frame receives our gold-standard certification after passing all quality benchmarks. Your satisfaction is guaranteed with our comprehensive warranty.",
-      features: ["Gold Standard Certified", "Quality Benchmark", "Comprehensive Warranty", "Customer Satisfaction"],
-      icon: CheckCircle
-    }
+      description:
+        "Each frame receives our gold-standard certification after passing all quality benchmarks. Your satisfaction is guaranteed with our comprehensive warranty.",
+      features: [
+        "Gold Standard Certified",
+        "Quality Benchmark",
+        "Comprehensive Warranty",
+        "Customer Satisfaction",
+      ],
+      icon: CheckCircle,
+    },
   ];
 
   return (
@@ -99,35 +126,18 @@ const About = () => {
           <video
             autoPlay
             loop
-            muted={isMuted}
+            muted
             playsInline
             className="w-full h-full object-cover"
           >
             <source src={AboutVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-gray-900/50" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/50" />
-        </div>
-
-        {/* Video Controls */}
-        <div className="absolute top-8 right-8 z-20 flex gap-3">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-white/10 backdrop-blur-md text-white p-3 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
-          >
-            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsMuted(!isMuted)}
-            className="bg-white/10 backdrop-blur-md text-white p-3 rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300"
-          >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          </motion.button>
+          {/* Darker overlays for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-blue-900/60 to-gray-900/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/50 to-black/70" />
+          {/* Additional dark overlay for better text contrast */}
+          <div className="absolute inset-0 bg-black/50" />
         </div>
 
         {/* Hero Content */}
@@ -173,13 +183,12 @@ const About = () => {
               transition={{ duration: 1, delay: 1.1 }}
               className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12"
             >
-              Witness our state-of-the-art production process delivering precision-crafted frames with unmatched quality and attention to detail.
+              Witness our state-of-the-art production process delivering
+              precision-crafted frames with unmatched quality and attention to
+              detail.
             </motion.p>
-
           </motion.div>
         </div>
-
-        
       </section>
 
       {/* Process Steps */}
@@ -192,7 +201,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true, margin: "-100px" }}
             className={`mb-32 last:mb-0 ${
-              index % 2 === 0 ? '' : 'md:flex-row-reverse'
+              index % 2 === 0 ? "" : "md:flex-row-reverse"
             }`}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -211,7 +220,7 @@ const About = () => {
                     className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                  
+
                   {/* Step Number */}
                   <div className="absolute top-6 left-6 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
                     0{index + 1}
@@ -303,7 +312,8 @@ const About = () => {
         </h2>
 
         <p className="text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
-          Join thousands of satisfied customers who trust our precision-crafted frames for their most precious memories.
+          Join thousands of satisfied customers who trust our precision-crafted
+          frames for their most precious memories.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

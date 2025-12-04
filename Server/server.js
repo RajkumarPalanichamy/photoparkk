@@ -16,6 +16,7 @@ import frameCustomizeRoutes from "./routes/framecustomize.js";
 import framesOrder from "./routes/framesorder.js";
 import orderRoutes from "./routes/orders.js";
 import paymentRoutes from "./routes/payments.js";
+import dashboardRoutes from "./routes/dashboard.js";
 
 // Get __dirname equivalent in ES module
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +35,11 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // 🐛 DEBUG: Log all incoming requests (add this for debugging)
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl} - Headers: ${JSON.stringify(req.headers)}`);
+  console.log(
+    `${new Date().toISOString()} - ${req.method} ${
+      req.originalUrl
+    } - Headers: ${JSON.stringify(req.headers)}`
+  );
   next();
 });
 
@@ -47,14 +52,31 @@ app.get("/", (req, res) => {
   });
 });
 
-
 // ✅ Serve static files
-app.use("/newarrivalsUploads", express.static(path.join(__dirname, "newarrivalsUploads")));
-app.use("/addtocartUploads", express.static(path.join(__dirname, "addtocartUploads")));
-app.use("/specialoffersUploads", express.static(path.join(__dirname, "specialoffersUploads")));
-app.use("/acryliccustomizeUploads", express.static(path.join(__dirname, "acryliccustomizeUploads")));
-app.use("/canvascustomizeUploads", express.static(path.join(__dirname, "canvascustomizeUploads")));
-app.use("/backlightcustomizeUploads", express.static(path.join(__dirname, "backlightcustomizeUploads")));
+app.use(
+  "/newarrivalsUploads",
+  express.static(path.join(__dirname, "newarrivalsUploads"))
+);
+app.use(
+  "/addtocartUploads",
+  express.static(path.join(__dirname, "addtocartUploads"))
+);
+app.use(
+  "/specialoffersUploads",
+  express.static(path.join(__dirname, "specialoffersUploads"))
+);
+app.use(
+  "/acryliccustomizeUploads",
+  express.static(path.join(__dirname, "acryliccustomizeUploads"))
+);
+app.use(
+  "/canvascustomizeUploads",
+  express.static(path.join(__dirname, "canvascustomizeUploads"))
+);
+app.use(
+  "/backlightcustomizeUploads",
+  express.static(path.join(__dirname, "backlightcustomizeUploads"))
+);
 app.use("/frameuploads", express.static(path.join(__dirname, "frameuploads")));
 
 // ✅ Routes
@@ -80,6 +102,9 @@ app.use("/api/orders", orderRoutes);
 //FrameOrders
 app.use("/api/frameorders", framesOrder);
 
+// ------------Dashboard--------------
+app.use("/api/dashboard", dashboardRoutes);
+
 // ------------Payments--------------
 app.use("/api/payments", paymentRoutes);
 
@@ -94,7 +119,6 @@ mongoose
     console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
   });
-
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;

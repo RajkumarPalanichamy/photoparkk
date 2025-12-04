@@ -1,6 +1,23 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../../utils/axiosInstance";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  ArrowLeft,
+  Plus,
+  Upload,
+  X,
+  Loader2,
+  Package,
+  Star,
+  Ruler,
+  Box,
+  Image as ImageIcon,
+} from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+  MAX_UPLOAD_SIZE_FULL_TEXT,
+} from "../../../../constants/upload";
 
 const SpecialOffersAddForm = () => {
   const navigate = useNavigate();
@@ -8,13 +25,14 @@ const SpecialOffersAddForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    rating: "",
+    rating: "4",
     thickness: "",
-    stock: "",
+    stock: "In Stock",
     sizes: [{ label: "", price: "0", original: "0" }],
   });
 
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -27,9 +45,30 @@ const SpecialOffersAddForm = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
+    if (!file) return;
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      alert(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
+      e.target.value = ""; // Clear the file input
+      return;
     }
+
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const handleSizeChange = (index, field, value) => {
@@ -49,6 +88,7 @@ const SpecialOffersAddForm = () => {
   };
 
   const removeSizeField = (index) => {
+    if (formData.sizes.length === 1) return;
     const updated = [...formData.sizes];
     updated.splice(index, 1);
     setFormData((prev) => ({
@@ -61,7 +101,9 @@ const SpecialOffersAddForm = () => {
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.content.trim() || !imageFile) {
-      alert("Please fill in all required fields.");
+      alert(
+        "Please fill in all required fields (Title, Description, and Image)."
+      );
       return;
     }
 
@@ -77,13 +119,11 @@ const SpecialOffersAddForm = () => {
       const dataToSend = {
         title: formData.title.trim(),
         content: formData.content.trim(),
-        rating: Number(formData.rating) || 0,
+        rating: Number(formData.rating) || 4,
         thickness: formData.thickness.trim(),
-        stock: formData.stock.trim(),
+        stock: formData.stock.trim() || "In Stock",
         sizes: sanitizedSizes,
       };
-
-      console.log("Submitting data:", dataToSend);
 
       const data = new FormData();
       for (const [key, value] of Object.entries(dataToSend)) {
@@ -95,149 +135,312 @@ const SpecialOffersAddForm = () => {
       }
       data.append("image", imageFile);
 
-      await axios.post("https://api.photoparkk.com/api/specialoffers", data, {
+      await axiosInstance.post("/specialoffers", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
       alert("Product added successfully!");
-      navigate("/adminproducts");
+      navigate("/admin/products");
     } catch (error) {
       console.error("Failed to add product:", error.response?.data || error);
-      alert("Failed to add product.");
+      alert(
+        error.response?.data?.message ||
+          "Failed to add product. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        Add Special Offers Product
-      </h2>
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <Link
+          to="/admin/products"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 mb-4 transition"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Products</span>
+        </Link>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-indigo-100 rounded-lg">
+            <Plus className="w-6 h-6 text-indigo-600" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Add Special Offer Product
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Create a new product for the Special Offers section
+            </p>
+          </div>
+        </div>
+      </div>
 
+      {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="space-y-4"
-        encType="multipart/form-data"
+        className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6"
       >
-        <input
-          type="text"
-          name="title"
-          placeholder="Product Title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+        {/* Basic Information */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <Package className="w-5 h-5 text-indigo-600" />
+            Basic Information
+          </h2>
 
-        <textarea
-          name="content"
-          placeholder="Product Description"
-          value={formData.content}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Product Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="title"
+              placeholder="Enter product title"
+              value={formData.title}
+              onChange={handleChange}
+              className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+              required
+            />
+          </div>
 
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Product Description <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              name="content"
+              placeholder="Enter product description"
+              value={formData.content}
+              onChange={handleChange}
+              rows={4}
+              className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition resize-none"
+              required
+            />
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input
-            type="number"
-            name="rating"
-            placeholder="Star Rating (1–5)"
-            value={formData.rating}
-            onChange={handleChange}
-            className="p-2 border rounded"
-            min={1}
-            max={5}
-          />
-          <input
-            type="text"
-            name="thickness"
-            placeholder="Thickness"
-            value={formData.thickness}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          <input
-            type="text"
-            name="stock"
-            placeholder="Stock Status (e.g. 'In Stock')"
-            value={formData.stock}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
+        {/* Image Upload */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-indigo-600" />
+            Product Image
+          </h2>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Upload Image <span className="text-red-500">*</span>
+            </label>
+            {imagePreview ? (
+              <div className="relative">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-10 h-10 mb-3 text-gray-400" />
+                  <p className="mb-2 text-sm text-gray-500">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {MAX_UPLOAD_SIZE_FULL_TEXT}
+                  </p>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  required
+                />
+              </label>
+            )}
+          </div>
+        </div>
+
+        {/* Product Details */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+            <Star className="w-5 h-5 text-indigo-600" />
+            Product Details
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rating
+              </label>
+              <select
+                name="rating"
+                value={formData.rating}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+              >
+                {[1, 2, 3, 4, 5].map((r) => (
+                  <option key={r} value={r}>
+                    {r} Star{r > 1 ? "s" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <Ruler className="w-4 h-4" />
+                Thickness
+              </label>
+              <input
+                type="text"
+                name="thickness"
+                placeholder="e.g., 3mm, 5mm"
+                value={formData.thickness}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <Box className="w-4 h-4" />
+                Stock Status
+              </label>
+              <select
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+              >
+                <option value="In Stock">In Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
+                <option value="Low Stock">Low Stock</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Sizes */}
-        <div>
-          <label className="font-semibold block mb-2">Sizes</label>
-          {formData.sizes.map((size, index) => (
-            <div key={index} className="grid grid-cols-3 gap-2 mb-2">
-              <input
-                type="text"
-                placeholder="Label (e.g. 10x12)"
-                value={size.label}
-                onChange={(e) =>
-                  handleSizeChange(index, "label", e.target.value)
-                }
-                className="p-2 border rounded"
-              />
-              <input
-                type="number"
-                placeholder="Price"
-                value={size.price}
-                onChange={(e) =>
-                  handleSizeChange(index, "price", e.target.value)
-                }
-                className="p-2 border rounded"
-              />
-              <input
-                type="number"
-                placeholder="Original"
-                value={size.original}
-                onChange={(e) =>
-                  handleSizeChange(index, "original", e.target.value)
-                }
-                className="p-2 border rounded"
-              />
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeSizeField(index)}
-                  className="col-span-3 text-sm text-red-600 mt-1"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addSizeField}
-            className="text-sm text-blue-600 underline"
-          >
-            + Add Another Size
-          </button>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+              <Ruler className="w-5 h-5 text-indigo-600" />
+              Product Sizes
+            </h2>
+            <button
+              type="button"
+              onClick={addSizeField}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition"
+            >
+              <Plus className="w-4 h-4" />
+              Add Size
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {formData.sizes.map((size, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-12 gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200"
+              >
+                <div className="col-span-12 sm:col-span-4">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Size Label
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., 10x12"
+                    value={size.label}
+                    onChange={(e) =>
+                      handleSizeChange(index, "label", e.target.value)
+                    }
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                  />
+                </div>
+                <div className="col-span-6 sm:col-span-3">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Price (₹)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={size.price}
+                    onChange={(e) =>
+                      handleSizeChange(index, "price", e.target.value)
+                    }
+                    min="0"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                  />
+                </div>
+                <div className="col-span-6 sm:col-span-3">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Original (₹)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={size.original}
+                    onChange={(e) =>
+                      handleSizeChange(index, "original", e.target.value)
+                    }
+                    min="0"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                  />
+                </div>
+                <div className="col-span-12 sm:col-span-2 flex items-end">
+                  <button
+                    type="button"
+                    onClick={() => removeSizeField(index)}
+                    disabled={formData.sizes.length === 1}
+                    className="w-full px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-          disabled={loading}
-        >
-          {loading ? "Submitting..." : "Add Product"}
-        </button>
+        {/* Submit Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Adding Product...</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-5 h-5" />
+                <span>Add Product</span>
+              </>
+            )}
+          </button>
+          <Link
+            to="/admin/products"
+            className="flex-1 sm:flex-initial px-6 py-3 text-center border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

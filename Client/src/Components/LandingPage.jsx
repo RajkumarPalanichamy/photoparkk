@@ -34,20 +34,22 @@ export default function LandingPage() {
             className="text-lg font-bold whitespace-nowrap flex items-center gap-4"
             initial={{ x: "100%" }}
             animate={{ x: "-100%" }}
-            transition={{ 
-              repeat: Infinity, 
-              duration: 20, 
-              ease: "linear" 
+            transition={{
+              repeat: Infinity,
+              duration: 20,
+              ease: "linear",
             }}
           >
             <span className="bg-red-600 px-3 py-1 rounded-full text-sm font-bold">
-              SALE
+              NEW
             </span>
-            <span>50% OFF on all products! Limited time offer</span>
+            <span>
+              Premium Photography Collections - Handcrafted Excellence
+            </span>
             <span className="text-red-400">•</span>
             <span>Free shipping on orders above ₹999</span>
             <span className="text-red-400">•</span>
-            <span>50% OFF on all products! Limited time offer</span>
+            <span>Transform your memories into timeless art</span>
           </motion.div>
         </div>
       </motion.div>
@@ -65,14 +67,13 @@ export default function LandingPage() {
         )}
 
         {/* Video Background */}
-        <Suspense fallback={
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-        }>
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
+          }
+        >
           {isVideoLoaded && (
-            <VideoBackground 
-              isPlaying={isVideoPlaying}
-              isMuted={isMuted}
-            />
+            <VideoBackground isPlaying={isVideoPlaying} isMuted={isMuted} />
           )}
         </Suspense>
 
@@ -92,8 +93,10 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Content Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-30 z-10"></div>
+        {/* Content Overlay - Darker for better text visibility */}
+        <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+        {/* Additional gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-transparent to-black/50 z-10"></div>
 
         {/* Main Content */}
         <div className="relative z-20 h-full flex items-center">
@@ -108,14 +111,14 @@ export default function LandingPage() {
                   className="bg-black bg-opacity-80 backdrop-blur-sm border border-white/20 p-6 rounded-lg"
                 >
                   <h1 className="text-3xl font-bold text-white mb-4">
-                    SPECIAL{" "}
+                    Premium{" "}
                     <span className="bg-red-600 px-2 py-1 rounded text-2xl">
-                      50%
-                    </span>{" "}
-                    OFFERS
+                      Collections
+                    </span>
                   </h1>
                   <p className="text-gray-300 mb-6 text-sm">
-                    Discover our exclusive collection with amazing discounts
+                    Discover our exclusive collection of handcrafted premium
+                    frames
                   </p>
                   <Link to="/Offers">
                     <motion.button
@@ -138,14 +141,14 @@ export default function LandingPage() {
                   className="bg-black bg-opacity-75 backdrop-blur-sm border border-white/20 p-10 rounded-xl max-w-lg"
                 >
                   <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-                    SPECIAL{" "}
+                    Premium{" "}
                     <span className="bg-red-600 px-3 py-2 rounded text-4xl">
-                      50%
-                    </span>{" "}
-                    OFFERS
+                      Collections
+                    </span>
                   </h1>
                   <p className="text-gray-300 mb-8 text-lg">
-                    Discover our exclusive collection with amazing discounts on premium products
+                    Discover our exclusive collection of handcrafted premium
+                    frames and photography art
                   </p>
                   <div className="flex gap-4">
                     <Link to="/Offers">
@@ -186,4 +189,4 @@ export default function LandingPage() {
       </div>
     </div>
   );
-} 
+}

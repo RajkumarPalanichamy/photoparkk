@@ -12,6 +12,10 @@ import {
 } from "react-icons/fa";
 import axiosInstance from "../../utils/axiosInstance";
 import { useCart } from "../../context/CartContext";
+import {
+  CONTACT_TEL_LINK,
+  CONTACT_WHATSAPP_LINK,
+} from "../../constants/contact";
 
 const NewArrivalOrderPage = () => {
   const { id } = useParams();
@@ -401,14 +405,14 @@ const NewArrivalOrderPage = () => {
 
             <div className="space-y-3">
               <button
-                onClick={() => (window.location.href = "tel:9940770011")}
+                onClick={() => (window.location.href = CONTACT_TEL_LINK)}
                 className="w-full bg-gray-900 hover:bg-black text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-3"
               >
                 <FaPhoneAlt />
                 Call for Bulk Orders
               </button>
               <button
-                onClick={() => window.open("https://wa.me/919940770011", "_blank")}
+                onClick={() => window.open(CONTACT_WHATSAPP_LINK, "_blank")}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-3"
               >
                 <FaPhoneAlt />

@@ -56,29 +56,25 @@ const Offers = () => {
             </div>
           </div>
 
-          {/* Flat 50% Offer Text with Discount Label */}
+          {/* Premium Collection Offer Section */}
           <div className="flex flex-col justify-center items-center bg-gray-100 text-xl font-bold p-6 rounded-lg shadow-lg order-2 xl:h-[32rem] 2xl:h-[32rem] space-y-4 relative">
-            {/* Discount Label */}
-            <div className="absolute top-6 -right-8 rotate-45 bg-red-600 text-white px-6 py-1 text-xs sm:text-sm font-bold shadow-lg rounded-tl-3xl rounded-tr-4xl hidden sm:block">
-              FLAT 50% OFF
-            </div>
-
             <p className="flex items-center gap-2 text-lg sm:text-xl xl:text-2xl 2xl:text-3xl font-semibold text-green-700">
               <FiTag className="text-xl sm:text-2xl xl:text-3xl 2xl:text-4xl text-red-600 drop-shadow-sm" />
-              <span className="text-black">Exclusive Limited Offer</span>
+              <span className="text-black">Premium Collection</span>
             </p>
 
             <p className="text-2xl sm:text-4xl xl:text-5xl 2xl:text-6xl text-yellow-500 font-extrabold mt-2 text-center">
-              Flat 50% OFF
+              Curated Excellence
             </p>
 
             <p className="text-xs sm:text-sm xl:text-base 2xl:text-lg text-gray-600 mt-2 text-center">
-              Hurry! Offer ends soon.
+              Discover our handcrafted premium frames designed for lasting
+              memories.
             </p>
 
             <button className="mt-4 bg-orange-400 text-white px-5 py-2 rounded-lg font-semibold shadow-md hover:bg-orange-500 transition-all flex items-center gap-2 text-sm sm:text-base xl:text-lg 2xl:text-xl">
               <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7" />
-              Grab the Deal
+              Explore Collection
             </button>
           </div>
 
@@ -97,19 +93,20 @@ const Offers = () => {
             </div>
           </div>
 
-          {/* Buy 1 Get 1 Free Text */}
+          {/* Featured Collection Offer Section */}
           <div className="flex flex-col justify-center items-center bg-gray-100 text-xl font-bold p-6 rounded-lg shadow-lg order-4 sm:order-3 xl:h-[32rem] 2xl:h-[32rem] space-y-4">
             <p className="flex items-center gap-2 text-lg sm:text-xl xl:text-2xl 2xl:text-3xl font-semibold text-green-700">
               <FiTag className="text-xl sm:text-2xl xl:text-3xl 2xl:text-4xl text-green-800 drop-shadow-sm" />
-              <span className="text-black">Unbeatable Best Deal</span>
+              <span className="text-black">Featured Collection</span>
             </p>
 
             <p className="text-2xl sm:text-4xl xl:text-5xl 2xl:text-6xl text-yellow-500 font-extrabold text-center mt-2">
-              Buy 1 Get 1 Free
+              Timeless Elegance
             </p>
 
             <p className="text-xs sm:text-sm xl:text-base 2xl:text-lg text-gray-600 mt-2 text-center">
-              Double the joy for the same price!
+              Transform your cherished moments into beautiful, lasting art
+              pieces.
             </p>
             <button className="mt-4 bg-orange-400 text-white px-5 py-2 rounded-lg font-semibold shadow-md hover:bg-orange-500 transition-all flex items-center gap-2 text-sm sm:text-base xl:text-lg 2xl:text-xl">
               <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7" />

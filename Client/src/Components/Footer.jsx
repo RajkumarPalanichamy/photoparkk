@@ -4,6 +4,7 @@ import {
   FaTwitter,
   FaInstagram,
   FaLinkedinIn,
+  FaWhatsapp,
 } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
@@ -22,7 +23,6 @@ const Footer = () => {
   </p>
 </div>
 
-
         {/* Quick Links */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
@@ -30,11 +30,6 @@ const Footer = () => {
             <li>
               <Link to="/" className="hover:text-white">
                 Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/customize" className="hover:text-white">
-                Customize
               </Link>
             </li>
             <li>
@@ -83,12 +78,33 @@ const Footer = () => {
           <p className="text-sm">Email: photoparkk.prints@gmail.com</p>
           <p className="text-sm">Phone: +91 96296 74444</p>
           <div className="flex gap-4 mt-4">
-            
-           
-            <a href="https://www.instagram.com/photoparkk_?igsh=MWI3aGNmZDZ6NnFrOQ==" className="hover:text-white">
-              <FaInstagram />
+            <a
+              href="https://www.instagram.com/photoparkk_?igsh=MWI3aGNmZDZ6NnFrOQ=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="Instagram"
+            >
+              <FaInstagram size={20} />
             </a>
-           
+            <a
+              href="https://wa.me/919629674444"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="WhatsApp"
+            >
+              <FaWhatsapp size={20} />
+            </a>
+            <a
+              href="https://twitter.com/photoparkk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+              aria-label="Twitter"
+            >
+              <FaTwitter size={20} />
+            </a>
           </div>
         </div>
       </div>

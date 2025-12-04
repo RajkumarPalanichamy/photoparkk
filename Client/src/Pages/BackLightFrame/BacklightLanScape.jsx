@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { toast } from "react-toastify";
 import LoadingBar from "../../Components/LoadingBar";
-import { Upload, X, Image, Eye } from "lucide-react";
+import { Upload, X, Image, Eye, Sparkles, CheckCircle2, Lightbulb } from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+} from "../../constants/upload";
 
 const BacklightLandscape = () => {
   const [photoData, setPhotoData] = useState(null);
@@ -17,6 +21,16 @@ const BacklightLandscape = () => {
   const handleFileUpload = async (file) => {
     if (!file.type.match("image.*")) {
       toast.error("Please select a valid image");
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      toast.error(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
       return;
     }
 
@@ -103,7 +117,22 @@ const BacklightLandscape = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 w-full overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-yellow-50/30 to-orange-50/30 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white px-6 py-2 rounded-full mb-4">
+            <Lightbulb className="w-5 h-5" />
+            <span className="font-semibold">Backlight Landscape Frame</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+            Customize Your Backlight Landscape
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Upload your favorite photo and see it glow in a beautiful backlit landscape frame
+          </p>
+        </div>
+
       <input
         type="file"
         ref={fileInputRef}
@@ -112,152 +141,189 @@ const BacklightLandscape = () => {
         className="hidden"
       />
 
-      <div className="bg-white rounded-lg shadow-xl overflow-hidden p-6 sm:p-8">
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Upload Section */}
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl mt-7 font-semibold text-gray-800 mb-4">
-              Your Backlight Frame Photo (Landscape)
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-6 py-4">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Image className="w-6 h-6" />
+                Upload Your Photo
             </h2>
+            </div>
+            
+            <div className="p-6">
             {!photoData ? (
               <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                  isDragging
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-300 hover:border-gray-400"
-                } ${isUploading ? "pointer-events-none opacity-50" : ""}`}
+                  className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
+                    isUploading
+                      ? "border-gray-200 bg-gray-50 cursor-not-allowed"
+                      : isDragging
+                      ? "border-yellow-500 bg-yellow-50 scale-[1.02]"
+                      : "border-gray-300 hover:border-yellow-400 hover:bg-gray-50"
+                  }`}
               >
-                <div className="flex flex-col items-center justify-center space-y-4">
+                  <div className="flex flex-col items-center justify-center space-y-6">
+                    {isUploading ? (
+                      <>
                   <div className="bg-gray-100 p-3 rounded-full">
-                    <Image className="w-8 h-8 text-gray-500" />
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+                        </div>
+                        <p className="text-lg font-semibold text-gray-700">
+                          Uploading your image...
+                        </p>
+                        <div className="w-full max-w-xs">
+                          <div className="flex justify-between text-sm text-gray-600 mb-2">
+                            <span>Progress</span>
+                            <span>{uploadProgress}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-yellow-500 h-2 rounded-full transition-all duration-300 ease-out"
+                              style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={`p-4 rounded-full transition-all ${
+                          isDragging ? "bg-yellow-100 scale-110" : "bg-gray-100"
+                        }`}>
+                          <Image className={`w-12 h-12 transition-colors ${
+                            isDragging ? "text-yellow-600" : "text-gray-500"
+                          }`} />
                   </div>
-                  <p className="text-base text-gray-700">
-                    Drag and drop your photo here, or
+                        <div>
+                          <p className="text-lg font-semibold text-gray-700 mb-2">
+                            Drag and drop your photo here
                   </p>
+                          <p className="text-sm text-gray-500 mb-4">or</p>
                   <button
                     onClick={handleReplaceClick}
-                    disabled={isUploading}
-                    className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-lg hover:from-yellow-600 hover:to-orange-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
-                    Browse Image
+                            <Upload className="w-5 h-5" />
+                            Browse Files
                   </button>
-                  <p className="text-sm text-gray-500">
-                    PNG, JPG, GIF up to 5MB
-                  </p>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>PNG, JPG, GIF up to 5MB</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-yellow-50 rounded-xl border border-green-200">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
-            ) : (
-              <div className="border rounded-lg p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center">
-                    <div className="bg-blue-100 p-1.5 rounded-md">
-                      <Image className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div className="ml-3 truncate">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {photoData.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {formatFileSize(photoData.size)}
-                      </p>
+                      <div>
+                        <p className="font-semibold text-gray-900">{photoData.name}</p>
+                        <p className="text-sm text-gray-500">{formatFileSize(photoData.size)}</p>
                     </div>
                   </div>
                   <button
                     onClick={handleRemovePhoto}
-                    disabled={isUploading}
-                    className="p-1 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="relative w-full max-h-[400px] flex justify-center items-center bg-gray-50 rounded-md overflow-hidden border border-gray-200">
+                  <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden border-2 border-gray-200 shadow-inner">
                   <img
                     src={photoData.url}
                     alt="Uploaded preview"
-                    className="w-auto h-auto max-w-full max-h-[380px] object-contain"
+                      className="w-full h-full object-contain"
                   />
                 </div>
 
-                <div className="mt-3">
                   <button
                     onClick={handleReplaceClick}
                     disabled={isUploading}
-                    className="w-full py-2 px-4 bg-gray-800 text-white text-sm font-medium rounded-md hover:bg-gray-700 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                   >
-                    <Upload className="w-4 h-4 mr-2" />
+                    <Upload className="w-5 h-5" />
                     Replace Photo
                   </button>
                 </div>
+              )}
               </div>
-            )}
-
-            {/* Loading Bar */}
+            {isUploading && (
             <LoadingBar 
               progress={uploadProgress} 
               isUploading={isUploading} 
               message="Uploading your backlight frame image..."
             />
+            )}
           </div>
 
-          {/* Frame Preview */}
-          <div
-            className={`flex-1 mt-8 md:mt-0 p-6 rounded-xl transition-colors min-w-0 ${
-              lightOn ? "bg-black" : "bg-white"
-            }`}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2
-                className={`text-xl font-semibold ${
-                  lightOn ? "text-white" : "text-gray-800"
-                }`}
-              >
-                Backlight Frame Preview (Landscape)
+          {/* Preview Section with Light Toggle */}
+          <div className={`bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 transition-colors ${
+            lightOn ? "bg-gradient-to-br from-gray-900 to-black" : ""
+          }`}>
+            <div className={`px-6 py-4 transition-colors ${
+              lightOn 
+                ? "bg-gradient-to-r from-yellow-400 to-orange-500" 
+                : "bg-gradient-to-r from-yellow-500 to-orange-600"
+            }`}>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Eye className="w-6 h-6" />
+                  Live Preview
               </h2>
               <button
                 onClick={handlePreviewClick}
                 disabled={!photoData}
-                className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                   photoData
-                    ? "bg-blue-500 text-white hover:bg-blue-600"
-                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      ? "bg-white text-yellow-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transform hover:scale-105"
+                      : "bg-white/20 text-white/50 cursor-not-allowed"
                 }`}
               >
-                <Eye size={18} className="mr-2" />
-                Preview
+                  View Full Preview
               </button>
+              </div>
             </div>
 
-            {/* Light toggle */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="p-8">
+              {/* Light Toggle */}
+              <div className="flex items-center justify-center gap-3 mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
+                <Lightbulb className={`w-5 h-5 ${lightOn ? "text-yellow-400" : "text-gray-400"}`} />
               <label
                 htmlFor="lightToggle"
-                className={`text-lg ${lightOn ? "text-white" : "text-black"}`}
+                  className={`text-lg font-medium cursor-pointer ${
+                    lightOn ? "text-yellow-400" : "text-gray-700"
+                  }`}
               >
-                Click Light {lightOn ? "Off" : "On"}
+                  {lightOn ? "Light On" : "Light Off"}
               </label>
               <input
                 id="lightToggle"
                 type="checkbox"
                 checked={lightOn}
                 onChange={() => setLightOn(!lightOn)}
-                className="w-5 h-5 accent-yellow-400"
+                  className="w-6 h-6 accent-yellow-400 cursor-pointer"
               />
             </div>
 
-            {/* Frame Container */}
+              <div className="relative w-full max-w-md mx-auto">
             <div
-              className={`relative w-full max-w-[400px] aspect-[4/3] mx-auto rounded-xl overflow-hidden transition-shadow duration-300 ${
+                  className={`relative aspect-[4/3] mx-auto rounded-2xl overflow-hidden transition-all duration-500 ${
                 lightOn
-                  ? "border-[6px] border-yellow-300 shadow-[0_0_40px_10px_rgba(253,224,71,0.4)]"
-                  : "border border-gray-300"
+                      ? "border-8 border-yellow-300 shadow-[0_0_60px_20px_rgba(253,224,71,0.5)]"
+                      : "border-8 border-gray-800 shadow-2xl"
               }`}
             >
               {lightOn && (
-                <div className="absolute inset-0 bg-yellow-300 opacity-20 blur-2xl z-0" />
+                    <div className="absolute inset-0 bg-yellow-300 opacity-30 blur-3xl z-0 animate-pulse" />
               )}
               {photoData ? (
                 <img
@@ -266,14 +332,36 @@ const BacklightLandscape = () => {
                   className="relative z-10 w-full h-full object-cover"
                 />
               ) : (
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-gray-500 text-center px-4">
-                  <p className="mb-2">No image selected</p>
-                  <button
-                    onClick={handleReplaceClick}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium"
-                  >
-                    Upload Photo
-                  </button>
+                    <div className="relative z-10 flex flex-col items-center justify-center h-full text-gray-400">
+                      <div className="p-4 bg-gray-200 rounded-full mb-4">
+                        <Image className="w-12 h-12" />
+                      </div>
+                      <p className="text-lg font-medium mb-2">No image selected</p>
+                      <p className="text-sm text-center px-4">
+                        Upload a photo to see your backlight landscape preview
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {photoData && (
+                  <div className={`absolute -bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full shadow-lg border ${
+                    lightOn 
+                      ? "bg-yellow-400 text-gray-900 border-yellow-500" 
+                      : "bg-white text-gray-700 border-gray-200"
+                  }`}>
+                    <span className="text-sm font-medium flex items-center gap-2">
+                      <Lightbulb className={`w-4 h-4 ${lightOn ? "text-gray-900" : "text-gray-500"}`} />
+                      Backlight Frame
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {photoData && (
+                <div className="mt-8 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
+                  <p className="text-sm text-gray-700 text-center">
+                    <span className="font-semibold">Ready to proceed?</span> Toggle the light to preview and click "View Full Preview" to continue.
+                  </p>
                 </div>
               )}
             </div>

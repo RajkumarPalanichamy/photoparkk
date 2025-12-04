@@ -1,43 +1,91 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Product from "./models/Product.js";
 import User from "./models/users.js";
-import Cart from "./models/Cart.js";
-import Products from "./data/products.js";
+import addtocartdata from "./models/addtocart.js";
 
 dotenv.config();
 
 const seedData = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    // Remove deprecated options - they're not needed in MongoDB Driver 4.0+
+    await mongoose.connect(process.env.MONGO_URI);
 
-    await Product.deleteMany();
-    await User.deleteMany();
-    await Cart.deleteMany();
+    console.log("🔌 Connected to MongoDB");
 
-    const createUser = await User.create({
-      name: "Admin",
+    // Clear existing data (optional - comment out if you want to keep existing data)
+    await addtocartdata.deleteMany();
+
+    // Check if user with this email already exists (regardless of role)
+    const existingUser = await User.findOne({
       email: "admin@gmail.com",
-      password: "123456",
-      role: "admin",
     });
 
-    const userId = createUser._id;
+    if (existingUser) {
+      // If user exists but is not admin, update to admin
+      if (existingUser.role !== "admin") {
+        existingUser.role = "admin";
+        await existingUser.save();
+        console.log("✅ Updated existing user to admin role");
+        console.log("   Email: admin@gmail.com");
+        console.log("   Password: (unchanged)");
+        console.log("   Role: admin (updated)");
+      } else {
+        console.log("⚠️  Admin user already exists. Skipping user creation.");
+        console.log("   Email: admin@gmail.com");
+        console.log("   Role: admin");
+      }
+      console.log("✅ Seeder completed");
+      await mongoose.connection.close();
+      process.exit(0);
+      return;
+    }
 
-    const sampleProducts = Products.map((product) => ({
-      ...product,
-      user: userId,
-    }));
+    // Create admin user if it doesn't exist
+    try {
+      const createUser = await User.create({
+        name: "Admin",
+        email: "admin@gmail.com",
+        password: "123456",
+        role: "admin",
+      });
 
-    await Product.insertMany(sampleProducts);
+      console.log("✅ Admin user created successfully");
+      console.log("   Email: admin@gmail.com");
+      console.log("   Password: 123456");
+      console.log("   Role: admin");
+      console.log("✅ Seeder completed successfully");
+    } catch (createError) {
+      // Handle duplicate key error - user was created between check and create
+      if (createError.code === 11000) {
+        console.log("⚠️  User with email 'admin@gmail.com' already exists.");
+        // Try to update it to admin role
+        const user = await User.findOne({ email: "admin@gmail.com" });
+        if (user && user.role !== "admin") {
+          user.role = "admin";
+          await user.save();
+          console.log("✅ Updated existing user to admin role");
+        } else {
+          console.log("✅ User already exists with admin role");
+        }
+      } else {
+        throw createError; // Re-throw if it's a different error
+      }
+    }
 
-    console.log("✅ Product data seeded successfully");
+    await mongoose.connection.close();
     process.exit(0);
   } catch (error) {
-    console.error("❌ Error seeding data:", error);
+    console.error("❌ Error seeding data:", error.message);
+
+    // Handle duplicate key error specifically
+    if (error.code === 11000) {
+      console.log("⚠️  User with email 'admin@gmail.com' already exists.");
+      console.log(
+        "   Run the seeder again to update the existing user to admin role."
+      );
+    }
+
+    await mongoose.connection.close().catch(() => {});
     process.exit(1);
   }
 };

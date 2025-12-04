@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+} from "../../../../constants/upload";
 
 const SpecialoffersUpdateForm = () => {
   const { id } = useParams();
@@ -52,13 +56,24 @@ const SpecialoffersUpdateForm = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      setFormData((prev) => ({
-        ...prev,
-        image: URL.createObjectURL(file),
-      }));
+    if (!file) return;
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      alert(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
+      e.target.value = ""; // Clear the file input
+      return;
     }
+
+    setImageFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      image: URL.createObjectURL(file),
+    }));
   };
 
   const handleSizeChange = (index, field, value) => {
