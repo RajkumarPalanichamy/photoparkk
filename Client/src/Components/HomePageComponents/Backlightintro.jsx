@@ -1,11 +1,10 @@
 import React from "react";
 import BacklightBanner from "../../assets/frontend_assets/BacklightPhotoFrames/BacklightBanner.jpeg";
 import BacklightPortrait from "../../assets/frontend_assets/BacklightPhotoFrames/BacklightPortrait.jpeg";
-import BacklighLandscape from "../../assets/frontend_assets/BacklightPhotoFrames/Landscape.jpeg";
+import BacklighLandscape from "../../assets/frontend_assets/BacklightPhotoFrames/LandScape.jpeg";
 import Backlighsquare from "../../assets/frontend_assets/BacklightPhotoFrames/Square.jpeg";
 import { Link } from "react-router-dom";
 const steps = ["Select Shape", "Upload Image", "Place Order"];
-
 
 const Backlightintro = () => {
   return (
