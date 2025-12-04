@@ -78,7 +78,7 @@ export const createFrameOrder = async (req, res) => {
 // ✅ Get orders by userId with search, filter, sort, and pagination
 export const getUserFrameOrders = async (req, res) => {
   try {
-    const { status, search, sortBy, page = 1, limit = 10 } = req.query;
+    const { status, search, sortBy, page = 1, limit = 10, period } = req.query;
     const userId = req.params.userId;
 
     // Calculate pagination first (needed for early returns)
@@ -88,14 +88,92 @@ export const getUserFrameOrders = async (req, res) => {
     // Build query
     let query = { userId };
 
-    // Apply status filter
-    if (status && status !== "All Orders") {
-      if (status === "Completed") {
+    // Apply status filter - accept both old labels and new values
+    if (status && status !== "all" && status !== "All Orders") {
+      if (status === "completed" || status === "Completed") {
         query.status = "Delivered";
-      } else if (status === "Processing") {
+      } else if (status === "processing" || status === "Processing") {
         query.status = { $in: ["Pending", "Shipped", "Out for Delivery"] };
-      } else if (status === "Cancelled") {
+      } else if (status === "cancelled" || status === "Cancelled") {
         query.status = "Cancelled";
+      }
+    }
+
+    // Apply period filter
+    if (period) {
+      const now = new Date();
+      let startDate = null;
+      let endDate = null;
+
+      switch (period) {
+        case "last_month": {
+          // Get the previous complete calendar month
+          // If current month is October (month 9), last month is September (month 8)
+          const currentYear = now.getFullYear();
+          const currentMonth = now.getMonth(); // 0-11
+          const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // Handle January -> December of previous year
+          const lastMonthYear =
+            currentMonth === 0 ? currentYear - 1 : currentYear;
+
+          // First day of last month at 00:00:00
+          const lastMonthStart = new Date(
+            lastMonthYear,
+            lastMonth,
+            1,
+            0,
+            0,
+            0,
+            0
+          );
+          // Last day of last month at 23:59:59.999
+          const lastMonthEnd = new Date(
+            lastMonthYear,
+            lastMonth + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          );
+
+          startDate = lastMonthStart;
+          endDate = lastMonthEnd;
+          break;
+        }
+        case "last_three_months": {
+          const threeMonthsAgo = new Date(now);
+          threeMonthsAgo.setMonth(now.getMonth() - 3);
+          threeMonthsAgo.setDate(1);
+          startDate = threeMonthsAgo;
+          endDate = now;
+          break;
+        }
+        case "last_six_months": {
+          const sixMonthsAgo = new Date(now);
+          sixMonthsAgo.setMonth(now.getMonth() - 6);
+          sixMonthsAgo.setDate(1);
+          startDate = sixMonthsAgo;
+          endDate = now;
+          break;
+        }
+        case "last_year": {
+          const lastYear = now.getFullYear() - 1;
+          const yearStart = new Date(lastYear, 0, 1);
+          const yearEnd = new Date(lastYear, 11, 31, 23, 59, 59, 999);
+          startDate = yearStart;
+          endDate = yearEnd;
+          break;
+        }
+        default:
+          // Unknown period, ignore
+          break;
+      }
+
+      if (startDate && endDate) {
+        query.createdAt = {
+          $gte: startDate,
+          $lte: endDate,
+        };
       }
     }
 
@@ -117,12 +195,16 @@ export const getUserFrameOrders = async (req, res) => {
       // Username matches - show all orders for this user (query already filtered by userId)
     }
 
-    // Build sort
+    // Build sort - accept both old labels and new values
     let sort = { createdAt: -1 }; // Default: newest first
-    if (sortBy === "Oldest") {
+    if (sortBy === "oldest" || sortBy === "Oldest") {
       sort = { createdAt: 1 };
+    } else if (sortBy === "newest" || sortBy === "Newest") {
+      sort = { createdAt: -1 };
     } else if (
+      sortBy === "price_desc" ||
       sortBy === "Price (High to Low)" ||
+      sortBy === "price_asc" ||
       sortBy === "Price (Low to High)"
     ) {
       // For frame orders, we need to calculate total from items
@@ -203,7 +285,7 @@ export const updateFrameOrderStatus = async (req, res) => {
 // ✅ Admin: Get all orders with search, filter, sort, and pagination
 export const getAllFrameOrders = async (req, res) => {
   try {
-    const { status, search, sortBy, page = 1, limit = 10 } = req.query;
+    const { status, search, sortBy, page = 1, limit = 10, period } = req.query;
 
     // Calculate pagination first (needed for early returns)
     const pageNum = parseInt(page);
@@ -212,14 +294,91 @@ export const getAllFrameOrders = async (req, res) => {
     // Build query
     let query = {};
 
-    // Apply status filter
-    if (status && status !== "All Orders") {
-      if (status === "Completed") {
+    // Apply status filter - accept both old labels and new values
+    if (status && status !== "all" && status !== "All Orders") {
+      if (status === "completed" || status === "Completed") {
         query.status = "Delivered";
-      } else if (status === "Processing") {
+      } else if (status === "processing" || status === "Processing") {
         query.status = { $in: ["Pending", "Shipped", "Out for Delivery"] };
-      } else if (status === "Cancelled") {
+      } else if (status === "cancelled" || status === "Cancelled") {
         query.status = "Cancelled";
+      }
+    }
+
+    // Apply period filter
+    if (period) {
+      const now = new Date();
+      let startDate = null;
+      let endDate = null;
+
+      switch (period) {
+        case "last_month": {
+          // Get the previous complete calendar month
+          const currentYear = now.getFullYear();
+          const currentMonth = now.getMonth(); // 0-11
+          const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // Handle January -> December of previous year
+          const lastMonthYear =
+            currentMonth === 0 ? currentYear - 1 : currentYear;
+
+          // First day of last month at 00:00:00
+          const lastMonthStart = new Date(
+            lastMonthYear,
+            lastMonth,
+            1,
+            0,
+            0,
+            0,
+            0
+          );
+          // Last day of last month at 23:59:59.999
+          const lastMonthEnd = new Date(
+            lastMonthYear,
+            lastMonth + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          );
+
+          startDate = lastMonthStart;
+          endDate = lastMonthEnd;
+          break;
+        }
+        case "last_three_months": {
+          const threeMonthsAgo = new Date(now);
+          threeMonthsAgo.setMonth(now.getMonth() - 3);
+          threeMonthsAgo.setDate(1);
+          startDate = threeMonthsAgo;
+          endDate = now;
+          break;
+        }
+        case "last_six_months": {
+          const sixMonthsAgo = new Date(now);
+          sixMonthsAgo.setMonth(now.getMonth() - 6);
+          sixMonthsAgo.setDate(1);
+          startDate = sixMonthsAgo;
+          endDate = now;
+          break;
+        }
+        case "last_year": {
+          const lastYear = now.getFullYear() - 1;
+          const yearStart = new Date(lastYear, 0, 1);
+          const yearEnd = new Date(lastYear, 11, 31, 23, 59, 59, 999);
+          startDate = yearStart;
+          endDate = yearEnd;
+          break;
+        }
+        default:
+          // Unknown period, ignore
+          break;
+      }
+
+      if (startDate && endDate) {
+        query.createdAt = {
+          $gte: startDate,
+          $lte: endDate,
+        };
       }
     }
 
@@ -245,12 +404,16 @@ export const getAllFrameOrders = async (req, res) => {
       query.userId = { $in: userIds };
     }
 
-    // Build sort
+    // Build sort - accept both old labels and new values
     let sort = { createdAt: -1 }; // Default: newest first
-    if (sortBy === "Oldest") {
+    if (sortBy === "oldest" || sortBy === "Oldest") {
       sort = { createdAt: 1 };
+    } else if (sortBy === "newest" || sortBy === "Newest") {
+      sort = { createdAt: -1 };
     } else if (
+      sortBy === "price_desc" ||
       sortBy === "Price (High to Low)" ||
+      sortBy === "price_asc" ||
       sortBy === "Price (Low to High)"
     ) {
       // For price sorting, we'll sort by createdAt and let frontend handle it
@@ -280,5 +443,21 @@ export const getAllFrameOrders = async (req, res) => {
   } catch (err) {
     console.error("❌ Failed to fetch all orders:", err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+// ✅ Delete frame order
+export const deleteFrameOrder = async (req, res) => {
+  try {
+    const deletedOrder = await FrameOrder.findByIdAndDelete(req.params.id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json({ message: "Frame order deleted successfully" });
+  } catch (err) {
+    console.error("❌ Failed to delete frame order:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

@@ -8,13 +8,17 @@ import {
   X,
   Loader2,
   Package,
-  Star,
   Ruler,
   Box,
   Image as ImageIcon,
   Edit,
   Plus,
 } from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+  MAX_UPLOAD_SIZE_FULL_TEXT,
+} from "../../../../constants/upload";
 
 const NewarrivalUpdateForm = () => {
   const { id } = useParams();
@@ -24,7 +28,6 @@ const NewarrivalUpdateForm = () => {
     title: "",
     content: "",
     image: "",
-    rating: 4,
     thickness: "",
     stock: "In Stock",
     sizes: [{ label: "", price: "", original: "" }],
@@ -64,7 +67,7 @@ const NewarrivalUpdateForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "rating" ? parseInt(value) : value,
+      [name]: value,
     }));
   };
 
@@ -95,14 +98,25 @@ const NewarrivalUpdateForm = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      alert(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
+      e.target.value = ""; // Clear the file input
+      return;
     }
+
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const removeImage = () => {
@@ -124,7 +138,6 @@ const NewarrivalUpdateForm = () => {
       const data = new FormData();
       data.append("title", formData.title.trim());
       data.append("content", formData.content.trim());
-      data.append("rating", Number(formData.rating));
       data.append("thickness", formData.thickness.trim());
       data.append("stock", formData.stock.trim() || "In Stock");
       data.append("sizes", JSON.stringify(cleanedSizes));
@@ -282,7 +295,7 @@ const NewarrivalUpdateForm = () => {
                     drag and drop
                   </p>
                   <p className="text-xs text-gray-500">
-                    PNG, JPG, GIF up to 10MB
+                    {MAX_UPLOAD_SIZE_FULL_TEXT}
                   </p>
                 </div>
                 <input
@@ -299,29 +312,11 @@ const NewarrivalUpdateForm = () => {
         {/* Product Details */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Star className="w-5 h-5 text-indigo-600" />
+            <Package className="w-5 h-5 text-indigo-600" />
             Product Details
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating
-              </label>
-              <select
-                name="rating"
-                value={formData.rating}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
-              >
-                {[1, 2, 3, 4, 5].map((r) => (
-                  <option key={r} value={r}>
-                    {r} Star{r > 1 ? "s" : ""}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                 <Ruler className="w-4 h-4" />

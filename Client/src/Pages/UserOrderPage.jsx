@@ -18,8 +18,24 @@ const UserOrderPage = () => {
   const modalRef = useRef(null);
   const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("All Orders");
-  const [sortBy, setSortBy] = useState("Newest");
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+
+  // Status mapping: value -> display label
+  const statusOptions = [
+    { value: "all", label: "All Orders" },
+    { value: "completed", label: "Completed" },
+    { value: "processing", label: "Processing" },
+    { value: "cancelled", label: "Cancelled" },
+  ];
+
+  // Sort mapping: value -> display label
+  const sortOptions = [
+    { value: "newest", label: "Sort by: Newest" },
+    { value: "oldest", label: "Sort by: Oldest" },
+    { value: "price_desc", label: "Sort by: Price (High to Low)" },
+    { value: "price_asc", label: "Sort by: Price (Low to High)" },
+  ];
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +44,7 @@ const UserOrderPage = () => {
   const [loadingOrderDetails, setLoadingOrderDetails] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
   const ordersPerPage = 5;
 
   // Debounce search query
@@ -50,16 +67,28 @@ const UserOrderPage = () => {
       try {
         setLoading(true);
 
-        // Build query parameters
+        // Build query parameters - send values, not labels
         const params = new URLSearchParams({
-          status: filter,
-          sortBy: sortBy,
           page: currentPage.toString(),
           limit: ordersPerPage.toString(),
         });
 
+        // Only send status if not "all"
+        if (filter && filter !== "all") {
+          params.append("status", filter);
+        }
+
+        // Always send sortBy
+        if (sortBy) {
+          params.append("sortBy", sortBy);
+        }
+
         if (debouncedSearchQuery.trim()) {
           params.append("search", debouncedSearchQuery.trim());
+        }
+
+        if (selectedTimePeriod) {
+          params.append("period", selectedTimePeriod);
         }
 
         const [frameRes, commonRes] = await Promise.all([
@@ -122,7 +151,7 @@ const UserOrderPage = () => {
     };
 
     fetchAllOrders();
-  }, [filter, sortBy, debouncedSearchQuery, currentPage]);
+  }, [filter, sortBy, debouncedSearchQuery, currentPage, selectedTimePeriod]);
 
   const getStatusConfig = (status) => {
     switch (status) {
@@ -225,10 +254,10 @@ const UserOrderPage = () => {
 
   const paginatedOrders = getSortedOrders();
 
-  // Reset to page 1 when filter/search/sort changes
+  // Reset to page 1 when filter/search/sort/period changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, debouncedSearchQuery, sortBy]);
+  }, [filter, debouncedSearchQuery, sortBy, selectedTimePeriod]);
 
   const handleViewDetails = async (order) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -327,56 +356,54 @@ const UserOrderPage = () => {
                 View and manage your past orders
               </p>
             </div>
-            <div className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200"
-                  placeholder="Search by username..."
-                />
-              </div>
-            </div>
           </div>
 
           {/* Filters and Sort */}
-          <div className="flex flex-wrap items-center gap-8 mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-6 mb-6">
+            {/* Left Side - Status Filter Tabs */}
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-[15px] font-medium text-slate-600">
                 Filter by:
               </span>
-              {["All Orders", "Completed", "Processing", "Cancelled"].map(
-                (filterOption) => (
-                  <button
-                    key={filterOption}
-                    onClick={() => setFilter(filterOption)}
-                    className={`px-4 py-2 cursor-pointer border rounded-md text-sm font-medium transition ${
-                      filter === filterOption
-                        ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
-                        : "bg-white border-gray-300 text-slate-900 hover:bg-gray-50"
-                    }`}
-                  >
-                    {filterOption}
-                  </button>
-                )
-              )}
+              {statusOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setFilter(option.value)}
+                  className={`px-4 py-2 cursor-pointer border rounded-md text-sm font-medium transition ${
+                    filter === option.value
+                      ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
+                      : "bg-white border-gray-300 text-slate-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
-            <div className="ml-auto">
+
+            {/* Right Side - Time Period and Sort Selects */}
+            <div className="flex flex-wrap items-center gap-4">
+              <select
+                value={selectedTimePeriod}
+                onChange={(e) => setSelectedTimePeriod(e.target.value)}
+                className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+              >
+                <option value="">All Time</option>
+                <option value="last_month">Last Month</option>
+                <option value="last_three_months">Last 3 Months</option>
+                <option value="last_six_months">Last 6 Months</option>
+                <option value="last_year">Last Year</option>
+              </select>
+
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+                className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
               >
-                <option value="Newest">Sort by: Newest</option>
-                <option value="Oldest">Sort by: Oldest</option>
-                <option value="Price (High to Low)">
-                  Sort by: Price (High to Low)
-                </option>
-                <option value="Price (Low to High)">
-                  Sort by: Price (Low to High)
-                </option>
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -389,8 +416,8 @@ const UserOrderPage = () => {
                 No Orders Found
               </h3>
               <p className="text-gray-500">
-                {searchQuery
-                  ? "No orders match your search criteria."
+                {selectedTimePeriod
+                  ? "No orders found for the selected time period."
                   : "You haven't placed any orders yet."}
               </p>
             </div>

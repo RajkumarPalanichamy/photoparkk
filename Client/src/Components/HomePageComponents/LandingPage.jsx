@@ -8,10 +8,10 @@ export default function LandingPage() {
   const [currentOffer, setCurrentOffer] = useState(0);
 
   const offers = [
-    "🎉 50% OFF on All Premium Frames - Limited Time!",
-    "✨ Buy 2 Get 1 Free on Canvas Prints",
-    "🔥 Exclusive Backlight Frames - 40% OFF",
-    "⭐ Free Shipping on Orders Over $99",
+    "Premium Photography Collections - Handcrafted Excellence",
+    "Transform Your Memories into Timeless Art",
+    "Curated Premium Frames for Lasting Moments",
+    "Free Shipping on Orders Over ₹999",
   ];
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function LandingPage() {
               >
                 <Sparkles size={16} />
                 <span className="text-white font-bold text-sm uppercase tracking-wide">
-                  Limited Offer
+                  Premium Collection
                 </span>
               </motion.div>
 
@@ -110,11 +110,10 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="text-4xl font-bold text-white mb-4 leading-tight"
               >
-                SPECIAL{" "}
+                Exclusive{" "}
                 <span className="bg-gradient-to-r from-red-500 to-pink-600 text-transparent bg-clip-text">
-                  50%
-                </span>{" "}
-                OFF
+                  Savings
+                </span>
               </motion.h1>
 
               <motion.p
@@ -167,7 +166,7 @@ export default function LandingPage() {
               >
                 <Sparkles size={20} className="text-white" />
                 <span className="text-white font-bold text-lg uppercase tracking-wider">
-                  Exclusive Limited Time Offer
+                  Premium Collection
                 </span>
               </motion.div>
 
@@ -177,16 +176,15 @@ export default function LandingPage() {
                 transition={{ duration: 1, delay: 0.5 }}
                 className="text-7xl font-bold text-white mb-6 leading-tight"
               >
-                SPECIAL{" "}
+                Exclusive{" "}
                 <motion.span
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", delay: 0.8 }}
                   className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-transparent bg-clip-text inline-block"
                 >
-                  50%
-                </motion.span>{" "}
-                OFF
+                  Savings
+                </motion.span>
               </motion.h1>
 
               <motion.p

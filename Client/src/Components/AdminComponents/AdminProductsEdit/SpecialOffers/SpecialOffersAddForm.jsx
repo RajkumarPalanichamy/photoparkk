@@ -13,6 +13,11 @@ import {
   Box,
   Image as ImageIcon,
 } from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+  MAX_UPLOAD_SIZE_FULL_TEXT,
+} from "../../../../constants/upload";
 
 const SpecialOffersAddForm = () => {
   const navigate = useNavigate();
@@ -40,14 +45,25 @@ const SpecialOffersAddForm = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      alert(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
+      e.target.value = ""; // Clear the file input
+      return;
     }
+
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const removeImage = () => {
@@ -242,7 +258,7 @@ const SpecialOffersAddForm = () => {
                     drag and drop
                   </p>
                   <p className="text-xs text-gray-500">
-                    PNG, JPG, GIF up to 10MB
+                    {MAX_UPLOAD_SIZE_FULL_TEXT}
                   </p>
                 </div>
                 <input

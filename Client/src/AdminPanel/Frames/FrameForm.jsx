@@ -13,6 +13,10 @@ import {
   Save,
   Sparkles,
 } from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+} from "../../constants/upload";
 
 const FrameForm = ({ initialData, onSuccess, onClose }) => {
   const [shape, setShape] = useState(initialData?.shape || "");
@@ -164,10 +168,9 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
     if (!file) return;
 
     // Check file size (10MB limit)
-    const maxSizeBytes = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSizeBytes) {
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
       alert(
-        `File size too large. Maximum allowed size is 10MB. Your file is ${(
+        `File size too large. Maximum allowed size is ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
           file.size /
           (1024 * 1024)
         ).toFixed(1)}MB. The image will be compressed.`
@@ -394,7 +397,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       if (err.response?.data?.message) {
         if (err.response.data.message.includes("File size too large")) {
           alert(
-            "File size too large! Please compress your images or use smaller files. Maximum size is 10MB."
+            `File size too large! Please compress your images or use smaller files. Maximum size is ${MAX_UPLOAD_SIZE_MB}MB.`
           );
         } else {
           alert(`Error: ${err.response.data.message}`);
@@ -439,10 +442,9 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                 if (!file) return;
 
                 // Check file size (10MB limit)
-                const maxSizeBytes = 10 * 1024 * 1024; // 10MB
-                if (file.size > maxSizeBytes) {
+                if (file.size > MAX_UPLOAD_SIZE_BYTES) {
                   alert(
-                    `File size too large. Maximum allowed size is 10MB. Your file is ${(
+                    `File size too large. Maximum allowed size is ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
                       file.size /
                       (1024 * 1024)
                     ).toFixed(1)}MB. The image will be compressed.`

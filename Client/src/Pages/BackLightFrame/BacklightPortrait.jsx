@@ -4,6 +4,10 @@ import axiosInstance from "../../utils/axiosInstance";
 import { toast } from "react-toastify";
 import LoadingBar from "../../Components/LoadingBar";
 import { Upload, X, Image, Eye, Sparkles, CheckCircle2, Lightbulb } from "lucide-react";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+} from "../../constants/upload";
 
 const BacklightPortrait = () => {
   const [photoData, setPhotoData] = useState(null);
@@ -17,6 +21,16 @@ const BacklightPortrait = () => {
   const handleFileUpload = async (file) => {
     if (!file.type.match("image.*")) {
       toast.error("Please select a valid image");
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      toast.error(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
       return;
     }
 
