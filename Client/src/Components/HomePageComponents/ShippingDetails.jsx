@@ -13,7 +13,7 @@ import GooglePay from "../../assets/frontend_assets/ShippingDetails/googlePay.pn
 import Paytm from "../../assets/frontend_assets/ShippingDetails/paytm.png";
 import upi from "../../assets/frontend_assets/ShippingDetails/bhimIcon.png";
 import visa from "../../assets/frontend_assets/ShippingDetails/visa.png";
-import masterCard from "../../assets/frontend_assets/ShippingDetails/masterCard.png";
+import masterCard from "../../assets/frontend_assets/ShippingDetails/mastercard.png";
 import Bank from "../../assets/frontend_assets/ShippingDetails/bank.png";
 import Razorpay from "../../assets/frontend_assets/ShippingDetails/Razorpay.jpg";
 
