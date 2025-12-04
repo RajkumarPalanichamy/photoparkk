@@ -20,14 +20,32 @@ import {
   ChevronLeft,
   ChevronRight,
   ShoppingBag,
+  Trash2,
 } from "lucide-react";
 
 const FrameOrders = () => {
   const [orders, setOrders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
-  const [filter, setFilter] = useState("All Orders");
-  const [sortBy, setSortBy] = useState("Newest");
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
+
+  // Status mapping: value -> display label
+  const statusOptions = [
+    { value: "all", label: "All Orders" },
+    { value: "completed", label: "Completed" },
+    { value: "processing", label: "Processing" },
+    { value: "cancelled", label: "Cancelled" },
+  ];
+
+  // Sort mapping: value -> display label
+  const sortOptions = [
+    { value: "newest", label: "Sort by: Newest" },
+    { value: "oldest", label: "Sort by: Oldest" },
+    { value: "price_desc", label: "Sort by: Price (High to Low)" },
+    { value: "price_asc", label: "Sort by: Price (Low to High)" },
+  ];
   const [currentPage, setCurrentPage] = useState(1);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -52,12 +70,16 @@ const FrameOrders = () => {
         limit: ordersPerPage.toString(),
       });
 
-      if (filter && filter !== "All Orders") {
+      if (filter && filter !== "all") {
         params.append("status", filter);
       }
 
       if (sortBy) {
         params.append("sortBy", sortBy);
+      }
+
+      if (selectedTimePeriod) {
+        params.append("period", selectedTimePeriod);
       }
 
       if (debouncedSearchQuery.trim()) {
@@ -82,7 +104,7 @@ const FrameOrders = () => {
       setTotalOrders(0);
       setTotalPages(1);
     }
-  }, [currentPage, filter, sortBy, debouncedSearchQuery]);
+  }, [currentPage, filter, sortBy, debouncedSearchQuery, selectedTimePeriod]);
 
   useEffect(() => {
     fetchOrders();
@@ -127,6 +149,31 @@ const FrameOrders = () => {
       fetchOrders();
     } catch (err) {
       console.error("Error updating order status", err);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this order? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/frameorders/${orderId}`);
+      alert("✅ Frame order deleted successfully");
+      // Refresh orders list
+      fetchOrders();
+      // Close modal if the deleted order was selected
+      if (selectedOrder?._id === orderId) {
+        setShowDetailsModal(false);
+        setSelectedOrder(null);
+      }
+    } catch (error) {
+      console.error("Failed to delete order:", error);
+      alert("❌ Failed to delete order");
     }
   };
 
@@ -211,10 +258,10 @@ const FrameOrders = () => {
 
   const paginatedOrders = getSortedOrders();
 
-  // Reset to page 1 when filter/search/sort changes
+  // Reset to page 1 when filter/search/sort/period changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filter, debouncedSearchQuery, sortBy]);
+  }, [filter, debouncedSearchQuery, sortBy, selectedTimePeriod]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -260,58 +307,52 @@ const FrameOrders = () => {
   return (
     <>
       <div className="w-full">
-        {/* Search Bar */}
-        <div className="flex flex-wrap justify-between items-center gap-6 mb-6">
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200"
-                placeholder="Search by username..."
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Filters and Sort */}
-        <div className="flex flex-wrap items-center gap-8 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-6 mb-6">
+          {/* Left Side - Status Filter Tabs */}
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-[15px] font-medium text-slate-600">
               Filter by:
             </span>
-            {["All Orders", "Completed", "Processing", "Cancelled"].map(
-              (filterOption) => (
-                <button
-                  key={filterOption}
-                  onClick={() => setFilter(filterOption)}
-                  className={`px-4 py-2 cursor-pointer border rounded-md text-sm font-medium transition ${
-                    filter === filterOption
-                      ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
-                      : "bg-white border-gray-300 text-slate-900 hover:bg-gray-50"
-                  }`}
-                >
-                  {filterOption}
-                </button>
-              )
-            )}
+            {statusOptions.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => setFilter(option.value)}
+                className={`px-4 py-2 cursor-pointer border rounded-md text-sm font-medium transition ${
+                  filter === option.value
+                    ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
+                    : "bg-white border-gray-300 text-slate-900 hover:bg-gray-50"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
-          <div className="ml-auto">
+
+          {/* Right Side - Time Period and Sort Selects */}
+          <div className="flex flex-wrap items-center gap-4">
+            <select
+              value={selectedTimePeriod}
+              onChange={(e) => setSelectedTimePeriod(e.target.value)}
+              className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+            >
+              <option value="">All Time</option>
+              <option value="last_month">Last Month</option>
+              <option value="last_three_months">Last 3 Months</option>
+              <option value="last_six_months">Last 6 Months</option>
+              <option value="last_year">Last Year</option>
+            </select>
+
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+              className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
             >
-              <option value="Newest">Sort by: Newest</option>
-              <option value="Oldest">Sort by: Oldest</option>
-              <option value="Price (High to Low)">
-                Sort by: Price (High to Low)
-              </option>
-              <option value="Price (Low to High)">
-                Sort by: Price (Low to High)
-              </option>
+              {sortOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -323,11 +364,7 @@ const FrameOrders = () => {
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               No Orders Found
             </h3>
-            <p className="text-gray-500">
-              {searchQuery
-                ? "No orders match your search criteria."
-                : "No frame orders found."}
-            </p>
+            <p className="text-gray-500">No frame orders found.</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -426,6 +463,13 @@ const FrameOrders = () => {
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     )}
+                    <button
+                      onClick={() => handleDeleteOrder(order._id)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium cursor-pointer transition flex items-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </button>
                   </div>
                 </div>
               );
@@ -733,7 +777,7 @@ const FrameOrders = () => {
                 </div>
 
                 {/* Footer */}
-                <div className="bg-gray-100 px-6 py-4 flex-shrink-0">
+                <div className="bg-gray-100 px-6 py-4 flex-shrink-0 space-y-3">
                   {selectedOrder.status !== "Delivered" && (
                     <button
                       onClick={() =>
@@ -748,6 +792,13 @@ const FrameOrders = () => {
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   )}
+                  <button
+                    onClick={() => handleDeleteOrder(selectedOrder._id)}
+                    className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium cursor-pointer transition flex items-center justify-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete Order
+                  </button>
                 </div>
               </>
             ) : null}

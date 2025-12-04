@@ -4,6 +4,10 @@ import axios from "axios";
 import { Upload, X, Image, Eye, Sparkles, CheckCircle2 } from "lucide-react";
 import LoadingBar from "../../Components/LoadingBar";
 import { toast } from "react-toastify";
+import {
+  MAX_UPLOAD_SIZE_BYTES,
+  MAX_UPLOAD_SIZE_MB,
+} from "../../constants/upload";
 
 const CanvasPortrait = () => {
   const [photoData, setPhotoData] = useState(null);
@@ -18,6 +22,17 @@ const CanvasPortrait = () => {
       toast.error("Please select a valid image");
       return;
     }
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      toast.error(
+        `File size should be less than ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}MB.`
+      );
+      return;
+    }
+
     setIsUploading(true);
     setUploadProgress(0);
     const formData = new FormData();

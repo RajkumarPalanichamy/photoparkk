@@ -6,7 +6,6 @@ import {
   Search,
   Edit,
   Trash2,
-  Star,
   Package,
   Loader2,
   Image as ImageIcon,
@@ -178,25 +177,6 @@ const NewArrivalProducts = () => {
                         </span>
                       )}
                     </div>
-                  </div>
-
-                  {/* Rating */}
-                  <div className="flex items-center gap-1 mb-3">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.round(item.rating || 4)
-                              ? "fill-current"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-500">
-                      {item.rating || 4}
-                    </span>
                   </div>
 
                   {/* Thickness */}
