@@ -24,7 +24,7 @@ export default function LandingPage() {
     <div className="relative">
       {/* Offers Scrolling Banner */}
       <motion.div
-        className="bg-black text-white py-3 overflow-hidden relative z-10"
+        className="bg-secondary text-white py-3 overflow-hidden relative z-10"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -116,7 +116,7 @@ export default function LandingPage() {
                       Collections
                     </span>
                   </h1>
-                  <p className="text-gray-300 mb-6 text-sm">
+                  <p className="text-neutral-300 mb-6 text-sm">
                     Discover our exclusive collection of handcrafted premium
                     frames
                   </p>
@@ -124,7 +124,7 @@ export default function LandingPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                      className="bg-white text-secondary px-6 py-3 rounded-lg font-semibold hover:bg-neutral-100 transition-colors"
                     >
                       SHOP NOW
                     </motion.button>
@@ -146,7 +146,7 @@ export default function LandingPage() {
                       Collections
                     </span>
                   </h1>
-                  <p className="text-gray-300 mb-8 text-lg">
+                  <p className="text-neutral-300 mb-8 text-lg">
                     Discover our exclusive collection of handcrafted premium
                     frames and photography art
                   </p>
@@ -155,7 +155,7 @@ export default function LandingPage() {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-white text-black px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-lg"
+                        className="bg-white text-secondary px-8 py-4 rounded-lg font-semibold hover:bg-neutral-100 transition-colors text-lg"
                       >
                         SHOP NOW
                       </motion.button>
@@ -164,7 +164,7 @@ export default function LandingPage() {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-black transition-colors text-lg"
+                        className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-secondary transition-colors text-lg"
                       >
                         VIEW ALL
                       </motion.button>

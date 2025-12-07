@@ -11,14 +11,14 @@ const AdminOrderPage = () => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-indigo-100 rounded-lg">
-            <ShoppingBag className="w-6 h-6 text-indigo-600" />
+          <div className="p-2 bg-primary-light rounded-lg">
+            <ShoppingBag className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-secondary">
               Order Management
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-neutral-500 mt-1">
           Manage and track all customer orders
         </p>
           </div>
@@ -26,14 +26,14 @@ const AdminOrderPage = () => {
       </div>
 
       {/* Tabs */}
-      <ul className="flex flex-wrap text-sm font-medium text-center text-gray-600 border-b border-gray-200 mb-6">
+      <ul className="flex flex-wrap text-sm font-medium text-center text-neutral-600 border-b border-neutral-200 mb-6">
         <li className="me-2">
           <button
             onClick={() => setActiveTab("frame")}
             className={`inline-block p-4 rounded-t-lg transition-colors ${
               activeTab === "frame"
-                ? "text-indigo-600 bg-gray-100"
-                : "hover:text-gray-900 hover:bg-gray-100"
+                ? "text-primary bg-neutral-100"
+                : "hover:text-secondary hover:bg-neutral-100"
             }`}
           >
             Frame Orders
@@ -44,8 +44,8 @@ const AdminOrderPage = () => {
             onClick={() => setActiveTab("common")}
             className={`inline-block p-4 rounded-t-lg transition-colors ${
               activeTab === "common"
-                ? "text-indigo-600 bg-gray-100"
-                : "hover:text-gray-900 hover:bg-gray-100"
+                ? "text-primary bg-neutral-100"
+                : "hover:text-secondary hover:bg-neutral-100"
             }`}
           >
             Product Orders

@@ -66,19 +66,19 @@ const FrameCustomizeAdmin = () => {
   });
 
   const ShapeGroup = ({ shapeData, id }) => (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6 hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden mb-6 hover:shadow-md transition-all duration-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
+      <div className="bg-neutral-50 px-6 py-4 border-b border-neutral-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-100 rounded-lg">
-              <Shapes className="w-5 h-5 text-indigo-600" />
+            <div className="p-2 bg-neutral-100 rounded-lg">
+              <Shapes className="w-5 h-5 text-secondary" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-secondary">
                 {shapeData.shape}
               </h2>
-              <p className="text-sm text-gray-600 mt-0.5">
+              <p className="text-sm text-neutral-600 mt-0.5">
                 {shapeData.colorOptions.length} colors •{" "}
                 {shapeData.colorOptions.reduce(
                   (total, color) => total + color.styles.length,
@@ -94,14 +94,14 @@ const FrameCustomizeAdmin = () => {
                 setEditFrame({ _id: id, shapeData });
                 setShowForm(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 text-secondary text-sm font-medium rounded-lg hover:bg-neutral-50 hover:border-primary transition"
             >
               <Pencil className="w-4 h-4" />
               Edit
             </button>
             <button
               onClick={() => deleteFrame(id)}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 text-error text-sm font-medium rounded-lg hover:bg-error-light transition"
             >
               <Trash2 className="w-4 h-4" />
               Delete
@@ -116,12 +116,12 @@ const FrameCustomizeAdmin = () => {
           <div key={colorIdx} className="mb-8 last:mb-0">
             {/* Color Header */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-lg border border-indigo-200">
-                <Palette className="w-4 h-4 text-indigo-600" />
-                <span className="font-semibold text-gray-900">
+              <div className="flex items-center gap-2 px-4 py-2 bg-neutral-50 rounded-lg border border-neutral-200">
+                <Palette className="w-4 h-4 text-secondary" />
+                <span className="font-semibold text-secondary">
                   {color.color}
                 </span>
-                <span className="text-xs text-gray-600 bg-white px-2 py-1 rounded-full">
+                <span className="text-xs text-neutral-600 bg-white px-2 py-1 rounded-full border border-neutral-200">
                   {color.styles.length} styles
                 </span>
               </div>
@@ -132,16 +132,16 @@ const FrameCustomizeAdmin = () => {
               {color.styles.map((style, styleIdx) => (
                 <div
                   key={styleIdx}
-                  className="border border-gray-200 rounded-lg bg-gray-50 overflow-hidden"
+                  className="border border-neutral-200 rounded-lg bg-white overflow-hidden"
                 >
                   {/* Style Header */}
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-3 border-b border-gray-200">
+                  <div className="bg-neutral-50 px-4 py-3 border-b border-neutral-200">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-purple-600" />
-                      <h3 className="font-semibold text-gray-900">
+                      <Sparkles className="w-4 h-4 text-secondary" />
+                      <h3 className="font-semibold text-secondary">
                         {style.styleName}
                       </h3>
-                      <span className="text-xs text-gray-600 bg-white px-2 py-1 rounded-full">
+                      <span className="text-xs text-neutral-600 bg-white px-2 py-1 rounded-full border border-neutral-200">
                         {style.frameImages.length} frames
                       </span>
                     </div>
@@ -157,7 +157,7 @@ const FrameCustomizeAdmin = () => {
                         .map((frame, frameIdx) => (
                           <div
                             key={frameIdx}
-                            className="group relative bg-white rounded-lg p-3 border border-gray-200 hover:border-indigo-300 transition-all duration-200 hover:shadow-md"
+                            className="group relative bg-white rounded-lg p-3 border border-neutral-200 hover:border-neutral-300 transition-all duration-200 hover:shadow-md"
                           >
                             <div className="relative overflow-hidden rounded-md mb-3">
                               <img
@@ -172,7 +172,7 @@ const FrameCustomizeAdmin = () => {
                             </div>
 
                             <div className="space-y-2">
-                              <h4 className="font-medium text-gray-900 text-sm line-clamp-1">
+                              <h4 className="font-medium text-secondary text-sm line-clamp-1">
                                 {frame.title}
                               </h4>
 
@@ -184,16 +184,16 @@ const FrameCustomizeAdmin = () => {
                                       key={sizeIdx}
                                       className="flex justify-between items-center text-xs"
                                     >
-                                      <span className="text-gray-600">
+                                      <span className="text-neutral-600">
                                         {size.label}
                                       </span>
-                                      <span className="font-medium text-indigo-600">
+                                      <span className="font-medium text-secondary">
                                         ₹{size.amount}
                                       </span>
                                     </div>
                                   ))}
                                 {frame.sizes.length > 2 && (
-                                  <div className="text-xs text-gray-500 text-center pt-1">
+                                  <div className="text-xs text-neutral-500 text-center pt-1">
                                     +{frame.sizes.length - 2} more sizes
                                   </div>
                                 )}
@@ -215,8 +215,8 @@ const FrameCustomizeAdmin = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        <span className="ml-3 text-gray-600">Loading frames...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-3 text-neutral-600">Loading frames...</span>
       </div>
     );
   }
@@ -226,14 +226,14 @@ const FrameCustomizeAdmin = () => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-indigo-100 rounded-lg">
-            <Frame className="w-6 h-6 text-indigo-600" />
+          <div className="p-2 bg-neutral-100 rounded-lg">
+            <Frame className="w-6 h-6 text-secondary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-secondary">
               Frame Management
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-neutral-500 mt-1">
               Manage your frame shapes, colors, styles, and pricing
             </p>
           </div>
@@ -243,13 +243,13 @@ const FrameCustomizeAdmin = () => {
       {/* Search and Add Button */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by shape or color..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
           />
         </div>
         <button
@@ -257,7 +257,7 @@ const FrameCustomizeAdmin = () => {
             setEditFrame(null);
             setShowForm(true);
           }}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition shadow-sm"
+          className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-hover transition shadow-sm"
         >
           <Plus className="w-5 h-5" />
           Add New Frame
@@ -266,44 +266,44 @@ const FrameCustomizeAdmin = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+        <div className="bg-white rounded-xl p-5 shadow-sm border border-neutral-200">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-indigo-100 rounded-lg">
-              <Shapes className="w-6 h-6 text-indigo-600" />
+            <div className="p-3 bg-neutral-100 rounded-lg">
+              <Shapes className="w-6 h-6 text-secondary" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-secondary">
                 {frames.length}
               </p>
-              <p className="text-gray-600 text-sm">Total Shapes</p>
+              <p className="text-neutral-600 text-sm">Total Shapes</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+        <div className="bg-white rounded-xl p-5 shadow-sm border border-neutral-200">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-100 rounded-lg">
-              <Palette className="w-6 h-6 text-green-600" />
+            <div className="p-3 bg-success-light rounded-lg">
+              <Palette className="w-6 h-6 text-success" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-secondary">
                 {frames.reduce(
                   (total, frame) => total + frame.shapeData.colorOptions.length,
                   0
                 )}
               </p>
-              <p className="text-gray-600 text-sm">Colors</p>
+              <p className="text-neutral-600 text-sm">Colors</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+        <div className="bg-white rounded-xl p-5 shadow-sm border border-neutral-200">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <Sparkles className="w-6 h-6 text-purple-600" />
+            <div className="p-3 bg-neutral-100 rounded-lg">
+              <Sparkles className="w-6 h-6 text-secondary" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-secondary">
                 {frames.reduce(
                   (total, frame) =>
                     total +
@@ -314,18 +314,18 @@ const FrameCustomizeAdmin = () => {
                   0
                 )}
               </p>
-              <p className="text-gray-600 text-sm">Styles</p>
+              <p className="text-neutral-600 text-sm">Styles</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
+        <div className="bg-white rounded-xl p-5 shadow-sm border border-neutral-200">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-orange-100 rounded-lg">
-              <ImageIcon className="w-6 h-6 text-orange-600" />
+            <div className="p-3 bg-warning-light rounded-lg">
+              <ImageIcon className="w-6 h-6 text-warning" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-secondary">
                 {frames.reduce(
                   (total, frame) =>
                     total +
@@ -342,28 +342,28 @@ const FrameCustomizeAdmin = () => {
                   0
                 )}
               </p>
-              <p className="text-gray-600 text-sm">Total Frames</p>
+              <p className="text-neutral-600 text-sm">Total Frames</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Frames Count */}
-      <div className="mb-4 text-sm text-gray-600">
+      <div className="mb-4 text-sm text-neutral-600">
         Showing {filteredFrames.length} of {frames.length} frame shapes
       </div>
 
       {/* Frames List */}
       <div className="space-y-6">
         {filteredFrames.length === 0 ? (
-          <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
-            <Shapes className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <div className="text-center py-16 bg-neutral-50 rounded-xl border-2 border-dashed border-neutral-300">
+            <Shapes className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-secondary mb-2">
               {searchQuery
                 ? "No frames found matching your search"
                 : "No frames yet"}
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-neutral-600 mb-6">
               {searchQuery
                 ? "Try adjusting your search terms"
                 : "Get started by creating your first frame customization"}
@@ -374,7 +374,7 @@ const FrameCustomizeAdmin = () => {
                   setEditFrame(null);
                   setShowForm(true);
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover transition"
               >
                 <Plus className="w-5 h-5" />
                 Create First Frame
@@ -397,20 +397,20 @@ const FrameCustomizeAdmin = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
           <div className="bg-white rounded-xl w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 bg-white">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 rounded-lg">
+                <div className="p-2 bg-neutral-100 rounded-lg">
                   {editFrame ? (
-                    <Pencil className="w-5 h-5 text-indigo-600" />
+                    <Pencil className="w-5 h-5 text-secondary" />
                   ) : (
-                    <Plus className="w-5 h-5 text-indigo-600" />
+                    <Plus className="w-5 h-5 text-secondary" />
                   )}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-secondary">
                     {editFrame ? "Edit Frame" : "Add New Frame"}
                   </h2>
-                  <p className="text-sm text-gray-500 mt-0.5">
+                  <p className="text-sm text-neutral-500 mt-0.5">
                     {editFrame
                       ? "Update frame details and settings"
                       : "Create a new frame customization"}
@@ -419,14 +419,14 @@ const FrameCustomizeAdmin = () => {
               </div>
               <button
                 onClick={() => setShowForm(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                className="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-lg transition"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Modal Content */}
-            <div className="overflow-y-auto flex-1 p-6 bg-gray-50">
+            <div className="overflow-y-auto flex-1 p-6 bg-neutral-50">
               <FrameForm
                 initialData={
                   editFrame

@@ -2,8 +2,8 @@ import React from "react";
 
 const TermsAndConditions = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-center text-black">
+    <div className="max-w-4xl mx-auto p-6 text-secondary">
+      <h1 className="text-3xl font-bold mb-6 text-center text-secondary">
         Terms & Conditions
       </h1>
 
@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
       <h2 className="text-xl font-semibold mt-6 mb-2">1. About Us</h2>
       <p className="mb-4">
         PhotoParkk is a personalized photo framing service operated via{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
         . We offer custom-designed photo frames based on your uploaded images
@@ -111,7 +111,7 @@ const TermsAndConditions = () => {
       </p>
       <p>
         Email:{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
       </p>

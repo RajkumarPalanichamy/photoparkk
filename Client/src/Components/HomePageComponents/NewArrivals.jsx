@@ -14,7 +14,7 @@ const NewArrivals = () => {
     const fetchNewArrivals = async () => {
       try {
         const response = await axiosInstance.get("/newarrivals");
-        
+
         // Ensure response.data is an array
         if (Array.isArray(response.data)) {
           setItems(response.data);
@@ -36,9 +36,9 @@ const NewArrivals = () => {
     <div className="max-w-7xl mx-auto px-6 py-16">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900">Latest Arrivals</h1>
-        <Link to="/shop/acrylic">
-          <button className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-800 transition-colors font-medium">
+        <h1 className="text-4xl font-bold text-secondary">Latest Arrivals</h1>
+        <Link to="/products">
+          <button className="bg-secondary text-white px-8 py-3 rounded-md hover:bg-secondary-light transition-colors font-medium">
             VIEW ALL
           </button>
         </Link>
@@ -47,7 +47,7 @@ const NewArrivals = () => {
       {/* Swiper Container */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
         </div>
       ) : (
         <div className="relative">
@@ -71,108 +71,110 @@ const NewArrivals = () => {
             }}
             className="py-4"
           >
-            {Array.isArray(items) && items.map((item, index) => {
-              const firstSize =
-                item.sizes && item.sizes.length > 0 ? item.sizes[0] : null;
-              const isNew = index < 2; // First 2 items are "NEW"
-              const isSoldOut = index === 2; // Third item is "SOLD OUT"
+            {Array.isArray(items) &&
+              items.map((item, index) => {
+                const firstSize =
+                  item.sizes && item.sizes.length > 0 ? item.sizes[0] : null;
+                const isNew = index < 2; // First 2 items are "NEW"
+                const isSoldOut = index === 2; // Third item is "SOLD OUT"
 
-              return (
-                <SwiperSlide key={index}>
-                  <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                    {/* Product Image Container */}
-                    <div className="relative bg-gray-100 aspect-square">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                      />
-                      
-                      {/* Status Badge */}
-                      {isNew && (
-                        <div className="absolute top-3 left-3">
-                          <span className="bg-black text-white text-xs font-medium px-2 py-1 rounded">
-                            NEW
-                          </span>
-                        </div>
-                      )}
-                      
-                      {isSoldOut && (
-                        <div className="absolute top-3 left-3">
-                          <span className="bg-gray-600 text-white text-xs font-medium px-2 py-1 rounded">
-                            SOLD OUT
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                return (
+                  <SwiperSlide key={index}>
+                    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                      {/* Product Image Container */}
+                      <div className="relative bg-neutral-100 aspect-square">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
 
-                    {/* Product Info */}
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                        {item.title}
-                      </h3>
-                      
-                      {/* Price */}
-                      <div className="flex items-center justify-between mb-3">
-                        {firstSize ? (
-                          <div className="flex items-center gap-2">
-                            <span className="text-xl font-bold text-gray-900">
-                              ₹{firstSize.price}
+                        {/* Status Badge */}
+                        {isNew && (
+                          <div className="absolute top-3 left-3">
+                            <span className="bg-secondary text-white text-xs font-medium px-2 py-1 rounded">
+                              NEW
                             </span>
-                            {firstSize.original && firstSize.original > firstSize.price && (
-                              <span className="text-gray-500 line-through text-sm">
-                                ₹{firstSize.original}
-                              </span>
-                            )}
                           </div>
-                        ) : (
-                          <span className="text-red-500 text-sm font-medium">
-                            Price not available
-                          </span>
+                        )}
+
+                        {isSoldOut && (
+                          <div className="absolute top-3 left-3">
+                            <span className="bg-neutral-600 text-white text-xs font-medium px-2 py-1 rounded">
+                              SOLD OUT
+                            </span>
+                          </div>
                         )}
                       </div>
 
-                      {/* Rating */}
-                      <div className="flex items-center mb-4">
-                        <div className="flex text-yellow-400">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className="text-sm">
-                              {i < Math.round(item.rating || 4) ? "★" : "☆"}
-                            </span>
-                          ))}
-                        </div>
-                        <span className="text-gray-500 text-sm ml-2">
-                          ({item.rating || 4})
-                        </span>
-                      </div>
+                      {/* Product Info */}
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-secondary mb-2 line-clamp-2">
+                          {item.title}
+                        </h3>
 
-                      {/* Buy Button */}
-                      <Link to={`/newarrivalorderpage/${item._id}`}>
-                        <button 
-                          disabled={isSoldOut}
-                          className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                            isSoldOut
-                              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                              : "bg-black text-white hover:bg-gray-800"
-                          }`}
-                        >
-                          {isSoldOut ? "SOLD OUT" : "Buy Now"}
-                        </button>
-                      </Link>
+                        {/* Price */}
+                        <div className="flex items-center justify-between mb-3">
+                          {firstSize ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xl font-bold text-secondary">
+                                ₹{firstSize.price}
+                              </span>
+                              {firstSize.original &&
+                                firstSize.original > firstSize.price && (
+                                  <span className="text-neutral-500 line-through text-sm">
+                                    ₹{firstSize.original}
+                                  </span>
+                                )}
+                            </div>
+                          ) : (
+                            <span className="text-red-500 text-sm font-medium">
+                              Price not available
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Rating */}
+                        <div className="flex items-center mb-4">
+                          <div className="flex text-warning">
+                            {[...Array(5)].map((_, i) => (
+                              <span key={i} className="text-sm">
+                                {i < Math.round(item.rating || 4) ? "★" : "☆"}
+                              </span>
+                            ))}
+                          </div>
+                          <span className="text-neutral-500 text-sm ml-2">
+                            ({item.rating || 4})
+                          </span>
+                        </div>
+
+                        {/* View Details Button */}
+                        <Link to={`/product/${item._id}`}>
+                          <button
+                            disabled={isSoldOut}
+                            className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
+                              isSoldOut
+                                ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
+                                : "bg-primary text-white hover:bg-primary-hover"
+                            }`}
+                          >
+                            {isSoldOut ? "SOLD OUT" : "View Details"}
+                          </button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
+                  </SwiperSlide>
+                );
+              })}
           </Swiper>
         </div>
       )}
 
       {/* View All Link for Mobile */}
       <div className="mt-8 text-center lg:hidden">
-        <Link to="/shopacrylic">
-          <button className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-800 transition-colors font-medium">
+        <Link to="/products">
+          <button className="bg-secondary text-white px-8 py-3 rounded-md hover:bg-secondary transition-colors font-medium">
             VIEW ALL PRODUCTS
           </button>
         </Link>

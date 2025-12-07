@@ -2,8 +2,8 @@ import React from "react";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-center text-black">
+    <div className="max-w-4xl mx-auto p-6 text-secondary">
+      <h1 className="text-3xl font-bold mb-6 text-center text-secondary">
         Privacy Policy
       </h1>
 
@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
 
       <p className="mb-4">
         At <strong>PhotoParkk</strong> (
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
         ), we are committed to protecting your privacy. This Privacy Policy
@@ -86,7 +86,7 @@ const PrivacyPolicy = () => {
       <p className="mb-4">
         You have the right to request access to, correction of, or deletion of
         your personal data. To make a request, contact us at{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
         .
@@ -111,7 +111,7 @@ const PrivacyPolicy = () => {
       </p>
       <p>
         Email:{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
       </p>

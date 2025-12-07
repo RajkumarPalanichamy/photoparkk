@@ -7,6 +7,7 @@ import {
   getCartItemsByUser,
   getSingleCartItem,
   getCartItemByUserAndProduct,
+  updateCartItem,
   deleteCartItem,
 } from "../controllers/addToCartController.js";
 
@@ -20,6 +21,7 @@ router.post("/", addToCart);
 router.get("/user/:userId", protect, getCartItemsByUser);
 router.get("/:cartItemId", getSingleCartItem);
 router.get("/user/:userId/product/:productId", protect, getCartItemByUserAndProduct);
+router.put("/:itemId", updateCartItem);
 router.delete("/:itemId", deleteCartItem);
 
 export default router;

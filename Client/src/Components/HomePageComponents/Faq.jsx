@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image1 from "../../assets/frontend_assets/BacklightPhotoFrames/LandScape.jpeg";
+import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
@@ -41,51 +41,62 @@ export default function Faq() {
 
   const toggleAnswer = (index) => {
     if (openIndex === index) {
-      setOpenIndex(null); // Close the answer if it's already open
+      setOpenIndex(null);
     } else {
-      setOpenIndex(index); // Open the selected answer
+      setOpenIndex(index);
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-start font-[poppins]">
-      {/* Image Section */}
-      <div className="relative w-full h-full md:h-[450px] rounded-lg overflow-hidden shadow-lg mt-18 hidden sm:block">
-        <img
-          src={Image1} // Replace with your actual image
-          alt="Custom Frame"
-          className="object-cover w-full h-full"
-        />
-        <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 md:p-8">
-          <p className="text-white text-xl md:text-2xl font-semibold text-center pb-4">
-            Find Answers to Your Questions
-          </p>
-        </div>
-      </div>
-
+    <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">
       {/* FAQ Section */}
       <div className="w-full">
-        <h2 className="text-3xl font-bold text-foreground mb-6 md:mb-8 text-center md:text-left">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
+        <div className="mb-10 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-3">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-neutral-600 text-lg">
+            Get answers to common questions about our products and services
+          </p>
+        </div>
+
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-card border border-border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+              className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${
+                openIndex === index
+                  ? "border-primary shadow-lg"
+                  : "border-neutral-200 hover:border-neutral-300 shadow-sm hover:shadow-md"
+              }`}
             >
-              <div
-                className="flex justify-between items-center cursor-pointer"
+              <button
                 onClick={() => toggleAnswer(index)}
+                className="w-full px-6 py-5 flex items-center justify-between text-left group"
               >
-                <h3 className="text-lg font-semibold">{faq.question}</h3>
-                <span className="text-xl">
-                  {openIndex === index ? "▲" : "▼"}
-                </span>
+                <h3 className="text-lg font-semibold text-secondary pr-4 group-hover:text-primary transition-colors">
+                  {faq.question}
+                </h3>
+                <ChevronDown
+                  className={`w-5 h-5 text-neutral-400 flex-shrink-0 transition-transform duration-300 ${
+                    openIndex === index ? "rotate-180 text-primary" : ""
+                  }`}
+                />
+              </button>
+
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  openIndex === index
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="px-6 pb-5 pt-0">
+                  <p className="text-neutral-600 leading-relaxed text-base">
+                    {faq.answer}
+                  </p>
+                </div>
               </div>
-              {openIndex === index && (
-                <p className="mt-2 text-gray-600">{faq.answer}</p>
-              )}
             </div>
           ))}
         </div>

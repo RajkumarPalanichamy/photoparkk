@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 
 const CartContext = createContext();
@@ -16,8 +16,8 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch cart count and items
-  const fetchCartData = async () => {
+  // Fetch cart count and items - memoized with useCallback
+  const fetchCartData = useCallback(async () => {
     const user = localStorage.getItem("user");
     if (!user) {
       setCartCount(0);
@@ -51,7 +51,7 @@ export const CartProvider = ({ children }) => {
         setCartItems([]);
       }
     }
-  };
+  }, []);
 
   // Add item to cart
   const addToCart = async (cartData) => {
@@ -76,6 +76,18 @@ export const CartProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error("Error removing from cart:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  // Update quantity
+  const updateQuantity = async (itemId, newQuantity) => {
+    try {
+      await axiosInstance.put(`/cart/${itemId}`, { quantity: newQuantity });
+      await fetchCartData(); // Refresh cart data
+      return { success: true };
+    } catch (error) {
+      console.error("Error updating quantity:", error);
       return { success: false, error: error.message };
     }
   };
@@ -117,6 +129,7 @@ export const CartProvider = ({ children }) => {
     loading,
     addToCart,
     removeFromCart,
+    updateQuantity,
     clearCart,
     fetchCartData,
   };

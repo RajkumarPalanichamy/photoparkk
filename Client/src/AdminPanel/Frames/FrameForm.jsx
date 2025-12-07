@@ -12,6 +12,7 @@ import {
   X,
   Save,
   Sparkles,
+  Info,
 } from "lucide-react";
 import {
   MAX_UPLOAD_SIZE_BYTES,
@@ -108,7 +109,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
     setColorOptions(updated);
   };
 
-  // Frame image handlers (same as before but with style level)
+  // Frame image handlers
   const handleFrameImageChange = (colorIdx, styleIdx, imgIdx, field, value) => {
     const updated = [...colorOptions];
     updated[colorIdx].styles[styleIdx].frameImages[imgIdx][field] = value;
@@ -122,9 +123,8 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       const img = new Image();
 
       img.onload = () => {
-        // Calculate new dimensions
         let { width, height } = img;
-        const maxDimension = 1200; // Max width or height
+        const maxDimension = 1200;
 
         if (width > height && width > maxDimension) {
           height = (height * maxDimension) / width;
@@ -136,8 +136,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
         canvas.width = width;
         canvas.height = height;
-
-        // Draw and compress
         ctx.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob(
@@ -145,7 +143,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
             if (blob.size <= maxSizeKB * 1024) {
               resolve(blob);
             } else {
-              // If still too large, compress more
               canvas.toBlob(
                 (compressedBlob) => {
                   resolve(compressedBlob);
@@ -167,7 +164,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
   const handleFileChange = async (colorIdx, styleIdx, imgIdx, file) => {
     if (!file) return;
 
-    // Check file size (10MB limit)
     if (file.size > MAX_UPLOAD_SIZE_BYTES) {
       alert(
         `File size too large. Maximum allowed size is ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
@@ -179,9 +175,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
     try {
       setCompressing(true);
-      // Compress the image
       const compressedFile = await compressImage(file);
-
       const updated = [...colorOptions];
       updated[colorIdx].styles[styleIdx].frameImages[imgIdx].file =
         compressedFile;
@@ -211,7 +205,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
     setColorOptions(updated);
   };
 
-  // Size handlers (same as before but with style level)
+  // Size handlers
   const handleSizeChange = (
     colorIdx,
     styleIdx,
@@ -253,7 +247,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
     e.preventDefault();
     setLoading(true);
 
-    // Validation (enhanced for new structure)
     if (!shape.trim()) {
       alert("Please enter a shape name");
       setLoading(false);
@@ -392,8 +385,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       onClose();
     } catch (err) {
       console.error("Submit error:", err);
-
-      // Show specific error messages
       if (err.response?.data?.message) {
         if (err.response.data.message.includes("File size too large")) {
           alert(
@@ -411,27 +402,56 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-lg p-6">
-      {/* Shape Input */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Shape Name <span className="text-red-500">*</span>
-        </label>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Info Banner */}
+      <div className="bg-primary-light border border-primary-light rounded-lg p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+          <div className="text-sm text-secondary">
+            <p className="font-semibold mb-1">Frame Structure:</p>
+            <p className="text-neutral-600">
+              Shape → Colors → Styles → Frame Images → Sizes & Pricing
+            </p>
+            <p className="text-xs text-neutral-500 mt-2">
+              Start by entering a shape name, then add colors. For each color, add styles. For each style, add frame images with their sizes and prices.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Step 1: Shape Input */}
+      <div className="bg-white rounded-lg border border-neutral-200 p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+            1
+          </div>
+          <label className="block text-lg font-semibold text-secondary">
+            Shape Name <span className="text-error">*</span>
+          </label>
+        </div>
         <input
           type="text"
           value={shape}
           onChange={(e) => setShape(e.target.value)}
-          className="block w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
-          placeholder="Enter shape name (e.g., Rectangle, Circle, Heart...)"
+          className="block w-full px-4 py-3 bg-white border border-neutral-300 text-secondary rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
+          placeholder="e.g., Portrait, Landscape, Square, Round, Heart..."
         />
+        <p className="text-xs text-neutral-500 mt-2">
+          This is the overall frame shape (e.g., Portrait, Landscape, Square)
+        </p>
       </div>
 
-      {/* User Image Upload */}
-      <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5">
-        <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-          <Upload className="w-4 h-4 text-indigo-600" />
-          Dummy User Image <span className="text-red-500">*</span>
-        </label>
+      {/* Step 2: Dummy User Image */}
+      <div className="bg-white rounded-lg border border-neutral-200 p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+            2
+          </div>
+          <label className="block text-lg font-semibold text-secondary flex items-center gap-2">
+            <Upload className="w-5 h-5 text-secondary" />
+            Dummy User Image <span className="text-error">*</span>
+          </label>
+        </div>
         <div className="flex items-center gap-4">
           <label className="flex-1 cursor-pointer">
             <input
@@ -441,7 +461,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                 const file = e.target.files[0];
                 if (!file) return;
 
-                // Check file size (10MB limit)
                 if (file.size > MAX_UPLOAD_SIZE_BYTES) {
                   alert(
                     `File size too large. Maximum allowed size is ${MAX_UPLOAD_SIZE_MB}MB. Your file is ${(
@@ -453,7 +472,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
                 try {
                   setCompressing(true);
-                  // Compress the image
                   const compressedFile = await compressImage(file);
                   setUserUploadedImage(compressedFile);
                 } catch (error) {
@@ -465,18 +483,18 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
               }}
               className="hidden"
             />
-            <div className="border-2 border-dashed border-indigo-300 rounded-lg p-6 text-center hover:bg-indigo-100 transition-colors duration-200">
-              <Upload className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
-              <p className="text-indigo-700 font-medium">
+            <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center hover:bg-neutral-50 hover:border-primary transition-colors duration-200">
+              <Upload className="w-10 h-10 text-neutral-400 mx-auto mb-3" />
+              <p className="text-secondary font-medium">
                 {compressing ? "Compressing image..." : "Click to upload image"}
               </p>
-              <p className="text-indigo-600 text-sm mt-1">
+              <p className="text-neutral-500 text-sm mt-1">
                 {userUploadedImage ? userUploadedImage.name : "No file chosen"}
               </p>
             </div>
           </label>
           {userUploadedImage && (
-            <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-indigo-300 shadow-sm">
+            <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-neutral-200 shadow-sm">
               <img
                 src={URL.createObjectURL(userUploadedImage)}
                 alt="Preview"
@@ -485,19 +503,27 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
             </div>
           )}
         </div>
+        <p className="text-xs text-neutral-500 mt-2">
+          This is a sample image that will be used to preview the frame
+        </p>
       </div>
 
-      {/* Color Options */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <label className="block text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Palette className="w-5 h-5 text-indigo-600" />
-            Color & Style Options
-          </label>
+      {/* Step 3: Color & Style Options */}
+      <div className="bg-white rounded-lg border border-neutral-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+              3
+            </div>
+            <label className="block text-lg font-semibold text-secondary flex items-center gap-2">
+              <Palette className="w-5 h-5 text-secondary" />
+              Color & Style Options
+            </label>
+          </div>
           <button
             type="button"
             onClick={addColor}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-hover transition shadow-sm"
           >
             <Plus className="w-4 h-4" />
             Add Color
@@ -507,29 +533,29 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
         {colorOptions.map((color, colorIdx) => (
           <div
             key={colorIdx}
-            className="border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm"
+            className="border border-neutral-200 rounded-lg bg-neutral-50 overflow-hidden mb-6 last:mb-0"
           >
             {/* Color Header */}
-            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white px-6 py-4 border-b border-neutral-200">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="p-2 bg-indigo-100 rounded-lg">
-                    <Palette className="w-5 h-5 text-indigo-600" />
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="p-2 bg-neutral-100 rounded-lg">
+                    <Palette className="w-5 h-5 text-secondary" />
                   </div>
                   <input
                     type="text"
-                    placeholder="Color name (e.g., Blue, White, Gold...)"
+                    placeholder="Color name (e.g., Black, White, Gold, Silver...)"
                     value={color.color}
                     onChange={(e) =>
                       handleColorChange(colorIdx, "color", e.target.value)
                     }
-                    className="bg-transparent text-lg font-semibold text-gray-900 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[200px]"
+                    className="flex-1 bg-transparent text-lg font-semibold text-secondary placeholder-neutral-400 border-none focus:ring-0 px-0"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => removeColor(colorIdx)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                  className="p-2 text-error hover:bg-error-light rounded-lg transition"
                   title="Remove Color"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -537,17 +563,17 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
               </div>
             </div>
 
-            {/* Styles */}
+            {/* Styles Section */}
             <div className="p-6 space-y-6">
-              <div className="flex items-center justify-between">
-                <label className="block text-md font-semibold text-gray-900 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-purple-600" />
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-md font-semibold text-secondary flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-secondary" />
                   Styles for {color.color || "this color"}
                 </label>
                 <button
                   type="button"
                   onClick={() => addStyle(colorIdx)}
-                  className="flex items-center gap-2 px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition"
+                  className="flex items-center gap-2 px-3 py-2 bg-white border border-neutral-300 text-secondary text-sm font-medium rounded-lg hover:bg-neutral-50 hover:border-primary transition"
                 >
                   <Plus className="w-4 h-4" />
                   Add Style
@@ -557,16 +583,16 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
               {color.styles.map((style, styleIdx) => (
                 <div
                   key={styleIdx}
-                  className="border border-gray-200 rounded-lg bg-gray-50 overflow-hidden"
+                  className="border border-neutral-200 rounded-lg bg-white overflow-hidden"
                 >
                   {/* Style Header */}
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 py-3 border-b border-gray-200">
+                  <div className="bg-neutral-50 px-4 py-3 border-b border-neutral-200">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Sparkles className="w-4 h-4 text-purple-600" />
+                      <div className="flex items-center gap-3 flex-1">
+                        <Sparkles className="w-4 h-4 text-secondary" />
                         <input
                           type="text"
-                          placeholder="Style name (e.g., Classic Frame, Shade Frame, Modern Border...)"
+                          placeholder="Style name (e.g., Classic Frame, Modern Border, Floral Design...)"
                           value={style.styleName}
                           onChange={(e) =>
                             handleStyleChange(
@@ -576,13 +602,13 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                               e.target.value
                             )
                           }
-                          className="bg-transparent text-base font-semibold text-gray-900 placeholder-gray-500 border-none focus:ring-0 px-0 min-w-[250px]"
+                          className="flex-1 bg-transparent text-base font-semibold text-secondary placeholder-neutral-400 border-none focus:ring-0 px-0"
                         />
                       </div>
                       <button
                         type="button"
                         onClick={() => removeStyle(colorIdx, styleIdx)}
-                        className="p-1.5 text-red-600 hover:bg-red-100 rounded transition"
+                        className="p-1.5 text-error hover:bg-error-light rounded transition"
                         title="Remove Style"
                       >
                         <X className="w-4 h-4" />
@@ -595,12 +621,12 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                     {style.frameImages.map((img, imgIdx) => (
                       <div
                         key={imgIdx}
-                        className="border border-gray-200 rounded-lg bg-white p-4"
+                        className="border border-neutral-200 rounded-lg bg-neutral-50 p-4"
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <ImageIcon className="w-4 h-4 text-indigo-600" />
-                            <span className="font-semibold text-gray-900">
+                            <ImageIcon className="w-4 h-4 text-secondary" />
+                            <span className="font-semibold text-secondary">
                               Frame Image {imgIdx + 1}
                             </span>
                           </div>
@@ -609,7 +635,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                             onClick={() =>
                               removeFrameImage(colorIdx, styleIdx, imgIdx)
                             }
-                            className="p-1.5 text-red-600 hover:bg-red-100 rounded transition"
+                            className="p-1.5 text-error hover:bg-error-light rounded transition"
                             title="Remove Frame Image"
                           >
                             <X className="w-4 h-4" />
@@ -618,9 +644,12 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
 
                         {/* Title Input */}
                         <div className="mb-4">
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Frame Title <span className="text-error">*</span>
+                          </label>
                           <input
                             type="text"
-                            placeholder="Frame title (e.g., Floral Border, Classic Frame...)"
+                            placeholder="e.g., Floral Border, Classic Frame, Modern Design..."
                             value={img.title}
                             onChange={(e) =>
                               handleFrameImageChange(
@@ -631,14 +660,14 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                 e.target.value
                               )
                             }
-                            className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+                            className="w-full px-4 py-2.5 bg-white border border-neutral-300 text-secondary rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
                           />
                         </div>
 
                         {/* File Upload */}
                         <div className="mb-4">
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Frame Image <span className="text-red-500">*</span>
+                          <label className="block text-sm font-medium text-neutral-700 mb-2">
+                            Frame Image <span className="text-error">*</span>
                           </label>
                           <div className="flex items-center gap-4">
                             <label className="flex-1 cursor-pointer">
@@ -655,18 +684,18 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                 }
                                 className="hidden"
                               />
-                              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 hover:border-indigo-400 transition">
-                                <Upload className="w-6 h-6 text-indigo-600 mx-auto mb-1" />
-                                <p className="text-gray-700 text-sm font-medium">
+                              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:bg-white hover:border-primary transition">
+                                <Upload className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
+                                <p className="text-neutral-700 text-sm font-medium">
                                   Upload frame image
                                 </p>
-                                <p className="text-gray-500 text-xs mt-1">
+                                <p className="text-neutral-500 text-xs mt-1">
                                   {img.file ? img.file.name : "No file chosen"}
                                 </p>
                               </div>
                             </label>
                             {(img.file || img.imageUrl) && (
-                              <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-indigo-300 shadow-sm">
+                              <div className="w-24 h-24 rounded-lg overflow-hidden border-2 border-neutral-200 shadow-sm">
                                 <img
                                   src={
                                     img.file
@@ -676,10 +705,6 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                   alt="Preview"
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
-                                    console.error(
-                                      "Form image failed to load:",
-                                      img.imageUrl
-                                    );
                                     e.target.src =
                                       "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMiA5VjE1TTkgMTJIMTUiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+";
                                   }}
@@ -692,8 +717,8 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                         {/* Sizes */}
                         <div>
                           <div className="flex items-center justify-between mb-3">
-                            <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
-                              <Ruler className="w-4 h-4 text-indigo-600" />
+                            <label className="block text-sm font-medium text-neutral-700 flex items-center gap-2">
+                              <Ruler className="w-4 h-4 text-secondary" />
                               Sizes & Pricing
                             </label>
                             <button
@@ -701,7 +726,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                               onClick={() =>
                                 addSize(colorIdx, styleIdx, imgIdx)
                               }
-                              className="flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition"
+                              className="flex items-center gap-1 px-3 py-1.5 bg-white border border-neutral-300 text-secondary text-xs font-medium rounded-lg hover:bg-neutral-50 hover:border-primary transition"
                             >
                               <Plus className="w-3 h-3" />
                               Add Size
@@ -716,7 +741,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                               >
                                 <input
                                   type="text"
-                                  placeholder="Size label (e.g., 8x10, A4...)"
+                                  placeholder="Size (e.g., 8x10, 12x16, A4...)"
                                   value={size.label}
                                   onChange={(e) =>
                                     handleSizeChange(
@@ -728,15 +753,15 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                       e.target.value
                                     )
                                   }
-                                  className="flex-1 px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition text-sm"
+                                  className="flex-1 px-3 py-2 bg-white border border-neutral-300 text-secondary rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition text-sm"
                                 />
                                 <div className="relative flex-1">
-                                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">
                                     ₹
                                   </span>
                                   <input
                                     type="number"
-                                    placeholder="Amount"
+                                    placeholder="Price"
                                     value={size.amount}
                                     onChange={(e) =>
                                       handleSizeChange(
@@ -748,7 +773,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                         e.target.value
                                       )
                                     }
-                                    className="w-full pl-8 pr-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition text-sm"
+                                    className="w-full pl-8 pr-3 py-2 bg-white border border-neutral-300 text-secondary rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition text-sm"
                                   />
                                 </div>
                                 <button
@@ -761,7 +786,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                                       sizeIdx
                                     )
                                   }
-                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-30 disabled:cursor-not-allowed"
+                                  className="p-2 text-error hover:bg-error-light rounded-lg transition disabled:opacity-30 disabled:cursor-not-allowed"
                                   disabled={img.sizes.length === 1}
                                   title={
                                     img.sizes.length === 1
@@ -782,10 +807,10 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
                     <button
                       type="button"
                       onClick={() => addFrameImage(colorIdx, styleIdx)}
-                      className="flex items-center gap-2 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition"
+                      className="flex items-center gap-2 w-full py-3 border-2 border-dashed border-neutral-300 rounded-lg text-neutral-600 hover:border-primary hover:text-primary hover:bg-primary-light transition"
                     >
                       <Plus className="w-5 h-5" />
-                      Add Another Frame Image to this Style
+                      Add Another Frame Image
                     </button>
                   </div>
                 </div>
@@ -796,11 +821,11 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
       </div>
 
       {/* Submit Button */}
-      <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-neutral-200">
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center justify-center gap-2 flex-1 px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center justify-center gap-2 flex-1 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {loading ? (
             <>
@@ -818,7 +843,7 @@ const FrameForm = ({ initialData, onSuccess, onClose }) => {
         <button
           type="button"
           onClick={onClose}
-          className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+          className="px-6 py-3 border border-neutral-300 text-neutral-700 font-medium rounded-lg hover:bg-neutral-50 transition"
         >
           Cancel
         </button>

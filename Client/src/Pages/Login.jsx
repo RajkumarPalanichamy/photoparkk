@@ -92,12 +92,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
+    <div className="bg-neutral-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Card Container */}
         <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-3xl">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-8 text-center">
+          <div className="bg-primary p-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4 backdrop-blur-sm">
               <User className="w-8 h-8 text-white" />
             </div>
@@ -117,7 +117,7 @@ const Login = () => {
               {/* Name Field (only for Sign Up) */}
               {currentState === "Sign Up" && (
                 <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
-                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
                     <User className="w-4 h-4" />
                     Full Name
                   </label>
@@ -127,19 +127,19 @@ const Login = () => {
                       name="name"
                       value={formData.name}
                       onChange={onChangeHandler}
-                      className="w-full px-4 py-3 pl-11 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 pl-11 border-2 border-neutral-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-all duration-200 bg-neutral-50 focus:bg-white"
                       placeholder="Enter your full name"
                       autoComplete="name"
                       required
                     />
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   </div>
                 </div>
               )}
 
               {/* Email Field */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
                   <Mail className="w-4 h-4" />
                   Email Address
                 </label>
@@ -149,18 +149,18 @@ const Login = () => {
                     name="email"
                     value={formData.email}
                     onChange={onChangeHandler}
-                    className="w-full px-4 py-3 pl-11 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 pl-11 border-2 border-neutral-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-all duration-200 bg-neutral-50 focus:bg-white"
                     placeholder="Enter your email"
                     autoComplete="email"
                     required
                   />
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                 </div>
               </div>
 
               {/* Password Field */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
                   <Lock className="w-4 h-4" />
                   Password
                 </label>
@@ -170,7 +170,7 @@ const Login = () => {
                     name="password"
                     value={formData.password}
                     onChange={onChangeHandler}
-                    className="w-full px-4 py-3 pl-11 pr-11 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 pl-11 pr-11 border-2 border-neutral-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-all duration-200 bg-neutral-50 focus:bg-white"
                     placeholder="Enter your password"
                     autoComplete={
                       currentState === "Login"
@@ -179,11 +179,11 @@ const Login = () => {
                     }
                     required
                   />
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -200,7 +200,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowForgotPassword(true)}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                    className="text-sm text-primary hover:text-primary-hover font-medium transition-colors"
                   >
                     Forgot Password?
                   </button>
@@ -209,15 +209,15 @@ const Login = () => {
 
               {/* Error Message */}
               {error && (
-                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
-                  <p className="text-red-700 text-sm font-medium">{error}</p>
+                <div className="bg-error-light border-l-4 border-error p-4 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
+                  <p className="text-error text-sm font-medium">{error}</p>
                 </div>
               )}
 
               {/* Success Message */}
               {success && (
-                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
-                  <p className="text-green-700 text-sm font-medium">
+                <div className="bg-success-light border-l-4 border-success p-4 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
+                  <p className="text-success text-sm font-medium">
                     {success}
                   </p>
                 </div>
@@ -227,7 +227,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className="w-full bg-primary text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:bg-primary-hover hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -246,14 +246,14 @@ const Login = () => {
 
             {/* Toggle between Login and Sign Up */}
             <div className="mt-6 text-center">
-              <p className="text-gray-600 text-sm">
+              <p className="text-neutral-600 text-sm">
                 {currentState === "Login"
                   ? "Don't have an account? "
                   : "Already have an account? "}
                 <button
                   type="button"
                   onClick={toggleState}
-                  className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+                  className="text-primary hover:text-primary-hover font-semibold transition-colors"
                 >
                   {currentState === "Login" ? "Sign Up" : "Sign In"}
                 </button>
@@ -263,7 +263,7 @@ const Login = () => {
         </div>
 
         {/* Footer Text */}
-        <p className="text-center text-gray-500 text-sm mt-6">
+        <p className="text-center text-neutral-500 text-sm mt-6">
           By continuing, you agree to our Terms of Service and Privacy Policy
         </p>
       </div>
@@ -273,7 +273,7 @@ const Login = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-secondary">
                 Reset Password
               </h2>
               <button
@@ -283,13 +283,13 @@ const Login = () => {
                   setForgotPasswordError("");
                   setForgotPasswordSuccess("");
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-neutral-400 hover:text-neutral-600 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <p className="text-gray-600 text-sm mb-6">
+            <p className="text-neutral-600 text-sm mb-6">
               Enter your email address and we'll send you a link to reset your
               password.
             </p>
@@ -347,7 +347,7 @@ const Login = () => {
               className="space-y-4"
             >
               <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-2">
+                <label className="text-sm font-medium text-neutral-700 flex items-center gap-2 mb-2">
                   <Mail className="w-4 h-4" />
                   Email Address
                 </label>
@@ -355,21 +355,21 @@ const Login = () => {
                   type="email"
                   value={forgotPasswordEmail}
                   onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-200 bg-gray-50 focus:bg-white"
+                  className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-all duration-200 bg-neutral-50 focus:bg-white"
                   placeholder="Enter your email"
                   required
                 />
               </div>
 
               {forgotPasswordError && (
-                <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg">
-                  <p className="text-red-700 text-sm">{forgotPasswordError}</p>
+                <div className="bg-error-light border-l-4 border-error p-3 rounded-r-lg">
+                  <p className="text-error text-sm">{forgotPasswordError}</p>
                 </div>
               )}
 
               {forgotPasswordSuccess && (
-                <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded-r-lg">
-                  <p className="text-green-700 text-sm">
+                <div className="bg-success-light border-l-4 border-success p-3 rounded-r-lg">
+                  <p className="text-success text-sm">
                     {forgotPasswordSuccess}
                   </p>
                 </div>
@@ -384,14 +384,14 @@ const Login = () => {
                     setForgotPasswordError("");
                     setForgotPasswordSuccess("");
                   }}
-                  className="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border-2 border-neutral-300 text-neutral-700 font-medium rounded-xl hover:bg-neutral-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={forgotPasswordLoading}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-hover hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                 >
                   {forgotPasswordLoading ? (
                     <>

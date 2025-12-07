@@ -22,15 +22,15 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden pt-[80px]">
       {/* Enhanced Offers Bar */}
-      <div className="relative bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 py-2 sm:py-3 overflow-hidden border-b border-purple-500/30">
+      <div className="relative bg-primary py-2 sm:py-3 overflow-hidden border-b border-primary/30">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
         <div className="relative flex flex-col sm:flex-row items-center justify-center px-4 sm:px-0 gap-2 sm:gap-0">
           <div className="flex items-center">
             <Sparkles
               size={14}
-              className="text-yellow-400 mr-2 sm:mr-3 animate-spin"
+              className="text-warning mr-2 sm:mr-3 animate-spin"
             />
             <AnimatePresence mode="wait">
               <motion.div
@@ -52,7 +52,7 @@ export default function LandingPage() {
           >
             <Link
               to="/offers"
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-3 sm:px-4 py-1 rounded-full text-xs font-bold hover:shadow-lg transition-all duration-300 hover:from-yellow-300 hover:to-orange-400 whitespace-nowrap"
+              className="bg-white text-primary px-3 sm:px-4 py-1 rounded-full text-xs font-bold hover:shadow-lg transition-all duration-300 whitespace-nowrap"
             >
               SHOP NOW
             </Link>
@@ -76,7 +76,7 @@ export default function LandingPage() {
           </video>
 
           {/* Enhanced Overlay - Darker for better text visibility */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/75 via-purple-900/50 to-black/75" />
+          <div className="absolute inset-0 bg-secondary/75" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/50 to-black/75" />
           {/* Additional dark overlay for better text contrast */}
           <div className="absolute inset-0 bg-black/40" />
@@ -90,13 +90,13 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="bg-gradient-to-br from-black/80 to-purple-900/60 backdrop-blur-md rounded-3xl border border-white/20 p-8 shadow-2xl"
+              className="bg-secondary/80 backdrop-blur-md rounded-3xl border border-white/20 p-8 shadow-2xl"
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.5 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 px-4 py-2 rounded-full mb-6"
+                className="inline-flex items-center gap-2 bg-primary px-4 py-2 rounded-full mb-6"
               >
                 <Sparkles size={16} />
                 <span className="text-white font-bold text-sm uppercase tracking-wide">
@@ -110,17 +110,14 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="text-4xl font-bold text-white mb-4 leading-tight"
               >
-                Exclusive{" "}
-                <span className="bg-gradient-to-r from-red-500 to-pink-600 text-transparent bg-clip-text">
-                  Savings
-                </span>
+                Exclusive <span className="text-primary">Savings</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-gray-200 text-lg mb-8 leading-relaxed"
+                className="text-neutral-200 text-lg mb-8 leading-relaxed"
               >
                 Premium Photography Collections
               </motion.p>
@@ -137,7 +134,7 @@ export default function LandingPage() {
                       boxShadow: "0 10px 30px -10px rgba(255, 255, 255, 0.3)",
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg w-full flex items-center justify-center gap-3 hover:shadow-2xl transition-all duration-300"
+                    className="group bg-white text-secondary px-8 py-4 rounded-2xl font-bold text-lg w-full flex items-center justify-center gap-3 hover:shadow-2xl transition-all duration-300"
                   >
                     EXPLORE COLLECTION
                     <ArrowRight
@@ -162,7 +159,7 @@ export default function LandingPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.3 }}
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-600 px-6 py-3 rounded-full mb-8 shadow-2xl"
+                className="inline-flex items-center gap-3 bg-primary px-6 py-3 rounded-full mb-8 shadow-2xl"
               >
                 <Sparkles size={20} className="text-white" />
                 <span className="text-white font-bold text-lg uppercase tracking-wider">
@@ -181,7 +178,7 @@ export default function LandingPage() {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", delay: 0.8 }}
-                  className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-transparent bg-clip-text inline-block"
+                  className="text-primary inline-block"
                 >
                   Savings
                 </motion.span>
@@ -191,7 +188,7 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.7 }}
-                className="text-2xl text-gray-200 mb-12 leading-relaxed max-w-2xl"
+                className="text-2xl text-neutral-200 mb-12 leading-relaxed max-w-2xl"
               >
                 Discover our premium photography collections with exclusive
                 discounts. Transform your memories into timeless art.
@@ -210,7 +207,7 @@ export default function LandingPage() {
                       boxShadow: "0 20px 40px -10px rgba(255, 255, 255, 0.3)",
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="group bg-gradient-to-r from-white to-gray-100 text-gray-900 px-12 py-6 rounded-2xl font-bold text-xl flex items-center gap-4 hover:shadow-2xl transition-all duration-300"
+                    className="group bg-white text-secondary px-12 py-6 rounded-2xl font-bold text-xl flex items-center gap-4 hover:shadow-2xl transition-all duration-300"
                   >
                     SHOP COLLECTION
                     <ArrowRight
@@ -243,7 +240,7 @@ export default function LandingPage() {
                     <div className="text-2xl font-bold text-white">
                       {stat.number}
                     </div>
-                    <div className="text-gray-300 text-sm">{stat.label}</div>
+                    <div className="text-neutral-300 text-sm">{stat.label}</div>
                   </motion.div>
                 ))}
               </motion.div>

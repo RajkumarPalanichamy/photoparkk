@@ -82,10 +82,10 @@ const AdminLayout = () => {
       <header className="flex shadow-md py-1 px-4 sm:px-7 bg-white min-h-[70px] tracking-wide z-[110] fixed top-0 w-full">
         <div className="flex flex-wrap items-center justify-between gap-4 w-full relative">
           <Link to="/admin/adminpanel" className="flex items-center">
-            <span className="text-2xl font-bold text-indigo-600">
+            <span className="text-2xl font-bold text-primary">
               PhotoParkk
             </span>
-            <span className="text-sm text-gray-500 ml-2">Admin</span>
+            <span className="text-sm text-neutral-500 ml-2">Admin</span>
           </Link>
 
           <div
@@ -105,40 +105,40 @@ const AdminLayout = () => {
             <div className="max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
               <div className="flex items-center max-lg:flex-col-reverse max-lg:ml-auto gap-8">
                 <div className="flex items-center space-x-6 max-lg:flex-wrap">
-                  <Link to="/" className="text-gray-700 hover:text-indigo-600">
+                  <Link to="/" className="text-neutral-700 hover:text-primary">
                     <Home className="w-5 h-5" />
                   </Link>
                 </div>
 
                 <div className="dropdown-menu relative flex shrink-0 group">
                   {user?.name ? (
-                    <div className="w-9 h-9 max-lg:w-16 max-lg:h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center font-semibold text-sm max-lg:text-lg border-2 border-gray-300 cursor-pointer">
+                    <div className="w-9 h-9 max-lg:w-16 max-lg:h-16 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-sm max-lg:text-lg border-2 border-neutral-300 cursor-pointer">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   ) : (
-                    <User className="w-9 h-9 max-lg:w-16 max-lg:h-16 rounded-full border-2 border-gray-300 cursor-pointer text-gray-600" />
+                    <User className="w-9 h-9 max-lg:w-16 max-lg:h-16 rounded-full border-2 border-neutral-300 cursor-pointer text-neutral-600" />
                   )}
 
                   <div className="dropdown-content hidden group-hover:block shadow-md p-2 bg-white rounded-md absolute top-9 right-0 w-56 z-50">
                     <div className="w-full">
                       <Link
                         to="/profile"
-                        className="text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out"
+                        className="text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-neutral-100 dropdown-item transition duration-300 ease-in-out"
                       >
                         <User className="w-[18px] h-[18px] font-medium mr-3" />
                         Account
                       </Link>
-                      <hr className="my-2 -mx-2 border-gray-200" />
+                      <hr className="my-2 -mx-2 border-neutral-200" />
                       <Link
                         to="/admin/adminpanel"
-                        className="text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out"
+                        className="text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-neutral-100 dropdown-item transition duration-300 ease-in-out"
                       >
                         <LayoutDashboard className="w-[18px] h-[18px] font-medium mr-3" />
                         Dashboard
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out"
+                        className="w-full text-left text-[15px] text-slate-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-neutral-100 dropdown-item transition duration-300 ease-in-out"
                       >
                         <LogOut className="w-[18px] h-[18px] font-medium mr-3" />
                         Logout
@@ -182,8 +182,8 @@ const AdminLayout = () => {
                       <Link
                         to={item.path}
                         onClick={() => setSidebarOpen(false)}
-                        className={`text-slate-800 text-[15px] font-medium flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all ${
-                          active ? "bg-indigo-50 text-indigo-600" : ""
+                        className={`text-slate-800 text-[15px] font-medium flex items-center hover:bg-neutral-100 rounded-md px-4 py-2 transition-all ${
+                          active ? "bg-primary-light text-primary" : ""
                         }`}
                       >
                         <Icon className="w-[18px] h-[18px] mr-3" />
@@ -199,7 +199,7 @@ const AdminLayout = () => {
           <button
             id="toggle-sidebar"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden w-8 h-8 z-[100] fixed top-[74px] left-[10px] cursor-pointer bg-indigo-600 flex items-center justify-center rounded-full outline-0 transition-all duration-500"
+            className="lg:hidden w-8 h-8 z-[100] fixed top-[74px] left-[10px] cursor-pointer bg-primary flex items-center justify-center rounded-full outline-0 transition-all duration-500"
           >
             <Menu className="w-4 h-4 text-white" />
           </button>

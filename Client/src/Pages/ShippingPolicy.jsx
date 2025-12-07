@@ -2,8 +2,8 @@ import React from "react";
 
 const ShippingPolicy = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-center text-black">
+    <div className="max-w-4xl mx-auto p-6 text-secondary">
+      <h1 className="text-3xl font-bold mb-6 text-center text-secondary">
         Shipping Policy
       </h1>
 
@@ -92,7 +92,7 @@ const ShippingPolicy = () => {
       </p>
       <p>
         Email:{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
       </p>

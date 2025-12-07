@@ -119,7 +119,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 font-[poppins]">
+    <div className="bg-primary/30 font-[poppins]">
       {/* Hero Video Section */}
       <section className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
@@ -134,7 +134,7 @@ const About = () => {
             Your browser does not support the video tag.
           </video>
           {/* Darker overlays for better text visibility */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-blue-900/60 to-gray-900/70" />
+          <div className="absolute inset-0 bg-secondary/70" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/50 to-black/70" />
           {/* Additional dark overlay for better text contrast */}
           <div className="absolute inset-0 bg-black/50" />
@@ -169,7 +169,7 @@ const About = () => {
               <SlideInText delay={0.5}>Advanced</SlideInText>
               <br />
               <SlideInText delay={0.7}>
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
+                <span className="text-primary">
                   Machinery
                 </span>
               </SlideInText>
@@ -222,7 +222,7 @@ const About = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
                   {/* Step Number */}
-                  <div className="absolute top-6 left-6 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                  <div className="absolute top-6 left-6 w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg">
                     0{index + 1}
                   </div>
                 </div>
@@ -233,9 +233,9 @@ const About = () => {
                   whileInView={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", delay: 0.5 }}
                   viewport={{ once: true }}
-                  className="absolute -bottom-6 -right-6 w-20 h-20 bg-white rounded-2xl shadow-2xl flex items-center justify-center border border-gray-100"
+                  className="absolute -bottom-6 -right-6 w-20 h-20 bg-white rounded-2xl shadow-2xl flex items-center justify-center border border-neutral-200"
                 >
-                  <step.icon className="w-10 h-10 text-blue-600" />
+                  <step.icon className="w-10 h-10 text-primary" />
                 </motion.div>
               </motion.div>
 
@@ -247,18 +247,18 @@ const About = () => {
                 viewport={{ once: true }}
                 className="space-y-6"
               >
-                <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-50 to-purple-50 px-6 py-3 rounded-2xl border border-blue-100">
-                  <step.icon className="w-6 h-6 text-blue-600" />
-                  <span className="text-blue-600 font-semibold uppercase tracking-wide text-sm">
+                <div className="inline-flex items-center gap-3 bg-primary px-6 py-3 rounded-2xl border border-primary">
+                  <step.icon className="w-6 h-6 text-primary" />
+                  <span className="text-primary font-semibold uppercase tracking-wide text-sm">
                     Step {index + 1}
                   </span>
                 </div>
 
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-4xl md:text-5xl font-bold text-secondary leading-tight">
                   {step.title}
                 </h2>
 
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <p className="text-lg text-neutral-600 leading-relaxed">
                   {step.description}
                 </p>
 
@@ -270,9 +270,9 @@ const About = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.6 + featureIndex * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-center gap-3 text-gray-700"
+                      className="flex items-center gap-3 text-neutral-700"
                     >
-                      <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                      <div className="w-2 h-2 bg-primary-light0 rounded-full" />
                       <span className="text-sm font-medium">{feature}</span>
                     </motion.div>
                   ))}
@@ -289,7 +289,7 @@ const About = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-20 px-4 text-center bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 rounded-3xl mx-4 md:mx-8 lg:mx-16 mb-20"
+        className="py-20 px-4 text-center bg-primary rounded-3xl mx-4 md:mx-8 lg:mx-16 mb-20"
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -306,7 +306,7 @@ const About = () => {
 
         <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Let's Create Something{" "}
-          <span className="bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text">
+          <span className="text-primary">
             Amazing
           </span>
         </h2>
@@ -320,7 +320,7 @@ const About = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl transition-all duration-300"
+            className="bg-white text-secondary px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl transition-all duration-300"
           >
             Start Your Project
           </motion.button>
