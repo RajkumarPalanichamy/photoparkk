@@ -30,11 +30,11 @@ const BacklightIntro = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full font-[Poppins] px-4 sm:px-6 md:px-12 lg:px-20 xl:px-24 mt-10 mb-20">
+    <div className="w-full font-[Poppins] px-4 sm:px-6 md:px-12 lg:px-20 xl:px-24 pt-[80px] mt-10 mb-20">
       {/* Header Section */}
       <div className="text-center font-extrabold text-2xl sm:text-3xl xl:text-4xl">
         <h1>Backlight Photo Frame</h1>
-        <p className="text-lg sm:text-xl text-gray-600 mt-3 sm:mt-5">
+        <p className="text-lg sm:text-xl text-neutral-600 mt-3 sm:mt-5">
           Customize Your Backlight Photo Frame
         </p>
 
@@ -53,10 +53,10 @@ const BacklightIntro = () => {
       </div>
 
       {/* Step Flow */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-6 md:gap-10 mt-10 mb-12 text-sm sm:text-base xl:text-lg font-semibold text-gray-800">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-6 md:gap-10 mt-10 mb-12 text-sm sm:text-base xl:text-lg font-semibold text-secondary">
         {steps.map((label, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-orange-400 text-white flex items-center justify-center text-sm sm:text-base">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm sm:text-base">
               {index + 1}
             </div>
             <p className="text-center">{label}</p>
@@ -83,7 +83,7 @@ const BacklightIntro = () => {
               <div className="mt-2 flex justify-center">
                 <button
                   onClick={() => navigate(frame.route)}
-                  className="flex items-center gap-1 text-orange-500 font-medium text-sm sm:text-base hover:underline"
+                  className="flex items-center gap-1 text-primary font-medium text-sm sm:text-base hover:underline"
                 >
                   Customize Now <ChevronRight className="w-4 h-4" />
                 </button>

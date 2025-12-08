@@ -29,111 +29,127 @@ const ShippingDetails = () => {
   ];
 
   return (
-    <div className="px-6 py-10 max-w-6xl mx-auto font-[poppins]">
+    <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
       {/* Brand and Promise */}
-      <div className="border-b pb-5">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center">
-          <ShieldCheck className="mr-2 text-indigo-600" size={24} />
+      <div className="mb-12 text-center">
+        <div className="inline-flex items-center justify-center mb-4">
+          <div className="p-3 bg-primary-light rounded-full">
+            <ShieldCheck className="text-primary" size={32} />
+          </div>
+        </div>
+        <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
           PhotoParkk Promise
         </h2>
-        <p className="mt-2 text-gray-600 leading-relaxed">
+        <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
           We stand behind every product we make. If our products fail to live up
           to your standards, you can return them for a replacement or refund.
         </p>
-        <p className="font-semibold mt-1 text-gray-800">- No Questions Asked</p>
+        <p className="font-bold mt-3 text-secondary text-xl">
+          - No Questions Asked
+        </p>
       </div>
 
       {/* Benefits Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-        <div className="p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors duration-300 border border-blue-100">
-          <div className="flex items-center mb-2">
-            <Truck className="text-blue-600 mr-2" size={20} />
-            <h3 className="text-lg font-semibold text-gray-800">
-              FREE SHIPPING
-            </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div className="group p-6 rounded-2xl bg-gradient-to-br from-primary-light to-white border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:shadow-xl">
+          <div className="flex items-center mb-4">
+            <div className="p-3 bg-primary rounded-xl mr-4 group-hover:scale-110 transition-transform">
+              <Truck className="text-white" size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-secondary">FREE SHIPPING</h3>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-neutral-600 leading-relaxed">
             About shipping charges? No worries, it's completely on us.
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-colors duration-300 border border-green-100">
-          <div className="flex items-center mb-2">
-            <RefreshCcw className="text-green-600 mr-2" size={20} />
-            <h3 className="text-lg font-semibold text-gray-800">
+        <div className="group p-6 rounded-2xl bg-gradient-to-br from-success-light to-white border-2 border-success/20 hover:border-success transition-all duration-300 hover:shadow-xl">
+          <div className="flex items-center mb-4">
+            <div className="p-3 bg-success rounded-xl mr-4 group-hover:scale-110 transition-transform">
+              <RefreshCcw className="text-white" size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-secondary">
               30 DAYS RETURNS
             </h3>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-neutral-600 leading-relaxed">
             We provide 30 days hassle-free returns & refunds.
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-amber-50 hover:bg-amber-100 transition-colors duration-300 border border-amber-100">
-          <div className="flex items-center mb-2">
-            <Percent className="text-amber-600 mr-2" size={20} />
-            <h3 className="text-lg font-semibold text-gray-800">
-              10% DISCOUNT
-            </h3>
+        <div className="group p-6 rounded-2xl bg-gradient-to-br from-warning-light to-white border-2 border-warning/20 hover:border-warning transition-all duration-300 hover:shadow-xl">
+          <div className="flex items-center mb-4">
+            <div className="p-3 bg-warning rounded-xl mr-4 group-hover:scale-110 transition-transform">
+              <Percent className="text-white" size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-secondary">10% DISCOUNT</h3>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-neutral-600 leading-relaxed">
             With every order placed, you'll receive a 10% discount.
           </p>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 mt-5">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+      <div className="mb-16">
+        <h3 className="text-2xl md:text-3xl font-bold text-secondary mb-8 text-center">
           Our Numbers Speak
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-          <div className="p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex justify-center mb-2">
-              <Heart className="text-rose-500" size={20} />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-error-light rounded-full mb-4">
+              <Heart className="text-error" size={28} />
             </div>
-            <p className="text-xl font-bold text-gray-800">2 LAKH +</p>
-            <p className="text-sm text-gray-600">Happy Customers</p>
+            <p className="text-3xl md:text-4xl font-bold text-secondary mb-2">
+              2 LAKH +
+            </p>
+            <p className="text-neutral-600 font-medium">Happy Customers</p>
           </div>
-          <div className="p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex justify-center mb-2">
-              <Package className="text-indigo-500" size={20} />
+          <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-light rounded-full mb-4">
+              <Package className="text-primary" size={28} />
             </div>
-            <p className="text-xl font-bold text-gray-800">2 LAKH +</p>
-            <p className="text-sm text-gray-600">Products Delivered</p>
+            <p className="text-3xl md:text-4xl font-bold text-secondary mb-2">
+              2 LAKH +
+            </p>
+            <p className="text-neutral-600 font-medium">Products Delivered</p>
           </div>
-          <div className="p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex justify-center mb-2">
-              <Star className="text-amber-500" size={20} />
+          <div className="text-center p-6 rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-warning-light rounded-full mb-4">
+              <Star className="text-warning" size={28} />
             </div>
-            <p className="text-xl font-bold text-gray-800">2730 +</p>
-            <p className="text-sm text-gray-600">Google Reviews</p>
+            <p className="text-3xl md:text-4xl font-bold text-secondary mb-2">
+              2730 +
+            </p>
+            <p className="text-neutral-600 font-medium">Google Reviews</p>
           </div>
         </div>
       </div>
 
       {/* Secure Payments */}
-      <div className="border-t pt-5 mt-5">
-        <div className="flex items-center mb-3">
-          <ShieldCheck className="text-green-600 mr-2" size={20} />
-          <h3 className="text-lg font-semibold text-gray-800">
-            100% SECURE PAYMENTS
-          </h3>
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center mb-4">
+          <div className="p-3 bg-success-light rounded-full">
+            <ShieldCheck className="text-success" size={28} />
+          </div>
         </div>
-        <p className="text-gray-600 mb-4 text-sm">
+        <h3 className="text-2xl md:text-3xl font-bold text-secondary mb-3">
+          100% SECURE PAYMENTS
+        </h3>
+        <p className="text-neutral-600 mb-8 text-lg max-w-2xl mx-auto">
           We support all major payment methods for your convenience.
         </p>
-        <div className="grid grid-cols-4 sm:grid-cols-7 gap-4 items-center">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4 max-w-4xl mx-auto">
           {paymentMethods.map((method, index) => (
             <div
               key={index}
-              className="flex justify-center items-center h-20 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-300 border border-gray-100"
+              className="flex justify-center items-center h-24 rounded-xl bg-white hover:bg-neutral-50 transition-all duration-300 border-2 border-neutral-200 hover:border-primary hover:shadow-md group"
               title={method.name}
             >
               <img
                 src={method.image}
                 alt={method.name}
-                className="h-10 object-contain"
+                className="h-12 object-contain group-hover:scale-110 transition-transform"
               />
             </div>
           ))}

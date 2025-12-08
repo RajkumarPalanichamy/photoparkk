@@ -57,7 +57,7 @@ const Framescheckout = () => {
 
   if (!userId) {
     return (
-      <div className="text-center text-red-600 p-10 text-xl">
+      <div className="text-center text-error p-10 text-xl">
         ⚠️ Please log in to proceed with checkout.
       </div>
     );
@@ -226,32 +226,32 @@ const Framescheckout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4 md:px-6">
       {/* Frame Preview */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 md:sticky md:top-6 md:h-fit">
-        <h2 className="text-2xl font-semibold mb-4 text-center text-gray-900">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200 md:sticky md:top-6 md:h-fit">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-secondary">
           🖼️ Frame Preview
         </h2>
         <div className="text-center mb-4">
-          <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+          <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-neutral-100 text-secondary">
             {color} Frame
           </span>
         </div>
         <div className="mb-6 flex justify-center">
           <div className={`inline-block border-[10px] rounded-2xl p-1 bg-white shadow-sm ${
             color.toLowerCase() === 'black' ? 'border-black' :
-            color.toLowerCase() === 'white' ? 'border-gray-300' :
-            color.toLowerCase() === 'brown' ? 'border-amber-800' :
+            color.toLowerCase() === 'white' ? 'border-neutral-300' :
+            color.toLowerCase() === 'brown' ? 'border-warning' :
             color.toLowerCase() === 'gold' ? 'border-yellow-500' :
-            color.toLowerCase() === 'silver' ? 'border-gray-400' :
-            color.toLowerCase() === 'blue' ? 'border-blue-500' :
-            color.toLowerCase() === 'red' ? 'border-red-500' :
-            color.toLowerCase() === 'green' ? 'border-green-500' :
-            color.toLowerCase() === 'purple' ? 'border-purple-500' :
-            color.toLowerCase() === 'pink' ? 'border-pink-500' :
-            color.toLowerCase() === 'orange' ? 'border-orange-500' :
-            'border-gray-300'
+            color.toLowerCase() === 'silver' ? 'border-neutral-neutral-400' :
+            color.toLowerCase() === 'blue' ? 'border-primary' :
+            color.toLowerCase() === 'red' ? 'border-error' :
+            color.toLowerCase() === 'green' ? 'border-success' :
+            color.toLowerCase() === 'purple' ? 'border-primary' :
+            color.toLowerCase() === 'pink' ? 'border-primary' :
+            color.toLowerCase() === 'orange' ? 'border-primary' :
+            'border-neutral-300'
           }`}>
             <img
               src={userImageUrl}
@@ -261,32 +261,32 @@ const Framescheckout = () => {
           </div>
         </div>
 
-        <div className="space-y-3 text-base text-gray-700">
+        <div className="space-y-3 text-base text-neutral-700">
           <div className="grid grid-cols-2 gap-y-2">
-            <span className="font-medium text-gray-500">Shape</span>
-            <span className="text-gray-900">{shape}</span>
-            <span className="font-medium text-gray-500">Color</span>
-            <span className="text-gray-900">{color}</span>
-            <span className="font-medium text-gray-500">Title</span>
-            <span className="text-gray-900">{title}</span>
-            <span className="font-medium text-gray-500">Size</span>
-            <span className="text-gray-900">{size}</span>
-            <span className="font-medium text-gray-500">Quantity</span>
-            <span className="text-gray-900">{quantity}</span>
-            <span className="font-medium text-gray-500">Price / Unit</span>
-            <span className="text-gray-900">₹{price}</span>
+            <span className="font-medium text-neutral-500">Shape</span>
+            <span className="text-secondary">{shape}</span>
+            <span className="font-medium text-neutral-500">Color</span>
+            <span className="text-secondary">{color}</span>
+            <span className="font-medium text-neutral-500">Title</span>
+            <span className="text-secondary">{title}</span>
+            <span className="font-medium text-neutral-500">Size</span>
+            <span className="text-secondary">{size}</span>
+            <span className="font-medium text-neutral-500">Quantity</span>
+            <span className="text-secondary">{quantity}</span>
+            <span className="font-medium text-neutral-500">Price / Unit</span>
+            <span className="text-secondary">₹{price}</span>
           </div>
 
-          <div className="mt-4 border-t border-gray-200 pt-4 space-y-2">
-            <div className="flex justify-between text-gray-700">
+          <div className="mt-4 border-t border-neutral-200 pt-4 space-y-2">
+            <div className="flex justify-between text-neutral-700">
               <span>Items Total</span>
               <span className="font-medium">₹{itemsTotal}</span>
             </div>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-neutral-700">
               <span>Shipping</span>
               <span className="font-medium">₹{SHIPPING_CHARGE}</span>
             </div>
-            <div className="flex justify-between text-gray-900 text-lg font-semibold">
+            <div className="flex justify-between text-secondary text-lg font-semibold">
               <span>Grand Total</span>
               <span>₹{itemsTotal + SHIPPING_CHARGE}</span>
             </div>
@@ -296,24 +296,24 @@ const Framescheckout = () => {
       </div>
 
       {/* Shipping Form */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-900">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-200">
+        <h2 className="text-2xl font-semibold mb-6 text-center text-secondary">
           📝 Shipping Details
         </h2>
 
         <form onSubmit={handlePayment} className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700">Full Name</label>
+          <label className="block text-sm font-medium text-neutral-700">Full Name</label>
           <input
             type="text"
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Enter your full name"
-            className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
           />
-          <label className="block text-sm font-medium text-gray-700">Phone</label>
+          <label className="block text-sm font-medium text-neutral-700">Phone</label>
           <div className="flex">
-            <span className="px-4 py-2 bg-gray-100 border border-r-0 rounded-l-lg text-gray-600">
+            <span className="px-4 py-2 bg-neutral-100 border border-r-0 rounded-l-lg text-neutral-600">
               +91
             </span>
             <input
@@ -324,10 +324,10 @@ const Framescheckout = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="10-digit Mobile Number"
-              className="w-full px-4 py-2 border border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
             />
           </div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium text-neutral-700">Email</label>
           <input
             type="email"
             required
@@ -335,17 +335,17 @@ const Framescheckout = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email (Gmail only)"
-            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
           />
 
-          <label className="block text-sm font-medium text-gray-700">Address</label>
+          <label className="block text-sm font-medium text-neutral-700">Address</label>
           <textarea
             required
             rows={3}
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Address"
-            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
           />
           {/* State / District / City */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -362,7 +362,7 @@ const Framescheckout = () => {
                 setDistrict("");
                 setCity("");
               }}
-              className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
             >
               <option value="">Select State</option>
               {statesList.map((st) => (
@@ -377,7 +377,7 @@ const Framescheckout = () => {
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
               placeholder="District (optional)"
-              className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+              className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary disabled:bg-neutral-100"
               disabled={!stateCode}
             />
 
@@ -387,7 +387,7 @@ const Framescheckout = () => {
               required
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+              className="w-full border p-2 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary disabled:bg-neutral-100"
               disabled={!stateCode}
             >
               <option value="">Select City</option>
@@ -396,10 +396,10 @@ const Framescheckout = () => {
               ))}
             </select>
           </div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-neutral-700">
             Pincode
             {pincode.length === 6 && /^\d{6}$/.test(pincode) && (
-              <span className="ml-2 text-green-600 text-xs">✓ Valid</span>
+              <span className="ml-2 text-success text-xs">✓ Valid</span>
             )}
           </label>
           <input
@@ -413,32 +413,22 @@ const Framescheckout = () => {
               setPincode(value);
             }}
             placeholder="Enter 6-digit pincode"
-            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-primary"
           />
 
           {/* Payment Method */}
           <div className="mt-2">
-            <p className="font-medium mb-2 text-gray-900">Payment Method</p>
+            <p className="font-medium mb-2 text-secondary">Payment Method</p>
             <div className="flex items-center gap-4">
-              <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${paymentMethod === 'ONLINE' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-700'}`}>
+              <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-primary bg-primary-light text-primary-hover`}>
                 <input
                   type="radio"
                   name="paymentMethod"
                   className="accent-blue-600"
-                  checked={paymentMethod === "ONLINE"}
-                  onChange={() => setPaymentMethod("ONLINE")}
+                  checked={true}
+                  readOnly
                 />
                 <span>Online (Razorpay)</span>
-              </label>
-              <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${paymentMethod === 'COD' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 text-gray-700'}`}>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  className="accent-blue-600"
-                  checked={paymentMethod === "COD"}
-                  onChange={() => setPaymentMethod("COD")}
-                />
-                <span>Cash on Delivery (COD)</span>
               </label>
             </div>
           </div>
@@ -447,7 +437,7 @@ const Framescheckout = () => {
             type="submit"
             disabled={paymentLoading}
             className={`w-full py-3 rounded-lg shadow-sm transition-colors ${
-              paymentLoading ? "bg-gray-300 text-gray-700" : "bg-blue-600 hover:bg-blue-700 text-white"
+              paymentLoading ? "bg-neutral-300 text-neutral-700" : "bg-primary hover:bg-primary-hover text-white"
             }`}
           >
             {paymentLoading ? "Processing..." : "🛒 Pay Now"}

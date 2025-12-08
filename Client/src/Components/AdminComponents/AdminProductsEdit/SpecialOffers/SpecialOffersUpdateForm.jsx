@@ -267,7 +267,7 @@ const SpecialoffersUpdateForm = () => {
           <button
             type="button"
             onClick={addSizeField}
-            className="text-sm text-blue-600 mt-2 underline"
+            className="text-sm text-primary mt-2 underline"
           >
             + Add Another Size
           </button>
@@ -275,7 +275,7 @@ const SpecialoffersUpdateForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary-hover transition"
         >
           Update Product
         </button>

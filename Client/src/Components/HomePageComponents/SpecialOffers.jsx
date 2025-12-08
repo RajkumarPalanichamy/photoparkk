@@ -28,12 +28,12 @@ const SpecialOffers = () => {
       <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">
         Special Offers 50%
       </h1>
-      <p className="text-sm sm:text-base text-gray-600 mb-10 max-w-2xl mx-auto">
+      <p className="text-sm sm:text-base text-neutral-600 mb-10 max-w-2xl mx-auto">
         Our most loved products, chosen by thousands of satisfied customers.
       </p>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading offers...</p>
+        <p className="text-center text-neutral-500">Loading offers...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {offers.map((item, index) => {
@@ -49,13 +49,13 @@ const SpecialOffers = () => {
                   className="w-full h-64 object-cover rounded-xl mb-4"
                 />
                 <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
-                <p className="text-gray-600 text-sm mb-2">{item.content}</p>
+                <p className="text-neutral-600 text-sm mb-2">{item.content}</p>
 
                 <div className="flex justify-center items-center text-base">
-                  <span className="text-yellow-500">
+                  <span className="text-warning">
                     {"★".repeat(Math.round(item.rating || 4))}
                   </span>
-                  <span className="text-gray-500 ml-2">
+                  <span className="text-neutral-500 ml-2">
                     {item.rating || 4} stars
                   </span>
                 </div>
@@ -63,10 +63,10 @@ const SpecialOffers = () => {
                 <div className="mt-2">
                   {firstSize ? (
                     <>
-                      <span className="text-xl text-yellow-500 font-bold">
+                      <span className="text-xl text-warning font-bold">
                         ₹{firstSize.price}
                       </span>
-                      <span className="text-gray-500 ml-2 line-through">
+                      <span className="text-neutral-500 ml-2 line-through">
                         ₹{firstSize.original}
                       </span>
                     </>
@@ -81,7 +81,7 @@ const SpecialOffers = () => {
                   to={`/specialoffersorderpage/${item._id}`}
                   className="w-full"
                 >
-                  <button className="mt-4 bg-orange-500 text-white w-full py-2 rounded-lg hover:bg-orange-600 transition">
+                  <button className="mt-4 bg-primary text-white w-full py-2 rounded-lg hover:bg-primary-hover transition">
                     Buy Now
                   </button>
                 </Link>

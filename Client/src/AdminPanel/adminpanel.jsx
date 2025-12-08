@@ -34,7 +34,6 @@ const AdminPanel = () => {
       commonOrders: 0,
       frameOrders: 0,
       newArrivals: 0,
-      specialOffers: 0,
       commonRevenue: 0,
       frameRevenue: 0,
     },
@@ -61,7 +60,6 @@ const AdminPanel = () => {
           commonOrders: payload.breakdown?.commonOrders || 0,
           frameOrders: payload.breakdown?.frameOrders || 0,
           newArrivals: payload.breakdown?.newArrivals || 0,
-          specialOffers: payload.breakdown?.specialOffers || 0,
           commonRevenue: payload.breakdown?.commonRevenue || 0,
           frameRevenue: payload.breakdown?.frameRevenue || 0,
         },
@@ -81,7 +79,7 @@ const AdminPanel = () => {
       icon: ShoppingBag,
       label: "Total Orders",
       value: loading ? "..." : numberFormatter.format(stats.totalOrders),
-      color: "bg-blue-500",
+      color: "bg-primary-light0",
       link: "/admin/orders",
       ctaLabel: "View orders",
     },
@@ -89,7 +87,7 @@ const AdminPanel = () => {
       icon: Package,
       label: "Total Products",
       value: loading ? "..." : numberFormatter.format(stats.totalProducts),
-      color: "bg-green-500",
+      color: "bg-success-light0",
       link: "/admin/products",
       ctaLabel: "Manage catalog",
     },
@@ -97,14 +95,14 @@ const AdminPanel = () => {
       icon: Frame,
       label: "Total Frames",
       value: loading ? "..." : numberFormatter.format(stats.totalFrames),
-      color: "bg-purple-500",
+      color: "bg-primary-light0",
       link: "/admin/frames",
       ctaLabel: "Customize frames",
     },
   ];
 
   const orderBreakdownData = {
-    labels: ["Common Orders", "Frame Orders", "New Arrivals", "Special Offers"],
+    labels: ["Common Orders", "Frame Orders", "New Arrivals"],
     datasets: [
       {
         label: "Orders",
@@ -112,13 +110,11 @@ const AdminPanel = () => {
           breakdown.commonOrders || 0,
           breakdown.frameOrders || 0,
           breakdown.newArrivals || 0,
-          breakdown.specialOffers || 0,
         ],
         backgroundColor: [
           "rgba(59, 130, 246, 1)",
           "rgba(139, 92, 246, 1)",
           "rgba(16, 185, 129, 1)",
-          "rgba(251, 191, 36, 1)",
         ],
         borderRadius: 12,
         borderSkipped: false,
@@ -188,11 +184,6 @@ const AdminPanel = () => {
 
   const insightList = [
     {
-      label: "Special offers live",
-      value: breakdown.specialOffers,
-      detail: "orders tagged as offers",
-    },
-    {
       label: "New arrival traction",
       value: breakdown.newArrivals,
       detail: "recent catalog orders",
@@ -203,16 +194,16 @@ const AdminPanel = () => {
     <div className="w-full space-y-8">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-secondary">Dashboard</h1>
         </div>
         <button
           onClick={fetchDashboardStats}
           disabled={loading}
-          className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:border-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm hover:border-neutral-300 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-400" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin text-neutral-400" />
               Refreshing
             </>
           ) : (
@@ -222,7 +213,7 @@ const AdminPanel = () => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+        <div className="bg-error-light border border-red-200 text-error px-4 py-3 rounded mb-6">
           {error}
         </div>
       )}
@@ -233,16 +224,16 @@ const AdminPanel = () => {
           return (
             <div
               key={index}
-              className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+              className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-neutral-500">
                     {stat.label}
                   </p>
-                  <div className="text-3xl font-semibold text-gray-900">
+                  <div className="text-3xl font-semibold text-secondary">
                     {loading ? (
-                      <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+                      <Loader2 className="h-6 w-6 animate-spin text-neutral-400" />
                     ) : (
                       stat.value
                     )}
@@ -255,7 +246,7 @@ const AdminPanel = () => {
               <div className="mt-6 flex items-center justify-end">
                 <Link
                   to={stat.link}
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary"
                 >
                   {stat.ctaLabel}
                   <ArrowUpRight className="h-4 w-4" />
@@ -268,16 +259,16 @@ const AdminPanel = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Order Flow Chart */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Order Flow</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-xl font-bold text-secondary">Order Flow</h2>
+            <p className="text-sm text-neutral-500 mt-1">
               Distribution by category
             </p>
           </div>
           <div className="h-80">
             {loading ? (
-              <div className="flex h-full items-center justify-center text-gray-400">
+              <div className="flex h-full items-center justify-center text-neutral-400">
                 <Loader2 className="h-8 w-8 animate-spin" />
               </div>
             ) : (
@@ -288,18 +279,18 @@ const AdminPanel = () => {
       </div>
 
       {/* Key Insights */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Key Insights</h2>
+      <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <h2 className="text-xl font-bold text-secondary mb-4">Key Insights</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {insightList.map((item) => (
             <div key={item.label} className="text-center">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
                 {item.label}
               </p>
-              <p className="text-3xl font-bold text-gray-900 mb-1">
+              <p className="text-3xl font-bold text-secondary mb-1">
                 {item.value}
               </p>
-              <p className="text-sm text-gray-500">{item.detail}</p>
+              <p className="text-sm text-neutral-500">{item.detail}</p>
             </div>
           ))}
         </div>

@@ -172,8 +172,8 @@ const NewarrivalUpdateForm = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        <span className="ml-3 text-gray-600">Loading product...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-3 text-neutral-600">Loading product...</span>
       </div>
     );
   }
@@ -184,20 +184,20 @@ const NewarrivalUpdateForm = () => {
       <div className="mb-8">
         <Link
           to="/admin/products"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-indigo-600 mb-4 transition"
+          className="inline-flex items-center gap-2 text-neutral-600 hover:text-primary mb-4 transition"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Products</span>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-100 rounded-lg">
-            <Edit className="w-6 h-6 text-indigo-600" />
+          <div className="p-2 bg-primary-light rounded-lg">
+            <Edit className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-secondary">
               Edit New Arrival Product
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-neutral-500 mt-1">
               Update product information and details
             </p>
           </div>
@@ -207,17 +207,17 @@ const NewarrivalUpdateForm = () => {
       {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6"
+        className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 space-y-6"
       >
         {/* Basic Information */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Package className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-xl font-semibold text-secondary flex items-center gap-2">
+            <Package className="w-5 h-5 text-primary" />
             Basic Information
           </h2>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Product Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -226,13 +226,13 @@ const NewarrivalUpdateForm = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="Enter product title"
-              className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+              className="w-full px-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Product Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -241,7 +241,7 @@ const NewarrivalUpdateForm = () => {
               onChange={handleChange}
               placeholder="Enter product description"
               rows={4}
-              className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition resize-none"
+              className="w-full px-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition resize-none"
               required
             />
           </div>
@@ -249,13 +249,13 @@ const NewarrivalUpdateForm = () => {
 
         {/* Image Upload */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <ImageIcon className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-xl font-semibold text-secondary flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-primary" />
             Product Image
           </h2>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Update Image (optional)
             </label>
             {imagePreview ? (
@@ -263,10 +263,10 @@ const NewarrivalUpdateForm = () => {
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="w-full h-64 object-cover rounded-lg border border-gray-300"
+                  className="w-full h-64 object-cover rounded-lg border border-neutral-300"
                 />
                 <div className="absolute top-2 right-2 flex gap-2">
-                  <label className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition cursor-pointer">
+                  <label className="p-2 bg-primary text-white rounded-full hover:bg-primary-hover transition cursor-pointer">
                     <Upload className="w-4 h-4" />
                     <input
                       type="file"
@@ -279,7 +279,7 @@ const NewarrivalUpdateForm = () => {
                     <button
                       type="button"
                       onClick={removeImage}
-                      className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                      className="p-2 bg-error-light0 text-white rounded-full hover:bg-red-600 transition"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -287,14 +287,14 @@ const NewarrivalUpdateForm = () => {
                 </div>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+              <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-neutral-300 border-dashed rounded-lg cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-10 h-10 mb-3 text-gray-400" />
-                  <p className="mb-2 text-sm text-gray-500">
+                  <Upload className="w-10 h-10 mb-3 text-neutral-400" />
+                  <p className="mb-2 text-sm text-neutral-500">
                     <span className="font-semibold">Click to upload</span> or
                     drag and drop
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-neutral-500">
                     {MAX_UPLOAD_SIZE_FULL_TEXT}
                   </p>
                 </div>
@@ -311,14 +311,14 @@ const NewarrivalUpdateForm = () => {
 
         {/* Product Details */}
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Package className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-xl font-semibold text-secondary flex items-center gap-2">
+            <Package className="w-5 h-5 text-primary" />
             Product Details
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                 <Ruler className="w-4 h-4" />
                 Thickness
               </label>
@@ -328,12 +328,12 @@ const NewarrivalUpdateForm = () => {
                 value={formData.thickness}
                 onChange={handleChange}
                 placeholder="e.g., 3mm, 5mm"
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+                className="w-full px-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                 <Box className="w-4 h-4" />
                 Stock Status
               </label>
@@ -341,7 +341,7 @@ const NewarrivalUpdateForm = () => {
                 name="stock"
                 value={formData.stock}
                 onChange={handleChange}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+                className="w-full px-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
               >
                 <option value="In Stock">In Stock</option>
                 <option value="Out of Stock">Out of Stock</option>
@@ -354,14 +354,14 @@ const NewarrivalUpdateForm = () => {
         {/* Sizes */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-              <Ruler className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-semibold text-secondary flex items-center gap-2">
+              <Ruler className="w-5 h-5 text-primary" />
               Product Sizes
             </h2>
             <button
               type="button"
               onClick={addSizeField}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition"
+              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-primary hover:text-primary-hover hover:bg-primary-light rounded-lg transition"
             >
               <Plus className="w-4 h-4" />
               Add Size
@@ -372,10 +372,10 @@ const NewarrivalUpdateForm = () => {
             {formData.sizes.map((size, index) => (
               <div
                 key={index}
-                className="grid grid-cols-12 gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200"
+                className="grid grid-cols-12 gap-3 p-4 bg-neutral-50 rounded-lg border border-neutral-200"
               >
                 <div className="col-span-12 sm:col-span-4">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-neutral-700 mb-1">
                     Size Label
                   </label>
                   <input
@@ -385,11 +385,11 @@ const NewarrivalUpdateForm = () => {
                     onChange={(e) =>
                       handleSizeChange(index, "label", e.target.value)
                     }
-                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                    className="w-full px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary-light text-sm"
                   />
                 </div>
                 <div className="col-span-6 sm:col-span-3">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-neutral-700 mb-1">
                     Price (₹)
                   </label>
                   <input
@@ -400,11 +400,11 @@ const NewarrivalUpdateForm = () => {
                       handleSizeChange(index, "price", e.target.value)
                     }
                     min="0"
-                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                    className="w-full px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary-light text-sm"
                   />
                 </div>
                 <div className="col-span-6 sm:col-span-3">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                  <label className="block text-xs font-medium text-neutral-700 mb-1">
                     Original (₹)
                   </label>
                   <input
@@ -415,7 +415,7 @@ const NewarrivalUpdateForm = () => {
                       handleSizeChange(index, "original", e.target.value)
                     }
                     min="0"
-                    className="w-full px-3 py-2 bg-white border border-gray-300 text-slate-900 rounded-md focus:outline-indigo-600 focus:ring-1 focus:ring-indigo-200 text-sm"
+                    className="w-full px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary-light text-sm"
                   />
                 </div>
                 <div className="col-span-12 sm:col-span-2 flex items-end">
@@ -423,7 +423,7 @@ const NewarrivalUpdateForm = () => {
                     type="button"
                     onClick={() => removeSizeField(index)}
                     disabled={formData.sizes.length === 1}
-                    className="w-full px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 text-sm font-medium text-error bg-error-light hover:bg-red-100 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Remove
                   </button>
@@ -434,11 +434,11 @@ const NewarrivalUpdateForm = () => {
         </div>
 
         {/* Submit Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-neutral-200">
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>
@@ -454,7 +454,7 @@ const NewarrivalUpdateForm = () => {
           </button>
           <Link
             to="/admin/products"
-            className="flex-1 sm:flex-initial px-6 py-3 text-center border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+            className="flex-1 sm:flex-initial px-6 py-3 text-center border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition font-medium"
           >
             Cancel
           </Link>

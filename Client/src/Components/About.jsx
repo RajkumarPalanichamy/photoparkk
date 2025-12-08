@@ -64,7 +64,7 @@ const About = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white min-h-screen">
+    <div className="bg-neutral-50 min-h-screen">
       {/* Hero Video Section */}
       <div className="relative w-full h-[70vh] overflow-hidden">
         {/* Loading Placeholder */}
@@ -97,7 +97,7 @@ const About = () => {
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               Advanced Machinery
-              <span className="block text-blue-400">In Action</span>
+              <span className="block text-primary">In Action</span>
             </h1>
             <p className="text-xl md:text-2xl font-medium max-w-3xl mx-auto leading-relaxed">
               Witness our state-of-the-art production process delivering precision-crafted frames with unmatched quality and innovation.
@@ -128,10 +128,10 @@ const About = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
               Our Manufacturing Process
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
               Discover how our advanced technology and skilled craftsmanship come together to create exceptional frames.
             </p>
           </motion.div>
@@ -143,13 +143,13 @@ const About = () => {
               onClick={prevSlide}
               className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 p-3 rounded-full shadow-lg hover:bg-opacity-100 transition-all"
             >
-              <ChevronLeft size={24} className="text-gray-700" />
+              <ChevronLeft size={24} className="text-neutral-700" />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white bg-opacity-90 p-3 rounded-full shadow-lg hover:bg-opacity-100 transition-all"
             >
-              <ChevronRight size={24} className="text-gray-700" />
+              <ChevronRight size={24} className="text-neutral-700" />
             </button>
 
             {/* Current Slide */}
@@ -178,10 +178,10 @@ const About = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                  <h3 className="text-3xl lg:text-4xl font-bold text-secondary mb-6 leading-tight">
                     {slides[currentSlide].title}
                   </h3>
-                  <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  <p className="text-lg text-neutral-600 leading-relaxed mb-8">
                     {slides[currentSlide].description}
                   </p>
                   
@@ -193,15 +193,15 @@ const About = () => {
                         onClick={() => setCurrentSlide(index)}
                         className={`w-3 h-3 rounded-full transition-all ${
                           index === currentSlide 
-                            ? 'bg-blue-600 w-8' 
-                            : 'bg-gray-300 hover:bg-gray-400'
+                            ? 'bg-primary w-8' 
+                            : 'bg-neutral-300 hover:bg-neutral-400'
                         }`}
                       />
                     ))}
                   </div>
 
                   {/* Slide Counter */}
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-neutral-500">
                     {currentSlide + 1} of {slides.length}
                   </p>
                 </motion.div>
@@ -218,27 +218,27 @@ const About = () => {
             className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">24/7</span>
+              <div className="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">24/7</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">Continuous Operation</h4>
-              <p className="text-gray-600">Our facilities operate around the clock to meet your demands.</p>
+              <h4 className="text-xl font-semibold text-secondary mb-2">Continuous Operation</h4>
+              <p className="text-neutral-600">Our facilities operate around the clock to meet your demands.</p>
             </div>
             
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-green-600">99.9%</span>
+              <div className="w-16 h-16 bg-success-light rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-success">99.9%</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">Quality Rate</h4>
-              <p className="text-gray-600">Exceptional quality standards maintained across all production.</p>
+              <h4 className="text-xl font-semibold text-secondary mb-2">Quality Rate</h4>
+              <p className="text-neutral-600">Exceptional quality standards maintained across all production.</p>
             </div>
             
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600">10K+</span>
+              <div className="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">10K+</span>
               </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">Frames Produced</h4>
-              <p className="text-gray-600">Successfully delivered thousands of high-quality frames.</p>
+              <h4 className="text-xl font-semibold text-secondary mb-2">Frames Produced</h4>
+              <p className="text-neutral-600">Successfully delivered thousands of high-quality frames.</p>
             </div>
           </motion.div>
         </div>

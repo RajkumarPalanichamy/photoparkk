@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaLinkedinIn,
   FaWhatsapp,
@@ -11,17 +10,17 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-12 pb-6 px-6 mt-15">
+    <footer className="bg-secondary text-neutral-300 pt-12 pb-6 px-6 mt-15">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {/* Company Info */}
         <div>
-  <h2 className="text-xl font-bold mb-1">PhotoParkk</h2>
-  <p className="text-xs text-gray-400 mb-3">Since 1996</p>
-  <p className="text-sm">
-    Frame your memories with style. High-quality custom photo frames
-    delivered to your door.
-  </p>
-</div>
+          <h2 className="text-xl font-bold mb-1">PhotoParkk</h2>
+          <p className="text-xs text-neutral-400 mb-3">Since 1996</p>
+          <p className="text-sm">
+            Frame your memories with style. High-quality custom photo frames
+            delivered to your door.
+          </p>
+        </div>
 
         {/* Quick Links */}
         <div>
@@ -96,21 +95,12 @@ const Footer = () => {
             >
               <FaWhatsapp size={20} />
             </a>
-            <a
-              href="https://twitter.com/photoparkk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
-              aria-label="Twitter"
-            >
-              <FaTwitter size={20} />
-            </a>
           </div>
         </div>
       </div>
 
       {/* Bottom Note */}
-      <div className="text-center text-sm mt-10 border-t border-gray-700 pt-4">
+      <div className="text-center text-sm mt-10 border-t border-neutral-700 pt-4">
         © {new Date().getFullYear()} PhotoPark. All rights reserved.
       </div>
     </footer>

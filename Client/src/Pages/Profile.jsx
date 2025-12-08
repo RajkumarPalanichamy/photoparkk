@@ -66,8 +66,8 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex items-center justify-center">
+        <div className="text-neutral-600">Loading...</div>
       </div>
     );
   }
@@ -75,17 +75,17 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col">
       <div className="flex-grow container mx-auto p-4 md:p-6">
         <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
           <div className="w-full md:w-1/3 lg:w-1/4 shadow-md rounded-lg p-6">
             <h1 className="text-2xl md:text-3xl font-bold mb-4">
               {user?.name}
             </h1>
-            <p className="text-lg text-gray-600 mb-4">{user?.email}</p>
+            <p className="text-lg text-neutral-600 mb-4">{user?.email}</p>
             <button
               onClick={handleLogout}
-              className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+              className="w-full bg-error text-white py-2 px-4 rounded hover:bg-error-light"
             >
               Logout
             </button>

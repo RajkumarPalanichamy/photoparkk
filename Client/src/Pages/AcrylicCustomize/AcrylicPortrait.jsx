@@ -1,7 +1,15 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Upload, X, Image, Eye, Sparkles, CheckCircle2, Move } from "lucide-react";
+import {
+  Upload,
+  X,
+  Image,
+  Eye,
+  Sparkles,
+  CheckCircle2,
+  Move,
+} from "lucide-react";
 import LoadingBar from "../../Components/LoadingBar";
 import { toast } from "react-toastify";
 import {
@@ -43,19 +51,15 @@ const AcrylicPortrait = () => {
     formData.append("image", file);
 
     try {
-      const res = await axios.post(
-        "/api/acryliccustomize/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setUploadProgress(percentCompleted);
-          },
-        }
-      );
+      const res = await axios.post("/api/acryliccustomize/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(percentCompleted);
+        },
+      });
 
       const imageUrl = res.data.imageUrl || res.data.uploadedImageUrl;
       setPhotoData({
@@ -169,205 +173,218 @@ const AcrylicPortrait = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 py-8 px-4">
+    <div className="bg-neutral-50 pt-[100px] pb-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full mb-4">
             <Sparkles className="w-5 h-5" />
             <span className="font-semibold">Acrylic Portrait Frame</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+          <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-3">
             Customize Your Acrylic Portrait
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload your favorite photo and position it perfectly in a beautiful acrylic portrait frame
+          <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+            Upload your favorite photo and position it perfectly in a beautiful
+            acrylic portrait frame
           </p>
         </div>
 
-      <input
-        type="file"
-        ref={fileInputRef}
+        <input
+          type="file"
+          ref={fileInputRef}
           onChange={handleChange}
-        accept="image/*"
-        className="hidden"
-      />
+          accept="image/*"
+          className="hidden"
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Upload Section */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200">
+            <div className="bg-primary px-6 py-4">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <Image className="w-6 h-6" />
                 Upload Your Photo
-            </h2>
+              </h2>
             </div>
-            
+
             <div className="p-6">
-            {!photoData ? (
-              <div
+              {!photoData ? (
+                <div
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
-                  isUploading
-                    ? "border-gray-200 bg-gray-50 cursor-not-allowed"
-                    : isDragging
-                      ? "border-blue-500 bg-blue-50 scale-[1.02]"
-                      : "border-gray-300 hover:border-blue-400 hover:bg-gray-50"
-                }`}
-              >
+                    isUploading
+                      ? "border-neutral-200 bg-neutral-50 cursor-not-allowed"
+                      : isDragging
+                      ? "border-primary bg-primary-light scale-[1.02]"
+                      : "border-neutral-300 hover:border-primary hover:bg-neutral-50"
+                  }`}
+                >
                   <div className="flex flex-col items-center justify-center space-y-6">
-                  {isUploading ? (
-                    <>
-                      <div className="bg-gray-100 p-3 rounded-full">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                      </div>
-                        <p className="text-lg font-semibold text-gray-700">
-                        Uploading your image...
-                      </p>
-                      <div className="w-full max-w-xs">
-                        <div className="flex justify-between text-sm text-gray-600 mb-2">
-                          <span>Progress</span>
-                          <span>{uploadProgress}%</span>
+                    {isUploading ? (
+                      <>
+                        <div className="bg-neutral-100 p-3 rounded-full">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
-                            style={{ width: `${uploadProgress}%` }}
-                          ></div>
+                        <p className="text-lg font-semibold text-neutral-700">
+                          Uploading your image...
+                        </p>
+                        <div className="w-full max-w-xs">
+                          <div className="flex justify-between text-sm text-neutral-600 mb-2">
+                            <span>Progress</span>
+                            <span>{uploadProgress}%</span>
+                          </div>
+                          <div className="w-full bg-neutral-200 rounded-full h-2">
+                            <div
+                              className="bg-primary-light0 h-2 rounded-full transition-all duration-300 ease-out"
+                              style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                        <div className={`p-4 rounded-full transition-all ${
-                          isDragging ? "bg-blue-100 scale-110" : "bg-gray-100"
-                        }`}>
-                          <Image className={`w-12 h-12 transition-colors ${
-                            isDragging ? "text-blue-600" : "text-gray-500"
-                          }`} />
-                      </div>
+                      </>
+                    ) : (
+                      <>
+                        <div
+                          className={`p-4 rounded-full transition-all ${
+                            isDragging
+                              ? "bg-primary-light scale-110"
+                              : "bg-neutral-100"
+                          }`}
+                        >
+                          <Image
+                            className={`w-12 h-12 transition-colors ${
+                              isDragging ? "text-primary" : "text-neutral-500"
+                            }`}
+                          />
+                        </div>
                         <div>
-                          <p className="text-lg font-semibold text-gray-700 mb-2">
+                          <p className="text-lg font-semibold text-neutral-700 mb-2">
                             Drag and drop your photo here
-                      </p>
-                          <p className="text-sm text-gray-500 mb-4">or</p>
-                      <button
-                        onClick={handleReplaceClick}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
-                      >
+                          </p>
+                          <p className="text-sm text-neutral-500 mb-4">or</p>
+                          <button
+                            onClick={handleReplaceClick}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+                          >
                             <Upload className="w-5 h-5" />
                             Browse Files
-                      </button>
+                          </button>
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <div className="flex items-center gap-2 text-xs text-neutral-500">
                           <CheckCircle2 className="w-4 h-4" />
                           <span>{MAX_UPLOAD_SIZE_FULL_TEXT}</span>
                         </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            ) : (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <CheckCircle2 className="w-6 h-6 text-green-600" />
-                    </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">{photoData.name}</p>
-                        <p className="text-sm text-gray-500">{formatFileSize(photoData.size)}</p>
-                    </div>
+                      </>
+                    )}
                   </div>
-                  <button
-                    onClick={handleRemovePhoto}
-                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
                 </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="p-2 bg-success-light rounded-lg flex-shrink-0">
+                        <CheckCircle2 className="w-5 h-5 text-success" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-secondary truncate">
+                          {photoData.name}
+                        </p>
+                        <p className="text-sm text-neutral-500">
+                          {formatFileSize(photoData.size)}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleRemovePhoto}
+                      className="p-2 rounded-lg text-neutral-400 hover:text-error hover:bg-error-light transition-colors flex-shrink-0 ml-2"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
 
-                  <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden border-2 border-gray-200 shadow-inner">
+                  <div className="relative w-full aspect-[3/4] bg-white rounded-xl overflow-hidden border-2 border-neutral-200 shadow-inner">
                     <img
                       src={photoData.url}
                       alt="Uploaded preview"
                       className="w-full h-full object-contain"
                     />
-                </div>
+                  </div>
 
                   <button
                     onClick={handleReplaceClick}
                     disabled={isUploading}
-                    className="w-full py-3 px-4 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                    className="w-full py-3 px-4 bg-secondary text-white rounded-lg hover:bg-secondary transition-all duration-300 font-medium flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                   >
                     <Upload className="w-5 h-5" />
-                        Replace Photo
+                    Replace Photo
                   </button>
                 </div>
               )}
-              </div>
+            </div>
           </div>
 
           {/* Preview Section with Drag */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200">
+            <div className="bg-primary px-6 py-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Eye className="w-6 h-6" />
                   Live Preview
-              </h2>
-              <button
-                onClick={handlePreviewClick}
-                disabled={!photoData}
+                </h2>
+                <button
+                  onClick={handlePreviewClick}
+                  disabled={!photoData}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                  photoData
-                      ? "bg-white text-purple-600 hover:bg-gray-50 shadow-lg hover:shadow-xl transform hover:scale-105"
+                    photoData
+                      ? "bg-white text-primary hover:bg-neutral-50 shadow-lg hover:shadow-xl transform hover:scale-105"
                       : "bg-white/20 text-white/50 cursor-not-allowed"
-                }`}
-              >
+                  }`}
+                >
                   View Full Preview
-              </button>
+                </button>
               </div>
             </div>
 
-            <div className="p-8">
-              <div className="relative w-full max-w-sm mx-auto">
-                <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-700 flex items-center gap-2">
+            <div className="p-8 flex items-center justify-center">
+              <div className="relative w-full max-w-sm">
+                <div className="mb-4 p-3 bg-primary-light rounded-lg border border-primary-light">
+                  <p className="text-sm text-primary-hover flex items-center gap-2">
                     <Move className="w-4 h-4" />
                     <span>Drag the image to adjust position</span>
                   </p>
                 </div>
                 <div
-                  className="relative aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-2xl border-8 border-gray-800 cursor-grab active:cursor-grabbing"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {photoData ? (
-                <img
-                  src={photoData.url}
-                  alt="Portrait Preview"
-                  style={{
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    transition: startDrag ? "none" : "transform 0.3s ease",
-                    transformOrigin: "center center",
-                  }}
+                  className="relative aspect-[3/4] bg-white rounded-2xl overflow-hidden shadow-2xl border-8 border-neutral-secondary cursor-grab active:cursor-grabbing"
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  {photoData ? (
+                    <img
+                      src={photoData.url}
+                      alt="Portrait Preview"
+                      style={{
+                        transform: `translate(${position.x}px, ${position.y}px)`,
+                        transition: startDrag ? "none" : "transform 0.3s ease",
+                        transformOrigin: "center center",
+                      }}
                       className="absolute top-0 left-0 w-full h-full object-cover select-none pointer-events-none"
-                  draggable={false}
-                />
-              ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                      <div className="p-4 bg-gray-200 rounded-full mb-4">
+                      draggable={false}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-neutral-400">
+                      <div className="p-4 bg-neutral-200 rounded-full mb-4">
                         <Image className="w-12 h-12" />
                       </div>
-                      <p className="text-lg font-medium mb-2">No image selected</p>
+                      <p className="text-lg font-medium mb-2">
+                        No image selected
+                      </p>
                       <p className="text-sm text-center px-4">
                         Upload a photo to see your acrylic portrait preview
                       </p>
@@ -375,16 +392,22 @@ const AcrylicPortrait = () => {
                   )}
                 </div>
                 {photoData && (
-                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-lg border border-gray-200">
-                    <span className="text-sm font-medium text-gray-700">Portrait Frame</span>
+                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-lg border border-neutral-200">
+                    <span className="text-sm font-medium text-neutral-700">
+                      Portrait Frame
+                    </span>
                   </div>
                 )}
               </div>
 
               {photoData && (
-                <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-                  <p className="text-sm text-gray-700 text-center">
-                    <span className="font-semibold">Ready to proceed?</span> Adjust the image position and click "View Full Preview" to continue.
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-neutral-600">
+                    <span className="font-semibold text-secondary">
+                      Ready to proceed?
+                    </span>{" "}
+                    Adjust the image position and click "View Full Preview" to
+                    continue.
                   </p>
                 </div>
               )}

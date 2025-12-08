@@ -30,9 +30,9 @@ const Home = () => {
         className="fixed bottom-5 right-5 z-50 group"
         title="Follow us on Instagram"
       >
-        <div className="flex items-center sm:gap-3 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white px-4 py-3 rounded-full shadow-xl transition-transform duration-300 transform hover:scale-105 ring-2 ring-pink-300">
+        <div className="flex items-center sm:gap-3 bg-primary text-white px-4 py-3 rounded-full shadow-xl transition-transform duration-300 transform hover:scale-105 ring-2 ring-primary-light">
           {/* Instagram Icon */}
-          <div className="bg-white text-pink-500 rounded-full p-2 shadow-md group-hover:rotate-12 transition-transform">
+          <div className="bg-white text-primary rounded-full p-2 shadow-md group-hover:rotate-12 transition-transform">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 448 512"

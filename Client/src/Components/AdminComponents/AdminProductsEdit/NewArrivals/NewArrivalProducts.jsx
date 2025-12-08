@@ -76,8 +76,8 @@ const NewArrivalProducts = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        <span className="ml-3 text-gray-600">Loading products...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-3 text-neutral-600">Loading products...</span>
       </div>
     );
   }
@@ -87,17 +87,17 @@ const NewArrivalProducts = () => {
       {/* Search and Add Button */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search products..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 text-slate-900 rounded-lg focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-neutral-300 text-slate-900 rounded-lg focus:outline-primary focus:ring-2 focus:ring-primary-light transition"
           />
         </div>
         <Link to="/admin/newarrivaladdform">
-          <button className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition shadow-sm">
+          <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-hover transition shadow-sm">
             <Plus className="w-5 h-5" />
             Add New Product
           </button>
@@ -105,22 +105,22 @@ const NewArrivalProducts = () => {
       </div>
 
       {/* Products Count */}
-      <div className="mb-4 text-sm text-gray-600">
+      <div className="mb-4 text-sm text-neutral-600">
         Showing {filteredProducts.length} of {newArrivalItems.length} products
       </div>
 
       {/* Products Grid */}
       {filteredProducts.length === 0 ? (
-        <div className="text-center py-16 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 text-lg font-medium">
+        <div className="text-center py-16 bg-neutral-50 rounded-lg border-2 border-dashed border-neutral-300">
+          <Package className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+          <p className="text-neutral-600 text-lg font-medium">
             {searchQuery
               ? "No products found matching your search"
               : "No products available"}
           </p>
           {!searchQuery && (
             <Link to="/admin/newarrivaladdform">
-              <button className="mt-4 text-indigo-600 hover:text-indigo-700 font-medium">
+              <button className="mt-4 text-primary hover:text-primary-hover font-medium">
                 Add your first product →
               </button>
             </Link>
@@ -133,10 +133,10 @@ const NewArrivalProducts = () => {
             return (
               <div
                 key={item._id}
-                className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
+                className="bg-white border border-neutral-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
               >
                 {/* Product Image */}
-                <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
+                <div className="relative w-full h-48 bg-neutral-100 overflow-hidden">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -149,30 +149,30 @@ const NewArrivalProducts = () => {
                     />
                   ) : null}
                   <div
-                    className="w-full h-full flex items-center justify-center bg-gray-100"
+                    className="w-full h-full flex items-center justify-center bg-neutral-100"
                     style={{ display: item.image ? "none" : "flex" }}
                   >
-                    <ImageIcon className="w-12 h-12 text-gray-400" />
+                    <ImageIcon className="w-12 h-12 text-neutral-400" />
                   </div>
                 </div>
 
                 {/* Product Info */}
                 <div className="p-4 flex-1 flex flex-col">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">
+                  <h3 className="text-lg font-semibold text-secondary mb-1 line-clamp-1">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                  <p className="text-sm text-neutral-600 mb-3 line-clamp-2">
                     {item.content}
                   </p>
 
                   {/* Price */}
                   <div className="mb-3">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xl font-bold text-indigo-600">
+                      <span className="text-xl font-bold text-primary">
                         ₹{selectedSize?.price || 0}
                       </span>
                       {selectedSize?.original && (
-                        <span className="text-sm text-gray-500 line-through">
+                        <span className="text-sm text-neutral-500 line-through">
                           ₹{selectedSize.original}
                         </span>
                       )}
@@ -181,7 +181,7 @@ const NewArrivalProducts = () => {
 
                   {/* Thickness */}
                   {item.thickness && (
-                    <p className="text-xs text-gray-600 mb-3">
+                    <p className="text-xs text-neutral-600 mb-3">
                       Thickness:{" "}
                       <span className="font-medium">{item.thickness}</span>
                     </p>
@@ -196,8 +196,8 @@ const NewArrivalProducts = () => {
                           onClick={() => handleSizeClick(item._id, size)}
                           className={`text-xs px-2.5 py-1 border rounded-md transition ${
                             selectedSize?.label === size.label
-                              ? "bg-indigo-600 text-white border-indigo-600"
-                              : "bg-white text-gray-700 border-gray-300 hover:border-indigo-400"
+                              ? "bg-primary text-white border-primary"
+                              : "bg-white text-neutral-700 border-neutral-300 hover:border-primary"
                           }`}
                         >
                           {size.label}
@@ -211,7 +211,7 @@ const NewArrivalProducts = () => {
                     <span
                       className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
                         item.stock === "In Stock"
-                          ? "bg-green-100 text-green-800"
+                          ? "bg-success-light text-green-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
@@ -225,14 +225,14 @@ const NewArrivalProducts = () => {
                       to={`/admin/newarrivalupdateform/${item._id}`}
                       className="flex-1"
                     >
-                      <button className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-600 py-2 rounded-lg hover:bg-indigo-100 transition font-medium text-sm">
+                      <button className="w-full flex items-center justify-center gap-2 bg-primary-light text-primary py-2 rounded-lg hover:bg-primary-light transition font-medium text-sm">
                         <Edit className="w-4 h-4" />
                         Edit
                       </button>
                     </Link>
                     <button
                       onClick={() => handleDelete(item._id)}
-                      className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100 transition font-medium text-sm"
+                      className="flex-1 flex items-center justify-center gap-2 bg-error-light text-error py-2 rounded-lg hover:bg-red-100 transition font-medium text-sm"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete

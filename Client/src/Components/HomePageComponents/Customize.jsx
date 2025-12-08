@@ -42,10 +42,10 @@ function Customize() {
 
   return (
     <div className="mt-20 flex flex-col items-center justify-center p-4 mx-[4vw]">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-800 text-center font-[poppins]">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-secondary text-center font-[poppins]">
         Customize Your Frame
       </h1>
-      <p className="text-base sm:text-lg text-gray-600 mb-12 text-center max-w-2xl font-[poppins]">
+      <p className="text-base sm:text-lg text-neutral-600 mb-12 text-center max-w-2xl font-[poppins]">
         Choose your favorite frame style and preview it in real-time. Make your
         memories stand out with a frame that fits your vibe!
       </p>
@@ -55,10 +55,10 @@ function Customize() {
           {/* Previous Button */}
           <button
             onClick={prevSlide}
-            className="p-2 rounded-full bg-white shadow-lg hover:bg-gray-50 z-20 transition-colors"
+            className="p-2 rounded-full bg-white shadow-lg hover:bg-neutral-50 z-20 transition-colors"
             aria-label="Previous frame"
           >
-            <ChevronLeft className="w-6 h-6 text-gray-600 z-20" />
+            <ChevronLeft className="w-6 h-6 text-neutral-600 z-20" />
           </button>
 
           {/* Frames Container */}
@@ -105,7 +105,7 @@ function Customize() {
                   }}
                 >
                   <div className="relative z-10 bg-white/80 p-3 rounded-xl shadow-lg text-center max-w-[85%]">
-                    <span className="text-sm sm:text-base font-semibold text-gray-700 font-[poppins]">
+                    <span className="text-sm sm:text-base font-semibold text-neutral-700 font-[poppins]">
                       {photoQuotes[index]}
                     </span>
                   </div>
@@ -117,10 +117,10 @@ function Customize() {
           {/* Next Button */}
           <button
             onClick={nextSlide}
-            className="p-2 rounded-full bg-white shadow-lg z-20 hover:bg-gray-50 transition-colors"
+            className="p-2 rounded-full bg-white shadow-lg z-20 hover:bg-neutral-50 transition-colors"
             aria-label="Next frame"
           >
-            <ChevronRight className="w-6 h-6 text-gray-600" />
+            <ChevronRight className="w-6 h-6 text-neutral-600" />
           </button>
         </div>
 
@@ -134,7 +134,7 @@ function Customize() {
                 setIsManual(true);
               }}
               className={`w-2 h-2 rounded-full transition-all ${
-                activeIndex === index ? "bg-gray-800 w-4" : "bg-gray-400"
+                activeIndex === index ? "bg-secondary w-4" : "bg-neutral-400"
               }`}
               aria-label={`Go to frame ${index + 1}`}
             />
@@ -143,7 +143,7 @@ function Customize() {
       </div>
 
       <Link to="/frames">
-        <button className="bg-orange-400 text-white px-6 py-3 mt-5 cursor-pointer text-xl rounded-2xl hover:bg-blue-800 hover:text-white transition duration-200">
+        <button className="bg-primary text-white px-6 py-3 mt-5 cursor-pointer text-xl rounded-2xl hover:bg-primary-hover hover:text-white transition duration-200">
           Customize
         </button>
       </Link>

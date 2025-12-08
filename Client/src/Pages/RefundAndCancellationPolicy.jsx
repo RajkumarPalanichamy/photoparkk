@@ -2,8 +2,8 @@ import React from "react";
 
 const RefundAndCancellationPolicy = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6 text-center text-black">
+    <div className="max-w-4xl mx-auto p-6 text-secondary">
+      <h1 className="text-3xl font-bold mb-6 text-center text-secondary">
         Refund & Cancellation Policy
       </h1>
 
@@ -26,7 +26,7 @@ const RefundAndCancellationPolicy = () => {
         • Once processing begins (image printing, cutting, framing), the order
         cannot be cancelled or changed.
         <br />• To request cancellation, email us immediately at{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>{" "}
         with your order number.
@@ -54,7 +54,7 @@ const RefundAndCancellationPolicy = () => {
             Email us at{" "}
             <a
               href="mailto:photoparkk.prints@gmail.com"
-              className="text-blue-600"
+              className="text-primary"
             >
               photoparkk.prints@gmail.com
             </a>{" "}
@@ -87,7 +87,7 @@ const RefundAndCancellationPolicy = () => {
       </p>
       <p>
         Email:{" "}
-        <a href="mailto:photoparkk.prints@gmail.com" className="text-blue-600">
+        <a href="mailto:photoparkk.prints@gmail.com" className="text-primary">
           photoparkk.prints@gmail.com
         </a>
       </p>

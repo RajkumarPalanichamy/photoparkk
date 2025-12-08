@@ -141,6 +141,32 @@ export const getCartItemByUserAndProduct = async (req, res) => {
   }
 };
 
+export const updateCartItem = async (req, res) => {
+  try {
+    const { quantity } = req.body;
+    const { itemId } = req.params;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ error: "Quantity must be at least 1." });
+    }
+
+    const item = await addtocartdata.findById(itemId);
+    if (!item) {
+      return res.status(404).json({ error: "Cart item not found." });
+    }
+
+    // Update quantity and recalculate totalAmount
+    item.quantity = quantity;
+    item.totalAmount = item.price * quantity;
+
+    const updatedItem = await item.save();
+    res.status(200).json(updatedItem);
+  } catch (error) {
+    console.error("Error updating cart item:", error);
+    res.status(500).json({ error: "Failed to update cart item." });
+  }
+};
+
 export const deleteCartItem = async (req, res) => {
   try {
     const deletedItem = await addtocartdata.findByIdAndDelete(req.params.itemId);

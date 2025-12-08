@@ -119,8 +119,8 @@ const Contact = () => {
       icon: FaEnvelope,
       label: "Email",
       value: "photoparkk.prints@gmail.com",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50",
+      color: "from-primary to-primary-dark",
+      bgColor: "bg-primary-light",
       delay: 0.1,
       link: "mailto:photoparkk.prints@gmail.com",
     },
@@ -129,7 +129,7 @@ const Contact = () => {
       label: "Phone",
       value: CONTACT_DISPLAY_NUMBER,
       color: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-50",
+      bgColor: "bg-success-light",
       delay: 0.2,
       link: CONTACT_TEL_LINK_WITH_COUNTRY,
     },
@@ -137,8 +137,8 @@ const Contact = () => {
       icon: FaInstagram,
       label: "Instagram",
       value: "@photoparkk",
-      color: "from-pink-500 to-rose-500",
-      bgColor: "bg-pink-50",
+      color: "from-primary to-primary-dark",
+      bgColor: "bg-primary",
       delay: 0.3,
       link: "https://instagram.com/photoparkk",
     },
@@ -147,7 +147,7 @@ const Contact = () => {
       label: "WhatsApp",
       value: CONTACT_DISPLAY_NUMBER,
       color: "from-green-500 to-green-600",
-      bgColor: "bg-green-50",
+      bgColor: "bg-success-light",
       delay: 0.35,
       link: CONTACT_WHATSAPP_LINK,
     },
@@ -155,8 +155,8 @@ const Contact = () => {
       icon: FaMapMarkerAlt,
       label: "Address",
       value: "501, Miller bus stop, P.N.Road Tiruppur - 641 602",
-      color: "from-purple-500 to-indigo-500",
-      bgColor: "bg-purple-50",
+      color: "from-primary to-primary-dark",
+      bgColor: "bg-primary-light",
       delay: 0.4,
       link: "https://maps.google.com/?q=Photo+Parkk+Tiruppur",
     },
@@ -169,13 +169,13 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+    <div className="bg-neutral-50">
       {/* Hero Header */}
       <section
         style={backgroundStyle}
         className="relative h-96 md:h-[500px] flex items-center justify-center overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-pink-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary/40 via-secondary/30 to-secondary/20" />
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,7 +201,7 @@ const Contact = () => {
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
             Let's Create{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
+            <span className="text-primary">
               Together
             </span>
           </motion.h1>
@@ -231,13 +231,13 @@ const Contact = () => {
                 viewport={{ once: true }}
                 className="bg-white/80 backdrop-blur-md rounded-3xl p-8 text-center border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 group"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
                   <stat.icon className="text-2xl text-white" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-2">
+                <div className="text-3xl font-bold text-secondary mb-2">
                   {stat.value}
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-neutral-600 font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -262,10 +262,10 @@ const Contact = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                   viewport={{ once: true }}
-                  className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                  className="text-4xl md:text-5xl font-bold text-secondary mb-6 leading-tight"
                 >
                   Let's Start a{" "}
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+                  <span className="text-primary">
                     Conversation
                   </span>
                 </motion.h2>
@@ -275,7 +275,7 @@ const Contact = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                   viewport={{ once: true }}
-                  className="text-lg text-gray-600 leading-relaxed mb-8"
+                  className="text-lg text-neutral-600 leading-relaxed mb-8"
                 >
                   Have a project in mind? We'd love to hear about it. Send us a
                   message and we'll respond within 24 hours.
@@ -301,14 +301,14 @@ const Contact = () => {
                       className={`p-3 rounded-2xl ${item.bgColor} group-hover:scale-110 transition-transform duration-300 shadow-sm`}
                     >
                       <item.icon
-                        className={`text-2xl bg-gradient-to-r ${item.color} text-transparent bg-clip-text`}
+                        className={`text-2xl text-primary`}
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-gray-900 mb-1 text-lg">
+                      <div className="font-semibold text-secondary mb-1 text-lg">
                         {item.label}
                       </div>
-                      <div className="text-gray-600 font-medium">
+                      <div className="text-neutral-600 font-medium">
                         {item.value}
                       </div>
                     </div>
@@ -336,10 +336,10 @@ const Contact = () => {
                   viewport={{ once: true }}
                 >
                   <div className="text-center mb-8">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-3xl font-bold text-secondary mb-2">
                       Send us a Message
                     </h3>
-                    <p className="text-gray-600">We'll get back to you soon</p>
+                    <p className="text-neutral-600">We'll get back to you soon</p>
                   </div>
 
                   <AnimatePresence>
@@ -348,14 +348,14 @@ const Contact = () => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
-                        className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-4 flex items-center gap-3"
+                        className="bg-primary border border-success rounded-2xl p-4 flex items-center gap-3"
                       >
-                        <FaCheckCircle className="text-2xl text-green-600" />
+                        <FaCheckCircle className="text-2xl text-success" />
                         <div>
-                          <div className="font-semibold text-green-900">
+                          <div className="font-semibold text-success">
                             Message sent successfully!
                           </div>
-                          <div className="text-green-700 text-sm">
+                          <div className="text-success text-sm">
                             We'll get back to you within 24 hours.
                           </div>
                         </div>
@@ -367,14 +367,14 @@ const Contact = () => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
-                        className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-4 flex items-center gap-3"
+                        className="bg-primary border border-red-200 rounded-2xl p-4 flex items-center gap-3"
                       >
-                        <FaComments className="text-2xl text-red-600" />
+                        <FaComments className="text-2xl text-error" />
                         <div>
                           <div className="font-semibold text-red-900">
                             Error sending message
                           </div>
-                          <div className="text-red-700 text-sm">{error}</div>
+                          <div className="text-error text-sm">{error}</div>
                         </div>
                       </motion.div>
                     )}
@@ -386,7 +386,7 @@ const Contact = () => {
                     transition={{ duration: 0.6, delay: 0.6 }}
                     viewport={{ once: true }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">
                       Your Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -395,15 +395,15 @@ const Contact = () => {
                       {...register("user_name")}
                       className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                         errors.user_name
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                          ? "border-error focus:ring-red-500"
+                          : "border-neutral-200 focus:ring-primary-light focus:border-transparent"
                       }`}
                     />
                     {errors.user_name && (
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-red-600 text-sm mt-1"
+                        className="text-error text-sm mt-1"
                       >
                         {errors.user_name.message}
                       </motion.p>
@@ -416,7 +416,7 @@ const Contact = () => {
                     transition={{ duration: 0.6, delay: 0.7 }}
                     viewport={{ once: true }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -425,15 +425,15 @@ const Contact = () => {
                       {...register("user_email")}
                       className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 ${
                         errors.user_email
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                          ? "border-error focus:ring-red-500"
+                          : "border-neutral-200 focus:ring-primary-light focus:border-transparent"
                       }`}
                     />
                     {errors.user_email && (
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-red-600 text-sm mt-1"
+                        className="text-error text-sm mt-1"
                       >
                         {errors.user_email.message}
                       </motion.p>
@@ -446,7 +446,7 @@ const Contact = () => {
                     transition={{ duration: 0.6, delay: 0.8 }}
                     viewport={{ once: true }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-2">
                       Your Message <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -456,8 +456,8 @@ const Contact = () => {
                       {...register("message")}
                       className={`w-full px-4 py-3 bg-white border rounded-2xl focus:outline-none focus:ring-2 transition-all duration-300 resize-none ${
                         errors.message
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-200 focus:ring-blue-500 focus:border-transparent"
+                          ? "border-error focus:ring-red-500"
+                          : "border-neutral-200 focus:ring-primary-light focus:border-transparent"
                       }`}
                     />
                     <div className="flex justify-between items-center mt-1">
@@ -465,7 +465,7 @@ const Contact = () => {
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="text-red-600 text-sm"
+                          className="text-error text-sm"
                         >
                           {errors.message.message}
                         </motion.p>
@@ -477,8 +477,8 @@ const Contact = () => {
                           messageLength > 2000
                             ? "text-red-500"
                             : messageLength > 1800
-                            ? "text-orange-500"
-                            : "text-gray-500"
+                            ? "text-warning"
+                            : "text-neutral-500"
                         }`}
                       >
                         {messageLength}/2000 characters
@@ -491,7 +491,7 @@ const Contact = () => {
                     disabled={isSubmitting}
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                   >
                     {isSubmitting ? (
                       <>
@@ -527,10 +527,10 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+              className="text-4xl md:text-5xl font-bold text-secondary mb-4"
             >
               Visit Our{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+              <span className="text-primary">
                 Studio
               </span>
             </motion.h2>
@@ -539,7 +539,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              className="text-lg text-neutral-600 max-w-2xl mx-auto"
             >
               Come see where the magic happens. Our studio is equipped with
               state-of-the-art technology to bring your vision to life.

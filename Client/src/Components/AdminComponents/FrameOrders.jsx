@@ -205,26 +205,26 @@ const FrameOrders = () => {
     switch (status) {
       case "Delivered":
         return {
-          bg: "bg-green-100",
-          text: "text-green-900",
+          bg: "bg-success-light",
+          text: "text-success",
           label: "Delivered",
         };
       case "Out for Delivery":
         return {
-          bg: "bg-orange-100",
-          text: "text-orange-900",
+          bg: "bg-warning-light",
+          text: "text-warning",
           label: "Out for Delivery",
         };
       case "Shipped":
         return {
-          bg: "bg-blue-100",
-          text: "text-blue-900",
+          bg: "bg-primary-light",
+          text: "text-secondary",
           label: "Shipped",
         };
       default:
         return {
-          bg: "bg-amber-100",
-          text: "text-amber-900",
+          bg: "bg-warning-light",
+          text: "text-warning",
           label: "Processing",
         };
     }
@@ -320,8 +320,8 @@ const FrameOrders = () => {
                 onClick={() => setFilter(option.value)}
                 className={`px-4 py-2 cursor-pointer border rounded-md text-sm font-medium transition ${
                   filter === option.value
-                    ? "bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700"
-                    : "bg-white border-gray-300 text-slate-900 hover:bg-gray-50"
+                    ? "bg-primary border-primary text-white hover:bg-primary-hover"
+                    : "bg-white border-neutral-300 text-slate-900 hover:bg-neutral-50"
                 }`}
               >
                 {option.label}
@@ -334,7 +334,7 @@ const FrameOrders = () => {
             <select
               value={selectedTimePeriod}
               onChange={(e) => setSelectedTimePeriod(e.target.value)}
-              className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+              className="appearance-none px-4 py-2.5 bg-white border border-neutral-neutral-400 text-slate-900 text-sm rounded-md focus:outline-primary focus:ring-2 focus:ring-primary-light cursor-pointer"
             >
               <option value="">All Time</option>
               <option value="last_month">Last Month</option>
@@ -346,7 +346,7 @@ const FrameOrders = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none px-4 py-2.5 bg-white border border-gray-400 text-slate-900 text-sm rounded-md focus:outline-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+              className="appearance-none px-4 py-2.5 bg-white border border-neutral-neutral-400 text-slate-900 text-sm rounded-md focus:outline-primary focus:ring-2 focus:ring-primary-light cursor-pointer"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -359,12 +359,12 @@ const FrameOrders = () => {
 
         {/* Orders List */}
         {paginatedOrders.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-300 p-12 text-center">
-            <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <div className="bg-white rounded-xl border border-neutral-300 p-12 text-center">
+            <ShoppingBag className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-secondary mb-2">
               No Orders Found
             </h3>
-            <p className="text-gray-500">No frame orders found.</p>
+            <p className="text-neutral-500">No frame orders found.</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -376,7 +376,7 @@ const FrameOrders = () => {
               return (
                 <div
                   key={order._id}
-                  className="bg-white rounded-xl border border-gray-300 overflow-hidden p-6"
+                  className="bg-white rounded-xl border border-neutral-300 overflow-hidden p-6"
                 >
                   {/* Order Header */}
                   <div className="flex flex-wrap justify-between gap-6 mb-6">
@@ -409,13 +409,13 @@ const FrameOrders = () => {
                     </div>
                   </div>
 
-                  <hr className="border-gray-300 my-6" />
+                  <hr className="border-neutral-300 my-6" />
 
                   {/* Products Display */}
                   <div className="flex flex-wrap items-center gap-8 mb-8">
                     {order.items?.slice(0, 3).map((item, idx) => (
                       <div key={idx} className="flex items-center gap-4">
-                        <div className="w-16 h-16 bg-gray-100 p-1 rounded-md overflow-hidden flex items-center justify-center">
+                        <div className="w-16 h-16 bg-neutral-100 p-1 rounded-md overflow-hidden flex items-center justify-center">
                           {item.userImageUrl ? (
                             <img
                               src={item.userImageUrl}
@@ -423,7 +423,7 @@ const FrameOrders = () => {
                               className="w-full h-full object-contain"
                             />
                           ) : (
-                            <ImageIcon className="w-8 h-8 text-gray-400" />
+                            <ImageIcon className="w-8 h-8 text-neutral-400" />
                           )}
                         </div>
                         <div>
@@ -447,7 +447,7 @@ const FrameOrders = () => {
                   <div className="flex flex-wrap gap-4">
                     <button
                       onClick={() => handleViewDetails(order)}
-                      className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-gray-50 transition flex items-center gap-2"
+                      className="px-4 py-2 bg-white border border-neutral-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-neutral-50 transition flex items-center gap-2"
                     >
                       <Eye className="w-4 h-4" />
                       View Details
@@ -457,7 +457,7 @@ const FrameOrders = () => {
                         onClick={() =>
                           handleAdvanceStatus(order._id, order.status)
                         }
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium cursor-pointer transition flex items-center gap-2"
+                        className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-md text-sm font-medium cursor-pointer transition flex items-center gap-2"
                       >
                         Mark as {getNextStatus(order.status)}
                         <ArrowRight className="w-4 h-4" />
@@ -497,7 +497,7 @@ const FrameOrders = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                className="px-3 py-1 bg-white border border-neutral-300 rounded-md text-sm font-medium hover:bg-neutral-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
               >
                 <ChevronLeft className="w-3 h-3" />
               </button>
@@ -518,8 +518,8 @@ const FrameOrders = () => {
                     onClick={() => setCurrentPage(pageNum)}
                     className={`px-3 py-1 rounded-md text-sm font-medium transition cursor-pointer ${
                       currentPage === pageNum
-                        ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                        : "bg-white border border-gray-300 text-slate-900 hover:bg-gray-50"
+                        ? "bg-primary text-white hover:bg-primary-hover"
+                        : "bg-white border border-neutral-300 text-slate-900 hover:bg-neutral-50"
                     }`}
                   >
                     {pageNum}
@@ -531,7 +531,7 @@ const FrameOrders = () => {
                   setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                className="px-3 py-1 bg-white border border-neutral-300 rounded-md text-sm font-medium hover:bg-neutral-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
               >
                 <ChevronRight className="w-3 h-3" />
               </button>
@@ -549,15 +549,15 @@ const FrameOrders = () => {
           >
             {loadingOrderDetails ? (
               <div className="flex items-center justify-center p-12">
-                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-                <span className="ml-3 text-gray-600">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <span className="ml-3 text-neutral-600">
                   Loading order details...
                 </span>
               </div>
             ) : selectedOrder ? (
               <>
                 {/* Header */}
-                <div className="bg-indigo-600 px-6 py-4 relative flex-shrink-0">
+                <div className="bg-primary px-6 py-4 relative flex-shrink-0">
                   <button
                     onClick={() => {
                       setShowDetailsModal(false);
@@ -611,14 +611,14 @@ const FrameOrders = () => {
                       <p className="text-slate-500 text-sm font-medium">
                         Total
                       </p>
-                      <p className="text-sm font-medium text-indigo-700 mt-2">
+                      <p className="text-sm font-medium text-primary-hover mt-2">
                         ₹{getOrderTotal(selectedOrder).toLocaleString("en-IN")}
                       </p>
                     </div>
                   </div>
 
                   {/* Shipping Information */}
-                  <div className="bg-gray-100 rounded-xl p-4 mt-8">
+                  <div className="bg-neutral-100 rounded-xl p-4 mt-8">
                     <h3 className="text-base font-medium text-slate-900 mb-6">
                       Shipping Information
                     </h3>
@@ -679,7 +679,7 @@ const FrameOrders = () => {
                           key={idx}
                           className="flex items-start gap-4 max-sm:flex-col"
                         >
-                          <div className="w-[70px] h-[70px] bg-gray-200 rounded-lg flex items-center justify-center shrink-0 relative group">
+                          <div className="w-[70px] h-[70px] bg-neutral-200 rounded-lg flex items-center justify-center shrink-0 relative group">
                             {item.userImageUrl ? (
                               <>
                                 <img
@@ -701,7 +701,7 @@ const FrameOrders = () => {
                                 </button>
                               </>
                             ) : (
-                              <ImageIcon className="w-8 h-8 text-gray-400" />
+                              <ImageIcon className="w-8 h-8 text-neutral-400" />
                             )}
                           </div>
                           <div className="flex-1">
@@ -727,7 +727,7 @@ const FrameOrders = () => {
                   </div>
 
                   {/* Order Summary */}
-                  <div className="bg-gray-100 rounded-xl p-4 mt-8">
+                  <div className="bg-neutral-100 rounded-xl p-4 mt-8">
                     <h3 className="text-base font-medium text-slate-900 mb-6">
                       Order Summary
                     </h3>
@@ -760,11 +760,11 @@ const FrameOrders = () => {
                           ).toLocaleString("en-IN")}
                         </p>
                       </div>
-                      <div className="flex justify-between pt-3 border-t border-gray-300">
+                      <div className="flex justify-between pt-3 border-t border-neutral-300">
                         <p className="text-[15px] font-semibold text-slate-900">
                           Total
                         </p>
-                        <p className="text-[15px] font-semibold text-indigo-700">
+                        <p className="text-[15px] font-semibold text-primary-hover">
                           ₹
                           {(
                             getOrderTotal(selectedOrder) +
@@ -777,7 +777,7 @@ const FrameOrders = () => {
                 </div>
 
                 {/* Footer */}
-                <div className="bg-gray-100 px-6 py-4 flex-shrink-0 space-y-3">
+                <div className="bg-neutral-100 px-6 py-4 flex-shrink-0 space-y-3">
                   {selectedOrder.status !== "Delivered" && (
                     <button
                       onClick={() =>
@@ -786,7 +786,7 @@ const FrameOrders = () => {
                           selectedOrder.status
                         )
                       }
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      className="w-full bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       Mark as {getNextStatus(selectedOrder.status)}
                       <ArrowRight className="w-4 h-4" />
