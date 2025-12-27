@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../../utils/axiosInstance";
 import { Link } from "react-router-dom";
 import {
   Plus,
@@ -20,9 +20,7 @@ const NewArrivalProducts = () => {
   useEffect(() => {
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get(
-          "https://api.photoparkk.com/api/newarrivals"
-        );
+        const response = await axiosInstance.get("/newarrivals");
 
         if (Array.isArray(response.data)) {
           setNewArrivalItems(response.data);
@@ -46,7 +44,7 @@ const NewArrivalProducts = () => {
     }
 
     try {
-      await axios.delete(`https://api.photoparkk.com/api/newarrivals/${id}`);
+      await axiosInstance.delete(`/newarrivals/${id}`);
       setNewArrivalItems((prevItems) =>
         prevItems.filter((item) => item._id !== id)
       );

@@ -217,9 +217,7 @@ const Login = () => {
               {/* Success Message */}
               {success && (
                 <div className="bg-success-light border-l-4 border-success p-4 rounded-r-lg animate-in slide-in-from-left-2 duration-300">
-                  <p className="text-success text-sm font-medium">
-                    {success}
-                  </p>
+                  <p className="text-success text-sm font-medium">{success}</p>
                 </div>
               )}
 
