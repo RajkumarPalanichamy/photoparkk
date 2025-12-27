@@ -78,6 +78,37 @@ const NewArrivalAddForm = () => {
     }));
   };
 
+  // Parse size label (e.g., "10x12") into width and height
+  const parseSizeLabel = (label) => {
+    if (!label) return { width: 0, height: 0 };
+    const parts = label.split("x");
+    return {
+      width: parseInt(parts[0]) || 0,
+      height: parseInt(parts[1]) || 0,
+    };
+  };
+
+  // Update size dimensions
+  const handleDimensionChange = (index, dimension, delta) => {
+    const currentLabel = formData.sizes[index].label || "0x0";
+    const { width, height } = parseSizeLabel(currentLabel);
+    const newWidth = dimension === "width" ? Math.max(0, width + delta) : width;
+    const newHeight = dimension === "height" ? Math.max(0, height + delta) : height;
+    const newLabel = `${newWidth}x${newHeight}`;
+    handleSizeChange(index, "label", newLabel);
+  };
+
+  // Handle direct input for dimensions
+  const handleDimensionInput = (index, dimension, value) => {
+    const currentLabel = formData.sizes[index].label || "0x0";
+    const { width, height } = parseSizeLabel(currentLabel);
+    const numValue = parseInt(value) || 0;
+    const newWidth = dimension === "width" ? numValue : width;
+    const newHeight = dimension === "height" ? numValue : height;
+    const newLabel = `${newWidth}x${newHeight}`;
+    handleSizeChange(index, "label", newLabel);
+  };
+
   const addSizeField = () => {
     setFormData((prev) => ({
       ...prev,
@@ -337,17 +368,29 @@ const NewArrivalAddForm = () => {
               >
                 <div className="col-span-12 sm:col-span-4">
                   <label className="block text-xs font-medium text-neutral-700 mb-1">
-                    Size Label
+                    Size (Width x Height)
                   </label>
-                  <input
-                    type="text"
-                    placeholder="e.g., 10x12"
-                    value={size.label}
-                    onChange={(e) =>
-                      handleSizeChange(index, "label", e.target.value)
-                    }
-                    className="w-full px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-1 focus:ring-primary-light text-sm"
-                  />
+                  <div className="flex items-center gap-2">
+                    {/* Width Input */}
+                    <input
+                      type="number"
+                      min="0"
+                      value={parseSizeLabel(size.label).width || ""}
+                      onChange={(e) => handleDimensionInput(index, "width", e.target.value)}
+                      className="w-20 px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-2 focus:ring-primary-light text-sm font-medium"
+                      placeholder="W"
+                    />
+                    <span className="text-neutral-500 font-semibold text-base">×</span>
+                    {/* Height Input */}
+                    <input
+                      type="number"
+                      min="0"
+                      value={parseSizeLabel(size.label).height || ""}
+                      onChange={(e) => handleDimensionInput(index, "height", e.target.value)}
+                      className="w-20 px-3 py-2 bg-white border border-neutral-300 text-slate-900 rounded-md focus:outline-primary focus:ring-2 focus:ring-primary-light text-sm font-medium"
+                      placeholder="H"
+                    />
+                  </div>
                 </div>
                 <div className="col-span-6 sm:col-span-3">
                   <label className="block text-xs font-medium text-neutral-700 mb-1">

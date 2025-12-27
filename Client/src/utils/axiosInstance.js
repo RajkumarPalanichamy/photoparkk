@@ -2,14 +2,31 @@
 import axios from "axios";
 
 // Resolve base URL from env with safe fallbacks
-// Priority: explicit Vite env -> window env injection -> production API URL -> relative "/api"
-const envBaseUrl =
-  import.meta?.env?.VITE_API_BASE_URL ||
-  (typeof window !== "undefined" && window.__API_BASE_URL__) ||
-  (typeof window !== "undefined" &&
-    window.location.hostname !== "localhost" &&
-    "https://api.photoparkk.com/api") ||
-  "/api";
+// Priority: explicit Vite env -> window env injection -> relative "/api" for localhost -> production API URL
+const getBaseUrl = () => {
+  // Check for explicit Vite environment variable
+  if (import.meta?.env?.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  // Check for window injection (for build-time configuration)
+  if (typeof window !== "undefined" && window.__API_BASE_URL__) {
+    return window.__API_BASE_URL__;
+  }
+
+  // For localhost, use relative path
+  if (
+    typeof window !== "undefined" &&
+    window.location.hostname === "localhost"
+  ) {
+    return "/api";
+  }
+
+  // For production, use production API URL
+  return "https://api.photoparkk.com/api";
+};
+
+const envBaseUrl = getBaseUrl();
 
 const axiosInstance = axios.create({
   baseURL: envBaseUrl,
@@ -59,6 +76,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Attempt to refresh the access token
+        // Use plain axios here to avoid circular dependency and token injection
         const refreshResponse = await axios.post(
           `${envBaseUrl}/users/refresh-token`,
           {

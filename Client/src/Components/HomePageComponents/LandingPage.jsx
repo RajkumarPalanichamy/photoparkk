@@ -22,7 +22,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden pt-[80px]">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Enhanced Offers Bar */}
       <div className="relative bg-primary py-2 sm:py-3 overflow-hidden border-b border-primary/30">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../../../utils/axiosInstance";
 import {
   MAX_UPLOAD_SIZE_BYTES,
   MAX_UPLOAD_SIZE_MB,
@@ -26,9 +26,7 @@ const SpecialoffersUpdateForm = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(
-          `https://api.photoparkk.com/api/specialoffers/${id}`
-        );
+        const res = await axiosInstance.get(`/specialoffers/${id}`);
         setFormData({
           ...res.data,
           sizes: res.data.sizes?.length
@@ -85,6 +83,27 @@ const SpecialoffersUpdateForm = () => {
     }));
   };
 
+  // Parse size label (e.g., "10x12") into width and height
+  const parseSizeLabel = (label) => {
+    if (!label) return { width: 0, height: 0 };
+    const parts = label.split("x");
+    return {
+      width: parseInt(parts[0]) || 0,
+      height: parseInt(parts[1]) || 0,
+    };
+  };
+
+  // Handle direct input for dimensions
+  const handleDimensionInput = (index, dimension, value) => {
+    const currentLabel = formData.sizes[index].label || "0x0";
+    const { width, height } = parseSizeLabel(currentLabel);
+    const numValue = parseInt(value) || 0;
+    const newWidth = dimension === "width" ? numValue : width;
+    const newHeight = dimension === "height" ? numValue : height;
+    const newLabel = `${newWidth}x${newHeight}`;
+    handleSizeChange(index, "label", newLabel);
+  };
+
   const addSizeField = () => {
     setFormData((prev) => ({
       ...prev,
@@ -125,7 +144,7 @@ const SpecialoffersUpdateForm = () => {
         data.append("image", imageFile);
       }
 
-      await axios.put(`https://api.photoparkk.com/api/specialoffers/${id}`, data, {
+      await axiosInstance.put(`/specialoffers/${id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -225,15 +244,33 @@ const SpecialoffersUpdateForm = () => {
               key={index}
               className="grid grid-cols-4 gap-2 mb-2 items-center"
             >
-              <input
-                type="text"
-                placeholder="Label"
-                value={size.label}
-                onChange={(e) =>
-                  handleSizeChange(index, "label", e.target.value)
-                }
-                className="p-2 border rounded"
-              />
+              <div className="flex items-center gap-2">
+                {/* Width Input */}
+                <input
+                  type="number"
+                  min="0"
+                  value={parseSizeLabel(size.label).width || ""}
+                  onChange={(e) =>
+                    handleDimensionInput(index, "width", e.target.value)
+                  }
+                  className="w-16 px-2 py-1.5 bg-white border border-neutral-300 rounded text-sm focus:outline-primary focus:ring-1 focus:ring-primary-light font-medium"
+                  placeholder="W"
+                />
+                <span className="text-neutral-500 font-semibold text-sm">
+                  ×
+                </span>
+                {/* Height Input */}
+                <input
+                  type="number"
+                  min="0"
+                  value={parseSizeLabel(size.label).height || ""}
+                  onChange={(e) =>
+                    handleDimensionInput(index, "height", e.target.value)
+                  }
+                  className="w-16 px-2 py-1.5 bg-white border border-neutral-300 rounded text-sm focus:outline-primary focus:ring-1 focus:ring-primary-light font-medium"
+                  placeholder="H"
+                />
+              </div>
               <input
                 type="number"
                 placeholder="Price"

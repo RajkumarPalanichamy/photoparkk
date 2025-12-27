@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../../utils/axiosInstance";
 import { Link } from "react-router-dom";
 import {
   Plus,
@@ -20,9 +20,7 @@ const SpecialOffersProducts = () => {
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await axios.get(
-          "https://api.photoparkk.com/api/specialoffers"
-        );
+        const response = await axiosInstance.get("/specialoffers");
         setSpecialoffersItems(
           Array.isArray(response.data) ? response.data : []
         );
@@ -43,7 +41,7 @@ const SpecialOffersProducts = () => {
     }
 
     try {
-      await axios.delete(`https://api.photoparkk.com/api/specialoffers/${id}`);
+      await axiosInstance.delete(`/specialoffers/${id}`);
       setSpecialoffersItems((prevItems) =>
         prevItems.filter((item) => item._id !== id)
       );

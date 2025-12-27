@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import { Link } from "react-router-dom";
 
 const SpecialOffers = () => {
@@ -9,9 +9,7 @@ const SpecialOffers = () => {
   useEffect(() => {
     const fetchSpecialOffers = async () => {
       try {
-        const response = await axios.get(
-          "https://api.photoparkk.com/api/specialoffers"
-        );
+        const response = await axiosInstance.get("/specialoffers");
         setOffers(response.data);
       } catch (error) {
         console.error("Error fetching special offers:", error);

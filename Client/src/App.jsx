@@ -100,7 +100,7 @@ function AppContent() {
   return (
     <div className="flex flex-col min-h-screen">
       {!isAdminRoute && <Navbar />}
-      <main className="flex-grow">
+      <main className={`flex-grow ${!isAdminRoute ? "pt-24" : ""}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
